@@ -6,18 +6,22 @@
       <van-swipe-item>3</van-swipe-item>
       <van-swipe-item>4</van-swipe-item>
     </van-swipe>
-    <van-nav-bar title="my" />
-    <div class="bd-red">我的</div>
-    <van-button type="primary">主要按钮</van-button>
-    <van-button type="success">成功按钮</van-button>
-    <van-button type="default">默认按钮</van-button>
-    <van-button type="danger">危险按钮</van-button>
-    <van-button type="warning">警告按钮</van-button>
-    <div class="bd-red h-200">index</div>
+    <div class="py-2">
+      <van-cell-group inset>
+        <van-cell title="单元格" value="内容" />
+        <van-cell title="单元格" is-link to="/good" />
+      </van-cell-group>
+    </div>
 
-    <Department></Department>
-    <div class="">
-      <div class="bd-red">11bottom</div>
+    <div class="py-2">
+      <van-cell-group inset>
+        <van-cell title="单元格" value="内容" />
+        <van-cell title="单元格" value="内容" label="描述信息" />
+      </van-cell-group>
+    </div>
+
+    <div class="p-4">
+      <van-button type="default" block>退出登录</van-button>
     </div>
   </div>
 </template>

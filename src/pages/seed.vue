@@ -25,7 +25,7 @@
 <script setup lang="ts">
 definePage({
   meta: {
-    // layout: 'default',
+    title: '社区',
     showHeader: true,
     showFooter: true,
   },

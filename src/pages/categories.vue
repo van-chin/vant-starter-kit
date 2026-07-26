@@ -26,6 +26,7 @@
 definePage({
   meta: {
     // layout: 'default',
+    title: '分类',
     showHeader: true,
     showFooter: true,
   },

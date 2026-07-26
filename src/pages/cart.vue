@@ -26,6 +26,7 @@
 definePage({
   meta: {
     // layout: 'default',
+    title: '购物车',
     showHeader: true,
     showFooter: true,
   },

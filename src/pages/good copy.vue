@@ -1,24 +1,6 @@
 <template>
-  <!-- <div class="size-full overflow-hidden bd-red">
-11
-</div> -->
-
   <van-sticky>
-    <van-nav-bar
-      left-text="返回"
-      right-text="分享"
-      left-arrow
-      @click-left="onClickLeft"
-      @click-right="onClickRight"
-    >
-      <template #title>
-        <van-tabs v-model:active="active">
-          <van-tab title="详情"></van-tab>
-          <van-tab title="参数"></van-tab>
-          <van-tab title="评论"></van-tab>
-        </van-tabs>
-      </template>
-    </van-nav-bar>
+    <van-nav-bar title="标题" left-arrow @click-left="onClickLeft" />
   </van-sticky>
   <van-button type="primary">主要按钮</van-button>
   <van-button type="success">成功按钮</van-button>
@@ -30,7 +12,7 @@
     <div class="bd-red">bottom</div>
   </div>
 
-  <van-action-bar placeholder>
+  <van-action-bar>
     <van-action-bar-icon icon="chat-o" text="客服" @click="onClickIcon" />
     <van-action-bar-icon icon="cart-o" text="购物车" @click="onClickIcon" />
     <van-action-bar-icon icon="shop-o" text="店铺" @click="onClickIcon" />
@@ -49,11 +31,8 @@ definePage({
   },
 });
 
-const active = ref(0);
-
 const onClickIcon = () => showToast('点击图标');
 const onClickButton = () => showToast('点击按钮');
-const onClickRight = () => showToast('按钮');
 const onClickLeft = () => history.back();
 </script>
 
