@@ -16,7 +16,8 @@
     "syncpack:format": "syncpack format",
     "syncpack:lint": "syncpack lint",
     "syncpack:list": "syncpack list",
-    "syncpack:update": "syncpack update"
+    "syncpack:update": "syncpack update",
+    "taze": "vpx taze"
   },
   "dependencies": {
     "@alova/adapter-axios": "catalog:",

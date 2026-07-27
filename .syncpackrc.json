@@ -1,6 +1,10 @@
 {
-  "$schema": "https://unpkg.com/syncpack@15.3.2/dist/schema.json",
   "versionGroups": [
+    {
+      "label": "ignore local package's own .version",
+      "dependencyTypes": ["local"],
+      "isIgnored": true
+    },
     {
       "label": "ignore aliased vite (npm: protocol, not plain semver)",
       "dependencies": ["vite"],
