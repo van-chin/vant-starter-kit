@@ -11,7 +11,12 @@
     "build": "tsc && vp build",
     "dev": "vp dev",
     "prepare": "vp config",
-    "preview": "vp preview"
+    "preview": "vp preview",
+    "syncpack:fix": "syncpack fix-mismatches",
+    "syncpack:format": "syncpack format",
+    "syncpack:lint": "syncpack lint",
+    "syncpack:list": "syncpack list-mismatches",
+    "syncpack:update": "syncpack update"
   },
   "dependencies": {
     "@alova/adapter-axios": "catalog:",
@@ -36,6 +41,7 @@
     "@vue/tsconfig": "catalog:",
     "jiti": "catalog:",
     "jsdom": "catalog:",
+    "syncpack": "catalog:",
     "typescript": "catalog:",
     "unplugin-auto-import": "catalog:",
     "unplugin-https-reverse-proxy": "catalog:",
