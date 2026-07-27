@@ -1,11 +1,14 @@
 {
   "$schema": "https://unpkg.com/syncpack@15.3.2/dist/schema.json",
-  "source": ["package.json", "pnpm-workspace.yaml"],
   "versionGroups": [
     {
-      "label": "ignore aliased vite",
+      "label": "ignore aliased vite (npm: protocol, not plain semver)",
       "dependencies": ["vite"],
-      "policy": "ignored"
+      "isIgnored": true
+    },
+    {
+      "label": "everything else must come from the pnpm catalog",
+      "policy": "catalog"
     }
   ]
 }

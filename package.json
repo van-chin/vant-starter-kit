@@ -12,10 +12,10 @@
     "dev": "vp dev",
     "prepare": "vp config",
     "preview": "vp preview",
-    "syncpack:fix": "syncpack fix-mismatches",
+    "syncpack:fix": "syncpack fix",
     "syncpack:format": "syncpack format",
     "syncpack:lint": "syncpack lint",
-    "syncpack:list": "syncpack list-mismatches",
+    "syncpack:list": "syncpack list",
     "syncpack:update": "syncpack update"
   },
   "dependencies": {
