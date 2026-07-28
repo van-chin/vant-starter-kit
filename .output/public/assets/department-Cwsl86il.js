@@ -1,0 +1,1 @@
+import{O as e,p as t,s as n,u as r}from"./runtime-core.esm-bundler-BQQbKTcu.js";import{t as i}from"./_plugin-vue_export-helper-BDNMzG2s.js";var a={},o={class:`bg-primary flex flex-col`};function s(i,a){return e(),r(`div`,o,[...a[0]||=[t(` bu department `,-1),n(`div`,null,`2234`,-1)]])}var c=i(a,[[`render`,s]]);export{c as t};

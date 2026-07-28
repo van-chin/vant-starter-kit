@@ -1,0 +1,1 @@
+import{g as e}from"./runtime-core.esm-bundler-BQQbKTcu.js";var t=()=>{let{scopeId:t}=e()?.vnode||{};return t?{[t]:``}:null};export{t};

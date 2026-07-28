@@ -3,6 +3,8 @@ import { resolve } from 'node:path';
 
 export default defineConfig({
   // preset: "node_server",
+  // preset: 'cloudflare_pages',
+  preset: 'cloudflare_module',
   experimental: {
     database: true,
   },
