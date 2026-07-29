@@ -25,13 +25,13 @@
 
 ### 当前状态
 
-| 状态             | 说明                                              |
-| ---------------- | ------------------------------------------------- |
-| Vue 版本         | `3.6.0-rc.1`（RC 阶段，正在向正式版推进）         |
-| Vapor 运行时     | ✅ 已内置，源码附带 `vue.runtime-with-vapor`       |
+| 状态                 | 说明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| Vue 版本             | `3.6.0-rc.1`（RC 阶段，正在向正式版推进）                    |
+| Vapor 运行时         | ✅ 已内置，源码附带 `vue.runtime-with-vapor`                 |
 | `@vitejs/plugin-vue` | ✅ `6.0.8` 已支持 `features.vapor` 和 `<script setup vapor>` |
-| 构建工具链       | ✅ 已就绪，无需额外配置                            |
-| **UI 组件库**    | ⏳ **Vant 4 尚未正式支持 Vapor Mode，等待生态跟进** |
+| 构建工具链           | ✅ 已就绪，无需额外配置                                      |
+| **UI 组件库**        | ⏳ **Vant 4 尚未正式支持 Vapor Mode，等待生态跟进**          |
 
 ### 策略建议
 
@@ -64,35 +64,35 @@ const count = ref(0);
 
 开发前务必调用相关 Skill：
 
-| 场景               | 推荐 Skill                     | 作用                             |
-| ------------------ | ------------------------------ | -------------------------------- |
-| Vue 组件开发       | `vue-best-practices`           | Composition API、SFC 规范        |
-| Vue 路由           | `vue-router-best-practices`    | 路由守卫、参数传递、布局集成     |
-| 状态管理           | `pinia`                        | Store 设计、SSR 兼容             |
-| 组件测试           | `vue-testing-best-practices`   | Vitest + Vue Test Utils 模式     |
-| 构建配置           | `vite`                         | Vite+ / Rolldown 配置            |
-| 测试运行           | `vitest`                       | 编写和运行测试                   |
-| 包管理             | `pnpm`                         | workspace / catalog 协议         |
-| 设计审核           | `web-design-guidelines`        | UI 可访问性、响应式、UX 审查     |
+| 场景         | 推荐 Skill                   | 作用                         |
+| ------------ | ---------------------------- | ---------------------------- |
+| Vue 组件开发 | `vue-best-practices`         | Composition API、SFC 规范    |
+| Vue 路由     | `vue-router-best-practices`  | 路由守卫、参数传递、布局集成 |
+| 状态管理     | `pinia`                      | Store 设计、SSR 兼容         |
+| 组件测试     | `vue-testing-best-practices` | Vitest + Vue Test Utils 模式 |
+| 构建配置     | `vite`                       | Vite+ / Rolldown 配置        |
+| 测试运行     | `vitest`                     | 编写和运行测试               |
+| 包管理       | `pnpm`                       | workspace / catalog 协议     |
+| 设计审核     | `web-design-guidelines`      | UI 可访问性、响应式、UX 审查 |
 
 详细开发约定请查看 [`AGENTS.md`](./AGENTS.md)。
 
 ## 技术栈
 
-| 类别          | 技术                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| 构建工具      | [Vite+](https://viteplus.dev/) (v0.2.5)                             |
-| 框架          | [Vue 3.6 RC](https://vuejs.org/)（Composition API, `<script setup>`）|
-| 编译模式      | VDOM（标准）— [Vapor Mode](https://vuejs.org/guide/extras/vapor-mode) 已就绪，等待生态成熟后启用 |
-| UI 库         | [Vant 4](https://vant-ui.github.io/)                                |
-| 状态管理      | [Pinia](https://pinia.vuejs.org/)                                   |
-| 路由          | [Vue Router 5](https://router.vuejs.org/) + 文件系统路由            |
-| HTTP 请求     | [Alova](https://alova.js.org/) + Axios 适配器                       |
-| CSS           | [Tailwind CSS v4](https://tailwindcss.com/)                         |
-| 服务端        | [Nitro](https://nitro.unjs.io/) (全栈/SSR)                          |
-| 日期处理      | [Day.js](https://day.js.org/)                                       |
-| 语言          | [TypeScript](https://www.typescriptlang.org/) 6.x                   |
-| 包管理        | [pnpm](https://pnpm.io/) 11.x                                       |
+| 类别      | 技术                                                                                             |
+| --------- | ------------------------------------------------------------------------------------------------ |
+| 构建工具  | [Vite+](https://viteplus.dev/) (v0.2.5)                                                          |
+| 框架      | [Vue 3.6 RC](https://vuejs.org/)（Composition API, `<script setup>`）                            |
+| 编译模式  | VDOM（标准）— [Vapor Mode](https://vuejs.org/guide/extras/vapor-mode) 已就绪，等待生态成熟后启用 |
+| UI 库     | [Vant 4](https://vant-ui.github.io/)                                                             |
+| 状态管理  | [Pinia](https://pinia.vuejs.org/)                                                                |
+| 路由      | [Vue Router 5](https://router.vuejs.org/) + 文件系统路由                                         |
+| HTTP 请求 | [Alova](https://alova.js.org/) + Axios 适配器                                                    |
+| CSS       | [Tailwind CSS v4](https://tailwindcss.com/)                                                      |
+| 服务端    | [Nitro](https://nitro.unjs.io/) (全栈/SSR)                                                       |
+| 日期处理  | [Day.js](https://day.js.org/)                                                                    |
+| 语言      | [TypeScript](https://www.typescriptlang.org/) 6.x                                                |
+| 包管理    | [pnpm](https://pnpm.io/) 11.x                                                                    |
 
 ## 快速开始
 
@@ -168,16 +168,16 @@ vp preview
 
 项目使用 **Vite+** 工具链，所有操作通过 `vp` CLI 统一管理：
 
-| 命令           | 说明                                     |
-| -------------- | ---------------------------------------- |
-| `vp dev`       | 启动开发服务器                           |
-| `vp build`     | 生产构建（`tsc && vp build`）            |
-| `vp preview`   | 预览生产构建                             |
-| `vp check`     | 格式化 + 代码检查 + 类型检查             |
-| `vp test`      | 运行测试                                 |
-| `vp install`   | 安装依赖                                 |
-| `vp run <script>` | 运行 `package.json` 中的脚本         |
-| `vp env doctor`   | 诊断环境问题                         |
+| 命令              | 说明                          |
+| ----------------- | ----------------------------- |
+| `vp dev`          | 启动开发服务器                |
+| `vp build`        | 生产构建（`tsc && vp build`） |
+| `vp preview`      | 预览生产构建                  |
+| `vp check`        | 格式化 + 代码检查 + 类型检查  |
+| `vp test`         | 运行测试                      |
+| `vp install`      | 安装依赖                      |
+| `vp run <script>` | 运行 `package.json` 中的脚本  |
+| `vp env doctor`   | 诊断环境问题                  |
 
 > `package.json` 中同时保留了 `pnpm dev/build/preview` 等脚本，通过 `pnpm` 运行本质也是调用 `vp` 命令。
 

@@ -50,10 +50,13 @@
     "unplugin-https-reverse-proxy": "catalog:",
     "unplugin-vue-components": "catalog:",
     "vite": "catalog:",
+    "vite-plugin-pwa": "catalog:",
     "vite-plugin-vue-devtools": "catalog:",
     "vite-plugin-vue-layouts-next": "catalog:",
     "vite-plus": "catalog:",
-    "vue-tsc": "catalog:"
+    "vue-tsc": "catalog:",
+    "workbox-build": "catalog:",
+    "workbox-window": "catalog:"
   },
   "devEngines": {
     "packageManager": {

@@ -106,12 +106,12 @@ Vue 3.6 引入了 **Vapor Mode** — 一种全新的编译模式，移除 Virtua
 
 坚持以下开发习惯，后续迁移到 Vapor Mode 只需添加 `vapor` 关键字：
 
-| 做法 ✅                              | 原因                                       |
-| ------------------------------------ | ------------------------------------------ |
-| 使用 Composition API + `<script setup>` | Vapor 的核心 API 子集                  |
-| 使用 Pinia 管理状态                  | 与 Vapor 完全兼容                         |
-| 使用 `provide/inject` 替代 `globalProperties` | Vapor 不支持 `globalProperties` |
-| Vant 组件按需导入（已自动配置）      | Vapor 中可正常使用 Vant 组件（走互操作）  |
+| 做法 ✅                                       | 原因                                     |
+| --------------------------------------------- | ---------------------------------------- |
+| 使用 Composition API + `<script setup>`       | Vapor 的核心 API 子集                    |
+| 使用 Pinia 管理状态                           | 与 Vapor 完全兼容                        |
+| 使用 `provide/inject` 替代 `globalProperties` | Vapor 不支持 `globalProperties`          |
+| Vant 组件按需导入（已自动配置）               | Vapor 中可正常使用 Vant 组件（走互操作） |
 
 ### 启用方式（参考，暂不启用）
 
@@ -142,21 +142,21 @@ const count = ref(0);
 
 ### 必须使用的 Skills 清单
 
-| Skill 名称                     | 触发场景                                       |
-| ------------------------------ | ---------------------------------------------- |
-| `vue-best-practices`           | 任何 Vue 组件 / SFC 开发                       |
-| `vue-router-best-practices`    | 路由配置、导航守卫、页面参数传递               |
-| `pinia`                        | Store 设计、状态管理                           |
-| `vue-testing-best-practices`   | 编写测试、测试覆盖、测试 Mock                  |
-| `vite`                         | Vite 配置、插件开发、Rolldown 迁移             |
-| `vitest`                       | 运行测试、测试配置                             |
-| `pnpm`                         | 依赖管理、workspace 配置                       |
-| `vueuse-functions`             | 使用 VueUse composables                        |
-| `web-design-guidelines`        | UI 审查、可访问性、响应式设计                  |
-| `superpowers:brainstorming`    | 新功能、新组件、新页面的需求分析               |
-| `superpowers:systematic-debugging` | 任何 Bug、测试失败、意外行为                |
-| `superpowers:test-driven-development` | 实现新功能或修复前，先写测试            |
-| `superpowers:requesting-code-review` | 完成任务、合并前进行自我审查             |
+| Skill 名称                                   | 触发场景                           |
+| -------------------------------------------- | ---------------------------------- |
+| `vue-best-practices`                         | 任何 Vue 组件 / SFC 开发           |
+| `vue-router-best-practices`                  | 路由配置、导航守卫、页面参数传递   |
+| `pinia`                                      | Store 设计、状态管理               |
+| `vue-testing-best-practices`                 | 编写测试、测试覆盖、测试 Mock      |
+| `vite`                                       | Vite 配置、插件开发、Rolldown 迁移 |
+| `vitest`                                     | 运行测试、测试配置                 |
+| `pnpm`                                       | 依赖管理、workspace 配置           |
+| `vueuse-functions`                           | 使用 VueUse composables            |
+| `web-design-guidelines`                      | UI 审查、可访问性、响应式设计      |
+| `superpowers:brainstorming`                  | 新功能、新组件、新页面的需求分析   |
+| `superpowers:systematic-debugging`           | 任何 Bug、测试失败、意外行为       |
+| `superpowers:test-driven-development`        | 实现新功能或修复前，先写测试       |
+| `superpowers:requesting-code-review`         | 完成任务、合并前进行自我审查       |
 | `superpowers:verification-before-completion` | 完成任务时，运行验证后再声明完成   |
 
 ### 开发工作流
