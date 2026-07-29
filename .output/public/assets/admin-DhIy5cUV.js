@@ -1,1 +1,0 @@
-import{O as e,h as t,m as n,s as r,u as i}from"./runtime-core.esm-bundler-BQQbKTcu.js";import{t as a}from"./department-Cwsl86il.js";var o={class:`p-2`},s=t({__name:`admin`,setup(t){return(t,s)=>{let c=a;return e(),i(`div`,o,[s[0]||=r(`div`,null,`test`,-1),n(c)])}}});export{s as default};
