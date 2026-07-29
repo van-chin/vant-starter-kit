@@ -359,5 +359,55 @@ VitePWA({
 | `package.json`           | PWA 依赖引用（devDependencies）                                      |
 | `build/plugins/pwa.ts`   | PWA 插件工厂函数，配置 manifest + workbox 策略                       |
 | `build/index.ts`         | 插件注册入口，条件加载 PWA 插件（生产构建）                          |
-| `public/pwa-192x192.png` | PWA 图标 192×192（需自行提供）                                       |
-| `public/pwa-512x512.png` | PWA 图标 512×512 + maskable（需自行提供）                            |
+| `public/pwa-192x192.png` | PWA 图标 192×192（从 favicon.svg 生成）                              |
+| `public/pwa-512x512.png` | PWA 图标 512×512 + maskable（从 favicon.svg 生成）                   |
+
+---
+
+## 十、Nitro + Vite 6 Environments 兼容问题（已解决）
+
+### 问题描述
+
+部署到 Cloudflare 后，浏览器请求 `sw.js` 返回 HTML（MIME 类型错误），PWA 无法注册。排查发现：
+
+1. `sw.js` 和 `workbox-*.js` 生成在 `dist/` 而非 `.output/public/`
+2. Nitro 服务端的 `public-assets-data` 清单中没有 `sw.js`
+3. 浏览器请求 `/sw.js` 穿透到 SPA fallback → 返回 `index.html`
+
+### 根因
+
+Nitro 使用 **Vite 6 Environments** 机制，创建了独立的 `client` 环境（`outDir: '.output/public/'`）和 `nitro` 环境。但 `vite-plugin-pwa` 的 `configResolved` / `closeBundle` 钩子运行在默认环境（`outDir: 'dist'`），导致 `sw.js` 写入到错误目录。
+
+```
+Vite 6 构建流程
+├── 默认环境 (outDir: dist/)
+│   └── vite-plugin-pwa 在此生成 sw.js → dist/sw.js ❌
+├── client 环境 (outDir: .output/public/)
+│   └── 客户端资源构建 → .output/public/assets/*
+└── nitro 环境 (ssr)
+    └── 服务端构建 → .output/server/
+```
+
+### 解决方案
+
+在 `vite-plugin-pwa` 插件配置中**显式指定 `outDir`**，将其对齐到 Nitro client 环境的 publicDir：
+
+```ts
+// build/plugins/pwa.ts
+export function createPwaPlugin(): PluginOption {
+  return VitePWA({
+    // 显式指定输出目录，绕过 Vite 6 Environments 的环境隔离
+    outDir: '.output/public',
+    // ... 其他配置
+  });
+}
+```
+
+### 图标生成
+
+PWA 图标从 `public/favicon.svg` 通过 macOS `sips` 命令生成：
+
+```bash
+sips -s format png -z 192 192 public/favicon.svg --out public/pwa-192x192.png
+sips -s format png -z 512 512 public/favicon.svg --out public/pwa-512x512.png
+```

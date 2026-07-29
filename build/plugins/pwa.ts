@@ -1,12 +1,23 @@
 import type { PluginOption } from 'vite';
+import { resolve } from 'node:path';
 import { VitePWA } from 'vite-plugin-pwa';
 
 /**
  * PWA 插件（生产构建时启用 Service Worker 和 manifest）
+ *
+ * 注意：Nitro 使用 Vite 6 Environments 机制，client 构建输出到
+ * .output/public/，但 vite-plugin-pwa 默认读取 Vite 默认环境的
+ * outDir（dist/），导致 sw.js 写入到错误目录。
+ *
+ * 通过在插件配置中显式指定 outDir 为 .output/public/ 解决此问题。
+ *
  * @returns PluginOption
  */
 export function createPwaPlugin(): PluginOption {
   return VitePWA({
+    // 显式指定输出目录，对齐 Nitro client 环境的 publicDir
+    outDir: '.output/public',
+
     // 自动更新 Service Worker，无需用户手动确认
     registerType: 'autoUpdate',
 
