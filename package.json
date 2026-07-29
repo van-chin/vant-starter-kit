@@ -17,7 +17,9 @@
     "syncpack:lint": "syncpack lint",
     "syncpack:list": "syncpack list",
     "syncpack:update": "syncpack update",
-    "taze": "vpx taze"
+    "taze": "vpx taze",
+    "wrangler:deploy": "vp dlx wrangler deploy",
+    "wrangler:login": "vp dlx wrangler login"
   },
   "dependencies": {
     "@alova/adapter-axios": "catalog:",

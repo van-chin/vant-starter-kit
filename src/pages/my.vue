@@ -9,7 +9,7 @@
     <div class="py-2">
       <van-cell-group inset>
         <van-cell title="单元格" value="内容" />
-        <van-cell title="单元格" is-link to="/good" />
+        <van-cell title="商品详细示例页面" is-link to="/good" />
       </van-cell-group>
     </div>
 
