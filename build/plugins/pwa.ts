@@ -47,8 +47,10 @@ export function createPwaPlugin(): PluginOption {
       name: 'vant-starter-kit',
       short_name: 'VSK',
       description: '基于 Vue 3 + Vant 4 的移动端启动模板',
-      theme_color: '#ffffff',
-      background_color: '#ffffff',
+      // 状态栏颜色由运行时 JS 动态控制（见 src/composables/useStatusBar.ts），
+      // manifest 设一个中间值兜底，避免极端情况下出现纯白/纯黑的割裂感
+      theme_color: '#f5f5f5',
+      background_color: '#f5f5f5',
       display: 'standalone',
       icons: [
         { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
