@@ -11,6 +11,15 @@ html {
   overflow-x: hidden;
 }
 
+/*
+ * 移动端布局使用 100dvh（dynamic viewport height）替代 100vh：
+ * - 100vh 在移动端浏览器工具栏展开/收起时大小会变，导致布局溢出、header/footer 跑出屏幕
+ * - 100dvh 动态跟随当前实际可视区域，工具栏变化时布局自动适配，无需禁止下拉刷新
+ */
+html, body {
+  height: 100dvh;
+}
+
 /* Tailwind CSS v4 Theme 配置 */
 @theme {
   /* 颜色 */

@@ -1,5 +1,9 @@
 <template>
-  <div class="layout-default flex h-screen flex-col overflow-hidden bg-gray-50">
+  <!--
+    h-[100dvh]: 使用动态视口高度，移动端浏览器工具栏展开/收起时自动适配。
+                100vh 会引起刷新后布局溢出、header/footer 偏移出屏。
+  -->
+  <div class="layout-default flex h-[100dvh] flex-col overflow-hidden bg-gray-50">
     <!-- 头部区域，固定顶部。可由页面通过 useCustomHeader 替换 -->
     <component :is="activeHeader" v-if="activeHeader" />
     <!-- 主要内容区域，内部滚动 -->

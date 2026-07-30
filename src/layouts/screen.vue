@@ -1,7 +1,7 @@
 <template>
-  <div class="relative h-screen w-screen overflow-hidden bg-gray-950 text-white">
+  <div class="relative h-[100dvh] w-screen overflow-hidden bg-gray-950 text-white">
     <ScreenHeader />
-    <main class="relative h-[calc(100vh-7rem)] p-4">
+    <main class="relative h-[calc(100dvh-7rem)] p-4">
       <router-view />
     </main>
     <ScreenFooter />

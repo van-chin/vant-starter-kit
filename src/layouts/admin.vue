@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen bg-gray-100">
+  <div class="flex min-h-[100dvh] bg-gray-100">
     <AdminSidebar :collapsed="sidebarCollapsed" @toggle="sidebarCollapsed = !sidebarCollapsed" />
     <div class="flex flex-1 flex-col overflow-hidden">
       <AdminNavbar @toggle-sidebar="sidebarCollapsed = !sidebarCollapsed" />
