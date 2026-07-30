@@ -12,6 +12,7 @@
     "dev": "vp dev",
     "prepare": "vp config",
     "preview": "vp preview",
+    "pwa:assets:generator": "vp exec pwa-assets-generator",
     "syncpack:fix": "syncpack fix",
     "syncpack:format": "syncpack format",
     "syncpack:lint": "syncpack lint",

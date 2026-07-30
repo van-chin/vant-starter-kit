@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- PWA 图标 — 50% 填充率 -->
+<!-- PWA 图标 — 65% 填充率 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <g transform="translate(128, 128) scale(2.7826) translate(-20, -20)">
+  <g transform="translate(89.5, 89.5) scale(3.6195) translate(-20, -20)">
     <path d="M0 0 L20 5 L20 47 L61 44 L61 59 L0 64 L0 0 Z" fill="#0253D9" transform="translate(20,43)"/>
     <path d="M0 0 L20 4 L20 88 L0 92 L0 0 Z" fill="#80CC28" transform="translate(92,20)"/>
     <path d="M0 0 L61 0 L61 12 L0 12 L0 0 Z" fill="#0052D9" transform="translate(20,25)"/>
