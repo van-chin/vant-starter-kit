@@ -1,44 +1,60 @@
 <template>
-  <div class="index">
-    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-      <van-swipe-item>1</van-swipe-item>
-      <van-swipe-item>2</van-swipe-item>
-      <van-swipe-item>3</van-swipe-item>
-      <van-swipe-item>4</van-swipe-item>
-    </van-swipe>
-    <van-nav-bar title="seed" />
-    <div class="bd-red">cart</div>
-    <van-button type="primary">主要按钮</van-button>
-    <van-button type="success">成功按钮</van-button>
-    <van-button type="default">默认按钮</van-button>
-    <van-button type="danger">危险按钮</van-button>
-    <van-button type="warning">警告按钮</van-button>
-    <div class="bd-red h-200">index</div>
+  <div class="cart-page p-4">
+    <!-- 购物车为空 -->
+    <van-empty v-if="cartStore.isEmpty" description="购物车是空的">
+      <van-button round type="primary" to="/" class="mt-4">去逛逛</van-button>
+    </van-empty>
 
-    <Department></Department>
-    <div class="">
-      <div class="bd-red">11bottom</div>
-    </div>
+    <!-- 购物车列表 -->
+    <template v-else>
+      <van-swipe-cell v-for="item in cartStore.items" :key="item.id">
+        <div class="flex items-center gap-3 border-b border-gray-100 p-3">
+          <div class="h-16 w-16 rounded bg-gray-200"></div>
+          <div class="flex-1">
+            <div class="text-sm font-medium">{{ item.name }}</div>
+            <div class="mt-1 text-xs text-gray-500">&yen;{{ item.price }}</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <van-button size="small" @click="cartStore.updateCount(item.id, item.count - 1)"
+              >-</van-button
+            >
+            <span class="w-6 text-center text-sm">{{ item.count }}</span>
+            <van-button size="small" @click="cartStore.updateCount(item.id, item.count + 1)"
+              >+</van-button
+            >
+          </div>
+        </div>
+        <template #right>
+          <van-button square type="danger" class="h-full" @click="cartStore.remove(item.id)"
+            >删除</van-button
+          >
+        </template>
+      </van-swipe-cell>
+
+      <!-- 底部结算栏 -->
+      <van-submit-bar :price="cartStore.totalPrice * 100" button-text="去结算" @submit="onCheckout">
+        <van-checkbox v-model="checked">全选</van-checkbox>
+      </van-submit-bar>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import { showToast } from 'vant';
+
 definePage({
   meta: {
-    // layout: 'default',
     title: '购物车',
     showHeader: true,
     showFooter: true,
   },
 });
-</script>
 
-<style scoped>
-.my-swipe .van-swipe-item {
-  color: #fff;
-  font-size: 20px;
-  line-height: 150px;
-  text-align: center;
-  background-color: #39a9ed;
-}
-</style>
+const cartStore = useCartStore();
+const checked = ref(true);
+
+const onCheckout = () => {
+  showToast('结算功能开发中');
+};
+</script>

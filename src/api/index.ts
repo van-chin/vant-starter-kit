@@ -24,28 +24,40 @@ export const baseAlova = createAlova({
       const { status, data: responseData } = response;
       const { code, message, data } = responseData as ApiResponse;
 
-      // HTTP 非 200 状态码处理
       if (status !== 200) {
+        const { showToast } = await import('vant');
+        showToast(`请求失败：HTTP ${status}`);
         throw new Error(`请求失败：HTTP ${status}`);
       }
 
       switch (code) {
         case BizCode.ERROR:
-          // TODO: 替换为实际的 UI 提示组件（如 ElMessage）
-          console.error(`[API] 业务错误：${message}`);
+          {
+            const { showToast } = await import('vant');
+            showToast(message || '请求失败');
+          }
           throw new Error(message);
 
         case BizCode.UNAUTHORIZED:
-          // TODO: 替换为实际的路由跳转（如 router.push('/login')）
-          console.error('[API] 未授权，请重新登录');
-          throw new Error('未授权，请重新登录');
+          {
+            const { showToast } = await import('vant');
+            showToast('登录已过期，请重新登录');
+            // 动态 import 避免循环依赖
+            const { useAuthStore } = await import('@/stores/auth');
+            useAuthStore().logout();
+            const { default: router } = await import('@/router');
+            void router.push('/login');
+          }
+          throw new Error('未授权');
 
         default:
           return data;
       }
     },
 
-    onError: (error) => {
+    onError: async (error) => {
+      const { showToast } = await import('vant');
+      showToast('网络异常，请稍后重试');
       console.error('[API] 请求异常：', error);
       throw error;
     },

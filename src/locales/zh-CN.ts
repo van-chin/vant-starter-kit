@@ -1,0 +1,48 @@
+export default {
+  app: {
+    title: 'vant-starter-kit',
+    loading: '加载中...',
+  },
+  nav: {
+    home: '首页',
+    categories: '分类',
+    seed: '种草',
+    cart: '购物车',
+    my: '我的',
+  },
+  login: {
+    title: '手机号登录',
+    username: '用户名',
+    password: '密码',
+    placeholderUsername: '请输入用户名',
+    placeholderPassword: '请输入密码',
+    submit: '登录',
+    logging: '登录中...',
+    success: '登录成功',
+    fail: '登录失败，请检查用户名和密码',
+  },
+  cart: {
+    empty: '购物车是空的',
+    goShop: '去逛逛',
+    checkout: '去结算',
+    delete: '删除',
+    pending: '结算功能开发中',
+  },
+  my: {
+    darkMode: '深色模式',
+    language: '多语言',
+    logout: '退出登录',
+    loggedOut: '已退出登录',
+  },
+  network: {
+    offline: '当前无网络连接',
+  },
+  common: {
+    confirm: '确认',
+    cancel: '取消',
+    refresh: '刷新',
+    error: '请求失败',
+    networkError: '网络异常，请稍后重试',
+    unknownError: '应用发生未知错误',
+  },
+};

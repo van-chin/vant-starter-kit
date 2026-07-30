@@ -7,7 +7,7 @@
     -->
     <van-tabbar :model-value="active" :fixed="false" safe-area-inset-bottom @change="onChange">
       <van-tabbar-item
-        v-for="item in tabItems"
+        v-for="item in localizedItems"
         :key="item.name"
         :icon="item.icon"
         :name="item.name"
@@ -24,11 +24,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useRequest } from 'alova/client';
 import { tabbarsMethod } from '@/api/methods/app';
 
 defineOptions({ name: 'DefaultFooter' });
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -36,18 +38,31 @@ const { data: tabItems } = useRequest(tabbarsMethod, {
   initialData: [],
 });
 
+/** tab name → i18n key 映射 */
+const nameToI18nKey: Record<string, string> = {
+  home: 'nav.home',
+  category: 'nav.categories',
+  seed: 'nav.seed',
+  cart: 'nav.cart',
+  my: 'nav.my',
+};
+
+/** 翻译后的标签列表 */
+const localizedItems = computed(() =>
+  tabItems.value.map((item) => ({
+    ...item,
+    label: t(nameToI18nKey[String(item.name)] ?? item.label),
+  })),
+);
+
 /** 根据当前路由路径匹配活跃 tab 的 name */
 const active = computed(() => {
-  const match = tabItems.value.find((item) => item.path === route.path);
+  const match = localizedItems.value.find((item) => item.path === route.path);
   return match?.name ?? '';
 });
 
 /** 点击 tab：统一用 router.push，即使重复点击也导航 */
-const onTabClick = (item: (typeof tabItems.value)[number]) => {
+const onTabClick = (item: (typeof localizedItems.value)[number]) => {
   router.push(item.path);
-};
-
-const onChange = (key: string) => {
-  console.info('onChange => key', key);
 };
 </script>

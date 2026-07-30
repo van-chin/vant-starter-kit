@@ -21,7 +21,7 @@ export function createVuePlugin(isBuild: boolean = false): PluginOption[] {
     vueJsx(),
     AutoImport({
       imports: ['vue', 'vue-router', 'pinia'],
-      dirs: ['src/composables'],
+      dirs: ['src/composables', 'src/stores'],
       resolvers: [VantResolver()],
       dts: 'types/automatics/auto-imports.d.ts',
     }),

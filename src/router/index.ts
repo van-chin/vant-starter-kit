@@ -7,11 +7,10 @@ import { routes, handleHotUpdate } from 'vue-router/auto-routes';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: setupLayouts(routes),
+  scrollBehavior: () => ({ top: 0, left: 0 }),
 });
 
 if (import.meta.hot) {
-  // handleHotUpdate 在 HMR 时会用原始路由（未经 setupLayouts 包裹）替换 router 的路由。
-  // 传入回调重新应用布局包裹，确保热更新后布局不丢失。
   handleHotUpdate(router, (newRoutes: RouteRecordRaw[]) => {
     router.clearRoutes();
     for (const route of setupLayouts(newRoutes)) {
@@ -19,6 +18,18 @@ if (import.meta.hot) {
     }
   });
 }
+
+// ─── 认证守卫 ─────────────────────────────────────────────────────
+// 使用动态 import 避免循环依赖：auth store → API methods → router
+router.beforeEach(async (to) => {
+  if (to.meta.requiresAuth) {
+    const { useAuthStore } = await import('@/stores/auth');
+    const authStore = useAuthStore();
+    if (!authStore.isLoggedIn) {
+      return { path: '/login', query: { redirect: to.fullPath } };
+    }
+  }
+});
 
 export const setupRouter = (app: App<Element>) => {
   app.use(router);

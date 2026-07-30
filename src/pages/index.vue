@@ -1,34 +1,79 @@
 <template>
   <div class="index">
+    <!-- Banner -->
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-      <van-swipe-item>1</van-swipe-item>
-      <van-swipe-item>2</van-swipe-item>
-      <van-swipe-item>3</van-swipe-item>
-      <van-swipe-item>4</van-swipe-item>
+      <van-swipe-item v-for="n in 4" :key="n">{{ n }}</van-swipe-item>
     </van-swipe>
-    <van-nav-bar title="首页" />
-    <div class="bd-red">vvv-hot</div>
-    <van-button type="primary">主要按钮</van-button>
-    <van-button type="success">成功按钮</van-button>
-    <van-button type="default">默认按钮</van-button>
-    <van-button type="danger">危险按钮</van-button>
-    <van-button type="warning">警告按钮</van-button>
-    <div class="bd-red h-200">index</div>
 
-    <Department></Department>
-    <div class="">
-      <div class="bd-red">11bottom</div>
+    <!-- Skeleton 加载演示 -->
+    <div v-if="loading" class="p-4">
+      <van-skeleton title avatar :row="3" />
+      <van-skeleton title avatar :row="3" class="mt-4" />
+      <van-skeleton title avatar :row="3" class="mt-4" />
+    </div>
+
+    <!-- 商品列表 -->
+    <div v-else class="grid grid-cols-2 gap-2 p-2">
+      <div
+        v-for="product in products"
+        :key="product.id"
+        class="overflow-hidden rounded-lg bg-white p-2 shadow-sm"
+      >
+        <div
+          class="mb-2 flex h-32 items-center justify-center rounded bg-gray-100 text-3xl text-gray-400"
+        >
+          {{ product.emoji }}
+        </div>
+        <div class="text-sm font-medium">{{ product.name }}</div>
+        <div class="mt-1 flex items-center justify-between">
+          <span class="text-sm font-bold text-red-500">&yen;{{ product.price }}</span>
+          <van-button size="small" type="primary" @click="addToCart(product)"> 加购 </van-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import { showToast } from 'vant';
+import type { CartItem } from '@/stores/cart';
+
 definePage({
   meta: {
-    // layout: 'default',
     showHeader: false,
     showFooter: true,
   },
+});
+
+const cartStore = useCartStore();
+const { loading, withLoading } = useLoading();
+
+/** 演示用商品数据 */
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  emoji: string;
+}
+
+const products = ref<Product[]>([]);
+
+const addToCart = (product: Product) => {
+  cartStore.add({ id: product.id, name: product.name, price: product.price, count: 1 });
+};
+
+// 模拟首次加载
+withLoading(async () => {
+  await new Promise((r) => setTimeout(r, 2000));
+  products.value = [
+    { id: '1', name: 'iPhone 16 Pro', price: 7999, emoji: '📱' },
+    { id: '2', name: 'MacBook Air M4', price: 8999, emoji: '💻' },
+    { id: '3', name: 'AirPods Pro 3', price: 1999, emoji: '🎧' },
+    { id: '4', name: 'Apple Watch Ultra', price: 5999, emoji: '⌚' },
+    { id: '5', name: 'iPad Pro M4', price: 6799, emoji: '📲' },
+    { id: '6', name: 'Vision Pro', price: 29999, emoji: '🥽' },
+  ];
 });
 </script>
 

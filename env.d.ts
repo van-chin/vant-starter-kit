@@ -1,18 +1,10 @@
 /// <reference types="vite-plus/client" />
+/// <reference types="vite/client" />
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue';
   const component: DefineComponent<{}, {}, unknown>;
   export default component;
-}
-
-declare module 'vue-router' {
-  interface RouteMeta {
-    /** 是否展示 layout 头部导航栏（默认 true） */
-    showHeader?: boolean;
-    /** 是否展示 layout 底部导航栏（默认 true） */
-    showFooter?: boolean;
-  }
 }
 
 export {};
@@ -36,6 +28,12 @@ interface ImportMetaEnv {
   readonly VITE_TAURI_DEV_HOST: string;
   /** Dev Server 主机地址 */
   readonly VITE_DEV_SERVER_HOST: string;
+  /** 应用标题 */
+  readonly VITE_APP_TITLE: string;
+  /** 应用版本号 */
+  readonly VITE_APP_VERSION: string;
+  /** 是否启用 Mock 数据 */
+  readonly VITE_ENABLE_MOCK: string;
 }
 
 interface ImportMeta {

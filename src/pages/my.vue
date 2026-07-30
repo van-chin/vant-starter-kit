@@ -28,17 +28,20 @@
       <van-cell-group inset>
         <van-cell title="下拉刷新" value="🆘" is-link to="/pull-refresh" />
         <van-cell title="列表" value="示例" is-link to="/list" />
+        <van-cell title="Vant 组件示例" value="🧩" is-link to="/components-demo" />
       </van-cell-group>
     </div>
 
     <div class="p-4">
-      <van-button type="default" block>退出登录</van-button>
+      <van-button type="default" block @click="onLogout">退出登录</van-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useDark, useToggle } from '@vueuse/core';
+import { useRouter } from 'vue-router';
+import { showToast } from 'vant';
 
 definePage({
   meta: {
@@ -51,6 +54,14 @@ definePage({
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
+const router = useRouter();
+const authStore = useAuthStore();
+
+const onLogout = () => {
+  authStore.logout();
+  showToast('已退出登录');
+  router.push('/login');
+};
 </script>
 
 <style scoped>

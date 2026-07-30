@@ -4,27 +4,36 @@ import 'dayjs/locale/zh-cn';
 /**
  * Day.js 插件配置
  *
- * 按需加载：仅保留常用插件，减少包体积。
- * 如需更多插件，参考 https://day.js.org/docs/en/plugin/plugin
- * 并在此处添加 extend() 调用。
+ * 按需加载常用插件，涵盖日期解析、格式化、时区、相对时间、
+ * 日历展示、日期比较等常见场景。
  */
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import updateLocale from 'dayjs/plugin/updateLocale';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import calendar from 'dayjs/plugin/calendar';
+import isToday from 'dayjs/plugin/isToday';
+import isYesterday from 'dayjs/plugin/isYesterday';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
 
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(updateLocale);
+dayjs.extend(customParseFormat);
+dayjs.extend(calendar);
+dayjs.extend(isToday);
+dayjs.extend(isYesterday);
+dayjs.extend(weekOfYear);
 
 /** 设置默认语言 */
 dayjs.locale('zh-cn');
 
-/** 设置全局默认时区（可选） */
-// dayjs.tz.setDefault('Asia/Shanghai')
+/** 设置全局默认时区 */
+dayjs.tz.setDefault('Asia/Shanghai');
 
 /** 自定义相对时间显示 */
 dayjs.updateLocale('zh-cn', {
@@ -42,6 +51,14 @@ dayjs.updateLocale('zh-cn', {
     MM: '%d个月',
     y: '1年',
     yy: '%d年',
+  },
+  calendar: {
+    sameDay: '[今天] HH:mm',
+    nextDay: '[明天] HH:mm',
+    nextWeek: 'dddd HH:mm',
+    lastDay: '[昨天] HH:mm',
+    lastWeek: 'dddd HH:mm',
+    sameElse: 'YYYY-MM-DD HH:mm',
   },
 });
 

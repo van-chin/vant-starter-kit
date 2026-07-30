@@ -7,6 +7,7 @@ import '@/plugins/dayjs';
 
 import App from './App.vue';
 
+import { i18n } from '@/plugins/i18n';
 import { setupRouter } from '@/router';
 
 import { setupStore } from '@/stores';
@@ -34,6 +35,16 @@ window.addEventListener('resize', setAppHeight);
 
 const initApplication = async () => {
   const app = createApp(App);
+
+  // ─── 全局错误捕获 ──────────────────────────────────────────
+  app.config.errorHandler = async (err) => {
+    const { showToast } = await import('vant');
+    showToast(err instanceof Error ? err.message : '应用发生未知错误');
+    console.error('[App Error]', err);
+  };
+
+  // 设置国际化
+  app.use(i18n);
 
   // 设置状态管理
   setupStore(app);
