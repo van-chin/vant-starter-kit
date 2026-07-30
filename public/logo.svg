@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Iconfont 标准版 LOGO SVG
+  - 画布尺寸：1024x1024，viewBox="0 0 1024 1024"
+  - 图标原始内容边界：92x92（x:20~112, y:20~112）
+  - 默认方案：内切圆的内切正方形（几何最佳居中）
+
+  ============================================================
+  缩放方案速查：
+  ============================================================
+
+  transform 模板：translate(T, T) scale(S) translate(-20, -20)
+  公式：T = (1024 - 92 x S) / 2
+
+  [方案1] 内切正方形 (724)  S=7.8704  T=149.96  默认，几何最居中
+  [方案2] 920区域 (边距52)  S=10      T=52      整数倍，坐标干净
+  [方案3] 896安全区(边距64)  S=9.74    T=64      官方保守区
+  [方案4] 960安全区(边距32)  S=10.435  T=32      图标最大
+
+  下方已预备好 4 行代码，取消一行注释、注释掉其他行即可切换。
+-->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+
+  <!--
+    切换方案：取消一行注释，注释掉其他行即可
+    方案1-内切正方形(默认) | 方案2-920整数 | 方案3-896安全 | 方案4-960饱满
+  -->
+  <g transform="translate(149.96, 149.96) scale(7.8704) translate(-20, -20)">
+
+  <!-- <g transform="translate(149.96, 149.96) scale(7.8704) translate(-20, -20)"> -->
+  <!-- <g transform="translate(52, 52) scale(10) translate(-20, -20)"> -->
+  <!-- <g transform="translate(64, 64) scale(9.74) translate(-20, -20)"> -->
+  <!-- <g transform="translate(32, 32) scale(10.435) translate(-20, -20)"> -->
+
+    <!-- 图形 1：深蓝色不规则形状 -->
+    <path d="M0 0 L20 5 L20 47 L61 44 L61 59 L0 64 L0 0 Z" fill="#0253D9" transform="translate(20,43)"/>
+
+    <!-- 图形 2：绿色长条形状 -->
+    <path d="M0 0 L20 4 L20 88 L0 92 L0 0 Z" fill="#80CC28" transform="translate(92,20)"/>
+
+    <!-- 图形 3：深蓝色矩形 -->
+    <path d="M0 0 L61 0 L61 12 L0 12 L0 0 Z" fill="#0052D9" transform="translate(20,25)"/>
+
+    <!-- 图形 4：天蓝色小三角形 -->
+    <path d="M0 0 L0 24 L-14 24 L-14 3 L0 0 Z" fill="#02ADEF" transform="translate(65,54)"/>
+
+    <!-- 图形 5：绿色小三角形 -->
+    <path d="M0 0 L14 0 L14 21 L0 24 L0 0 Z" fill="#80CC29" transform="translate(67,54)"/>
+
+  </g>
+
+</svg>
