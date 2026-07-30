@@ -1,7 +1,10 @@
 <template>
-  <div class="relative h-[100dvh] w-screen overflow-hidden bg-gray-950 text-white">
+  <div class="vh-full relative w-screen overflow-hidden bg-gray-950 text-white">
     <ScreenHeader />
-    <main class="relative h-[calc(100dvh-7rem)] p-4">
+    <main
+      class="relative min-h-0 overflow-y-auto overscroll-contain p-4"
+      :style="{ height: `calc(var(--app-height, 100dvh) - 7rem)` }"
+    >
       <router-view />
     </main>
     <ScreenFooter />

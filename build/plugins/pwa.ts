@@ -1,5 +1,4 @@
 import type { PluginOption } from 'vite';
-import { resolve } from 'node:path';
 import { VitePWA } from 'vite-plugin-pwa';
 
 /**

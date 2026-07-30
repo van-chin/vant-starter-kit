@@ -1,18 +1,25 @@
 <template>
   <!--
-    h-[100dvh]: 使用动态视口高度，移动端浏览器工具栏展开/收起时自动适配。
-                100vh 会引起刷新后布局溢出、header/footer 偏移出屏。
+    App Shell 三段式布局：
+
+      header (flex-none) — 钉死在顶部
+      main   (flex-1 min-h-0) — 唯一的滚动区域
+      footer (flex-none) — 钉死在底部
+
+    vh-full: 由 JS --app-height 驱动，100dvh → 100svh 递进回退。
+    overscroll-contain: main 滚到头/底时手势不接力给 body。
+    min-h-0: ★ 允许 main 收缩到比内容矮——没有这行 flex 子项默认
+             min-height: auto，内容一多会撑破外壳，tabbar 被挤出屏外。
   -->
-  <div class="layout-default flex h-[100dvh] flex-col overflow-hidden bg-gray-50">
-    <!-- 头部区域，固定顶部。可由页面通过 useCustomHeader 替换 -->
-    <component :is="activeHeader" v-if="activeHeader" />
-    <!-- 主要内容区域，内部滚动 -->
-    <main class="flex-1 overflow-y-auto">
+  <div class="layout-default vh-full flex flex-col overflow-hidden bg-gray-50">
+    <!-- header: 不伸缩，钉在顶部 -->
+    <component :is="activeHeader" class="flex-none" v-if="activeHeader" />
+    <!-- main: 唯一滚动容器，min-h-0 防止内容撑破外壳 -->
+    <main class="min-h-0 flex-1 overflow-y-auto overscroll-contain">
       <router-view />
     </main>
-    <!-- 底部区域，正常流布局，flex 自动分配空间。
-         可由页面通过 useCustomFooter 替换 -->
-    <component :is="activeFooter" v-if="activeFooter" />
+    <!-- footer: 不伸缩，钉在底部 -->
+    <component :is="activeFooter" class="flex-none" v-if="activeFooter" />
   </div>
 </template>
 

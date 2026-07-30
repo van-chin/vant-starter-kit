@@ -359,8 +359,8 @@ VitePWA({
 | `package.json`           | PWA 依赖引用（devDependencies）                                      |
 | `build/plugins/pwa.ts`   | PWA 插件工厂函数，配置 manifest + workbox 策略                       |
 | `build/index.ts`         | 插件注册入口，条件加载 PWA 插件（生产构建）                          |
-| `public/pwa-192x192.png` | PWA 图标 192×192（从 logo.svg 生成）                              |
-| `public/pwa-512x512.png` | PWA 图标 512×512 + maskable（从 logo.svg 生成）                   |
+| `public/pwa-192x192.png` | PWA 图标 192×192（从 logo.svg 生成）                                 |
+| `public/pwa-512x512.png` | PWA 图标 512×512 + maskable（从 logo.svg 生成）                      |
 
 ---
 
@@ -419,16 +419,18 @@ node scripts/generate-icons.mjs
 
 该脚本会遍历 `public/` 目录下的源文件，生成所有图标变体：
 
-| 目标文件              | 尺寸    | 生成方式                        |
-| --------------------- | ------- | ------------------------------- |
-| `public/favicon.svg`  | 32×32   | 直接派生自 logo.svg             |
-| `public/icons.svg`    | 512×512 | 直接派生自 logo.svg             |
-| `public/pwa-192x192.png` | 192×192 | `@resvg/resvg-js` 渲染导出    |
-| `public/pwa-512x512.png` | 512×512 | `@resvg/resvg-js` 渲染导出    |
+| 目标文件                 | 尺寸    | 生成方式                   |
+| ------------------------ | ------- | -------------------------- |
+| `public/favicon.svg`     | 32×32   | 直接派生自 logo.svg        |
+| `public/icons.svg`       | 512×512 | 直接派生自 logo.svg        |
+| `public/pwa-192x192.png` | 192×192 | `@resvg/resvg-js` 渲染导出 |
+| `public/pwa-512x512.png` | 512×512 | `@resvg/resvg-js` 渲染导出 |
 
 > macOS 用户也可使用 `sips` 命令快捷转换：
+>
 > ```bash
 > sips -s format png -z 192 192 public/logo.svg --out public/pwa-192x192.png
 > sips -s format png -z 512 512 public/logo.svg --out public/pwa-512x512.png
 > ```
+>
 > 但 `sips` 不支持透明背景的 SVG 完美渲染，建议使用 `@resvg/resvg-js`。

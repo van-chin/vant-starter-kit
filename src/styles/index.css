@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 /*
- * 跨平台滚动条兼容性修复：
+ * ─── 跨平台滚动条兼容性修复 ────────────────────────────────────
  * macOS 使用 overlay 滚动条（不占布局空间），Windows 使用非 overlay 滚动条（占 ~17px）。
  * fixed 元素（如 van-tabbar）的 width: 100% 基于视口全宽（含滚动条区域），
  * 在 Windows 上会导致水平溢出 → 触发水平滚动条 → 挤压垂直空间 → 底部出现多余空白。
@@ -12,21 +12,49 @@ html {
 }
 
 /*
- * 移动端布局使用 100dvh（dynamic viewport height）替代 100vh：
- * - 100vh 在移动端浏览器工具栏展开/收起时大小会变，导致布局溢出、header/footer 跑出屏幕
- * - 100dvh 动态跟随当前实际可视区域，工具栏变化时布局自动适配，无需禁止下拉刷新
+ * ─── App Shell：body 焊死，永不滚动 ────────────────────────────
+ *
+ * 这是整个布局修复的基石。所有"下拉刷新""头/脚消失""边界橡皮筋"
+ * 都是同一个病的三张脸——病根是 body 变成了可滚的画布。
+ *
+ * 治法：html/body 焊死，滚动唯一发生在 main 内部（overflow-y: auto）。
+ * 刷新前后内容高度怎么变，都再也波及不到头和脚。
+ *
+ * 高度策略（三层递进回退）：
+ *   1. --app-height  由 main.ts 用 window.innerHeight 精确测量（最准）
+ *   2. 100dvh         浏览器原生动态视口单位
+ *   3. 100svh         不支持 dvh 的老浏览器用小视口高度兜底
+ *
+ * overscroll-behavior:
+ *   浏览器模式下用 none（让 body 不参与任何越界手势）。
+ *   PWA 模式下用 contain（PWA 的 standalone 模式有独立的 overscroll 行为）。
  */
-html, body {
-  height: 100dvh;
+html,
+body {
+  height: var(--app-height, 100dvh);
+  margin: 0;
+  overscroll-behavior: none;
+  /* iOS 防橡皮筋：把 body 固定在视口内，不被手势位移 */
+  position: fixed;
+  inset: 0;
+}
+
+/*
+ * PWA 模式（display-mode: standalone）下的特殊处理：
+ * Chrome 的 Pull-to-Refresh 在浏览器层面拦截手势并移动整个页面，
+ * 即使 body 已经 overflow:hidden 也无法完全阻止。
+ * 用 overscroll-behavior: contain 替代 none 来抑制。
+ * 浏览器模式下用户保留原生下拉刷新能力。
+ */
+@media (display-mode: standalone) {
+  html,
+  body {
+    overscroll-behavior: contain;
+  }
 }
 
 /* Tailwind CSS v4 Theme 配置 */
 @theme {
-  /* 颜色 */
-  /*--color-primary: #3b82f6;
-  --color-secondary: #64748b;*/
-
-  /* 字体 */
   --font-sans: ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, monospace;
 }
@@ -40,4 +68,17 @@ html, body {
 
 @utility bd-red {
   border: 1px solid red;
+}
+
+/*
+ * 视口高度工具类（App Shell 外壳高度）：
+ * 由 JS 赋值的 --app-height 驱动，100dvh → 100svh 递进回退。
+ * 在 layout 容器上使用，确保外壳 = 可视区域高度。
+ */
+@utility vh-full {
+  height: var(--app-height, 100dvh);
+}
+
+@utility min-vh-full {
+  min-height: var(--app-height, 100dvh);
 }
