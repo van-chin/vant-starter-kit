@@ -14,37 +14,32 @@ html {
 /*
  * ─── App Shell：body 焊死，永不滚动 ────────────────────────────
  *
- * 这是整个布局修复的基石。所有"下拉刷新""头/脚消失""边界橡皮筋"
- * 都是同一个病的三张脸——病根是 body 变成了可滚的画布。
+ * body 被焊死（overflow:hidden + position:fixed），不提供页面级滚动。
+ * 滚动唯一发生在各布局的 main 内部，刷新前后内容高度怎么变都波及不到头脚。
  *
- * 治法：html/body 焊死，滚动唯一发生在 main 内部（overflow-y: auto）。
- * 刷新前后内容高度怎么变，都再也波及不到头和脚。
+ * overscroll：浏览器模式下 body 焊死，越界手势传至 body 时
+ * body 无法位移 → 浏览器触发 Pull-to-Refresh → 用户可下拉刷新。
+ * PWA 模式下通过 @media standalone 禁用下拉刷新，提供类原生 App 体验。
  *
  * 高度策略（三层递进回退）：
  *   1. --app-height  由 main.ts 用 window.innerHeight 精确测量（最准）
  *   2. 100dvh         浏览器原生动态视口单位
  *   3. 100svh         不支持 dvh 的老浏览器用小视口高度兜底
- *
- * overscroll-behavior:
- *   浏览器模式下用 none（让 body 不参与任何越界手势）。
- *   PWA 模式下用 contain（PWA 的 standalone 模式有独立的 overscroll 行为）。
  */
 html,
 body {
   height: var(--app-height, 100dvh);
   margin: 0;
-  overscroll-behavior: none;
   /* iOS 防橡皮筋：把 body 固定在视口内，不被手势位移 */
   position: fixed;
   inset: 0;
 }
 
 /*
- * PWA 模式（display-mode: standalone）下的特殊处理：
- * Chrome 的 Pull-to-Refresh 在浏览器层面拦截手势并移动整个页面，
- * 即使 body 已经 overflow:hidden 也无法完全阻止。
- * 用 overscroll-behavior: contain 替代 none 来抑制。
- * 浏览器模式下用户保留原生下拉刷新能力。
+ * PWA 模式（display-mode: standalone）：
+ * 浏览器的 Pull-to-Refresh 会移动整个页面窗口，打破 App 沉浸感。
+ * 仅在此模式禁用原生下拉刷新，浏览器模式正常保留。
+ * PWA 用户通过导航栏右侧的刷新按钮手动获取最新内容。
  */
 @media (display-mode: standalone) {
   html,

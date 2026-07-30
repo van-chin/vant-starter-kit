@@ -3,7 +3,7 @@
     <AdminSidebar :collapsed="sidebarCollapsed" @toggle="sidebarCollapsed = !sidebarCollapsed" />
     <div class="flex flex-1 flex-col overflow-hidden">
       <AdminNavbar @toggle-sidebar="sidebarCollapsed = !sidebarCollapsed" />
-      <main class="min-h-0 flex-1 overflow-y-auto overscroll-contain p-6">
+      <main class="min-h-0 flex-1 overflow-y-auto p-6">
         <router-view />
       </main>
     </div>

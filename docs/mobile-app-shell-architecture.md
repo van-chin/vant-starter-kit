@@ -10,11 +10,11 @@
 
 移动端 PWA / 浏览器全屏应用中，存在以下三类连锁异常：
 
-| # | 现象 | 触发条件 |
-|---|------|---------|
-| ① | **下拉触发整页刷新**（Pull-to-Refresh） | 页面滚动到顶部后继续下拉 |
-| ② | **Header / Footer 不在视窗内** | 页面刷新后向上/下滚动 |
-| ③ | **边界橡皮筋 / 滚动链** | 滚动到最顶/底部后继续拖拽 |
+| #   | 现象                                    | 触发条件                  |
+| --- | --------------------------------------- | ------------------------- |
+| ①   | **下拉触发整页刷新**（Pull-to-Refresh） | 页面滚动到顶部后继续下拉  |
+| ②   | **Header / Footer 不在视窗内**          | 页面刷新后向上/下滚动     |
+| ③   | **边界橡皮筋 / 滚动链**                 | 滚动到最顶/底部后继续拖拽 |
 
 三类现象**总是同时出现**，刷新只是扳机，真正的病灶在页面刷新前后高度变化时暴露。
 
@@ -53,11 +53,11 @@
 
 **病根只有一个：本该固定的"外壳"（body / shell）变成了可滚的画布。**
 
-| 脸谱 | 对应现象 | 直接原因 |
-|------|---------|---------|
-| ① 下拉刷新 | 浏览器 Pull-to-Refresh | body 可滚 → 在顶部越界下拉被浏览器解释为刷新手势 |
-| ② 头/脚消失 | Header / Footer 不在视口 | header/footer 躺在文档流中，body 一滚就跟着跑 |
-| ③ 边界橡皮筋 | 滚动到底部/顶部继续拽 | body 内层滚动容器到达边界后，手势"接力"到 body → 越界 → 橡皮筋 |
+| 脸谱         | 对应现象                 | 直接原因                                                       |
+| ------------ | ------------------------ | -------------------------------------------------------------- |
+| ① 下拉刷新   | 浏览器 Pull-to-Refresh   | body 可滚 → 在顶部越界下拉被浏览器解释为刷新手势               |
+| ② 头/脚消失  | Header / Footer 不在视口 | header/footer 躺在文档流中，body 一滚就跟着跑                  |
+| ③ 边界橡皮筋 | 滚动到底部/顶部继续拽    | body 内层滚动容器到达边界后，手势"接力"到 body → 越界 → 橡皮筋 |
 
 ### 2.3 刷新为什么是扳机
 
@@ -75,12 +75,12 @@
 
 ### 2.4 四个元凶（按危害排序）
 
-| 优先级 | 元凶 | 说明 |
-|-------|------|------|
-| ★★★★★ | **`min-height: auto`** | flex 子项默认 `min-height: auto`，拒绝收缩到比内容矮。内容一多就把外壳撑破，是"刷新后高度变化"最常见的元凶 |
-| ★★★★ | **`100vh` 含栏高度** | 移动端 `100vh` 包含工具栏空间，工具栏展开/收起时 `100vh` 与实际可视区域不匹配 |
-| ★★★ | **异步内容 reflow** | 图片/字体/动态组件刷新后渲染，总高"+1px"就把 body 推过临界线 |
-| ★★ | **sticky 粘错容器** | `position: sticky` 以最近的可滚动祖先为参考系，祖先若为 body 则跟着 body 跑 |
+| 优先级 | 元凶                   | 说明                                                                                                       |
+| ------ | ---------------------- | ---------------------------------------------------------------------------------------------------------- |
+| ★★★★★  | **`min-height: auto`** | flex 子项默认 `min-height: auto`，拒绝收缩到比内容矮。内容一多就把外壳撑破，是"刷新后高度变化"最常见的元凶 |
+| ★★★★   | **`100vh` 含栏高度**   | 移动端 `100vh` 包含工具栏空间，工具栏展开/收起时 `100vh` 与实际可视区域不匹配                              |
+| ★★★    | **异步内容 reflow**    | 图片/字体/动态组件刷新后渲染，总高"+1px"就把 body 推过临界线                                               |
+| ★★     | **sticky 粘错容器**    | `position: sticky` 以最近的可滚动祖先为参考系，祖先若为 body 则跟着 body 跑                                |
 
 ---
 
@@ -133,18 +133,19 @@
 height: var(--app-height, 100dvh);
 ```
 
-| 单位 | 含义 | 特点 |
-|------|------|------|
+| 单位                 | 含义           | 特点                           |
+| -------------------- | -------------- | ------------------------------ |
 | `window.innerHeight` | 运行时 JS 测量 | **始终精确**，不含系统 UI 占位 |
-| `100dvh` | 动态视口高度 | 工具栏展开/收起时**实时跟随** |
-| `100svh` | 小视口高度 | 工具栏展开时的高度，**最保守** |
+| `100dvh`             | 动态视口高度   | 工具栏展开/收起时**实时跟随**  |
+| `100svh`             | 小视口高度     | 工具栏展开时的高度，**最保守** |
 
 为什么不用 `100vh`？
+
 ```
 工具栏展开时:
   100vh  = 896px（全屏高度，错误 ❌）
   100dvh = 792px（当前可视区域，正确 ✅）
-  
+
 工具栏收起时:
   100vh  = 896px（全屏，正常 ✅）
   100dvh = 896px（全屏，正常 ✅）
@@ -158,10 +159,10 @@ CSS Flexbox 规范中，flex 子项的 `min-height` 默认为 `auto`，意味着
 .shell {
   display: flex;
   flex-direction: column;
-  height: 100dvh;    /* 假设 = 800px */
+  height: 100dvh; /* 假设 = 800px */
 }
 .main {
-  flex: 1;           /* 期望吃掉剩余空间 */
+  flex: 1; /* 期望吃掉剩余空间 */
   /* ★ min-height: auto（默认）→ 内容高 900px 时拒绝收缩 */
   /* ★ 结果：.shell 被撑到 900px → 外壳溢出 → body 滚 */
 }
@@ -189,13 +190,15 @@ min-height: auto（默认 ── ✗）   |   min-height: 0（修复 ── ✓�
 
 ```css
 /* body 层：禁止页面级越界 */
-html, body {
+html,
+body {
   overscroll-behavior: none;
 }
 
 /* PWA 模式：standalone 有独立手势，需加强制止 */
 @media (display-mode: standalone) {
-  html, body {
+  html,
+  body {
     overscroll-behavior: contain;
   }
 }
@@ -244,17 +247,19 @@ PWA 模式:   浏览器的下拉刷新被 CSS 阻止（standalone 模式下会�
 html {
   overflow-x: hidden;
 }
-html, body {
+html,
+body {
   height: var(--app-height, 100dvh);
   margin: 0;
   overscroll-behavior: none;
-  position: fixed;      /* iOS 防橡皮筋 */
+  position: fixed; /* iOS 防橡皮筋 */
   inset: 0;
 }
 
 /* ─── PWA 模式 ──────────────────────────────────────────── */
 @media (display-mode: standalone) {
-  html, body {
+  html,
+  body {
     overscroll-behavior: contain;
   }
 }
@@ -274,10 +279,7 @@ html, body {
 
 ```typescript
 const setAppHeight = () => {
-  document.documentElement.style.setProperty(
-    '--app-height',
-    `${window.innerHeight}px`,
-  );
+  document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
 };
 setAppHeight();
 window.addEventListener('resize', setAppHeight);
@@ -293,18 +295,19 @@ window.addEventListener('resize', setAppHeight);
 <div class="layout-default flex vh-full flex-col overflow-hidden bg-gray-50">
   <!-- header: 钉死在顶部 -->
   <component :is="activeHeader" class="flex-none" v-if="activeHeader" />
-  
+
   <!-- main: 唯一滚动区域 -->
   <main class="flex-1 min-h-0 overflow-y-auto overscroll-contain">
     <router-view />
   </main>
-  
+
   <!-- footer: 钉死在底部 -->
   <component :is="activeFooter" class="flex-none" v-if="activeFooter" />
 </div>
 ```
 
 关键点：
+
 - `flex-none` — 头/脚不参与伸缩，高度由内容决定
 - `flex-1` — main 吃掉剩余空间
 - `min-h-0` — ★ 允许 main 收缩到比内容矮
@@ -363,24 +366,24 @@ export function usePwaRefresh() {
 
 完成修复后，以下 5 项全部通过才算达标：
 
-| # | 验证项 | 方法 | 预期结果 |
-|---|--------|------|---------|
-| 1 | body 焊死 | `document.scrollingElement.scrollTop` 始终为 0 | ✅ 不滚动 |
-| 2 | 内容撑不破外壳 | 在 main 中塞超长内容 | ✅ 只有 main 出滚动条，header/footer 纹丝不动 |
-| 3 | 下拉刷新 | 页面顶部用力下拉 | ✅ 浏览器模式：触发刷新；PWA 模式：不触发（用按钮替代） |
-| 4 | 边界无橡皮筋 | 在 main 滚到顶/底继续拽 | ✅ 手势不传给 body，无整页弹动 |
-| 5 | 工具栏变化 | 旋转屏幕 / 弹出键盘再收起 | ✅ 头脚位置不变，布局不跳 |
+| #   | 验证项         | 方法                                           | 预期结果                                                |
+| --- | -------------- | ---------------------------------------------- | ------------------------------------------------------- |
+| 1   | body 焊死      | `document.scrollingElement.scrollTop` 始终为 0 | ✅ 不滚动                                               |
+| 2   | 内容撑不破外壳 | 在 main 中塞超长内容                           | ✅ 只有 main 出滚动条，header/footer 纹丝不动           |
+| 3   | 下拉刷新       | 页面顶部用力下拉                               | ✅ 浏览器模式：触发刷新；PWA 模式：不触发（用按钮替代） |
+| 4   | 边界无橡皮筋   | 在 main 滚到顶/底继续拽                        | ✅ 手势不传给 body，无整页弹动                          |
+| 5   | 工具栏变化     | 旋转屏幕 / 弹出键盘再收起                      | ✅ 头脚位置不变，布局不跳                               |
 
 ---
 
 ## 六、浏览器兼容性
 
-| 特性 | Chrome Android | Safari iOS | Firefox Android |
-|-----|---------------|------------|-----------------|
-| `100dvh` | 108+ ✅ | 15.4+ ✅ | 101+ ✅ |
-| `overscroll-behavior` | 63+ ✅ | 16+ ⚠️(晚) | 59+ ✅ |
-| `env(safe-area-inset-bottom)` | 69+ ✅ | 11+ ✅ | 64+ ✅ |
-| `position: fixed` iOS 锁体 | — | 全版本 ✅ | — |
+| 特性                          | Chrome Android | Safari iOS | Firefox Android |
+| ----------------------------- | -------------- | ---------- | --------------- |
+| `100dvh`                      | 108+ ✅        | 15.4+ ✅   | 101+ ✅         |
+| `overscroll-behavior`         | 63+ ✅         | 16+ ⚠️(晚) | 59+ ✅          |
+| `env(safe-area-inset-bottom)` | 69+ ✅         | 11+ ✅     | 64+ ✅          |
+| `position: fixed` iOS 锁体    | —              | 全版本 ✅  | —               |
 
 > **iOS 注意**：`overscroll-behavior` 在 iOS 上支持较晚且不彻底。`position: fixed; inset: 0;` 是 iOS 上"锁住页面不让整体拽走"的有效手段，已包含在方案中。
 
