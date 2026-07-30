@@ -6,6 +6,17 @@
       <van-swipe-item>3</van-swipe-item>
       <van-swipe-item>4</van-swipe-item>
     </van-swipe>
+
+    <div class="py-2">
+      <van-cell-group inset>
+        <van-cell title="深色模式">
+          <template #right-icon>
+            <van-switch :model-value="isDark" size="18px" @click="toggleDark()" />
+          </template>
+        </van-cell>
+        <van-cell title="多语文" is-link value="简体中文" />
+      </van-cell-group>
+    </div>
     <div class="py-2">
       <van-cell-group inset>
         <van-cell title="单元格" value="我是新修改的内容" />
@@ -15,8 +26,8 @@
 
     <div class="py-2">
       <van-cell-group inset>
-        <van-cell title="单元格" value="我是新修改的内容" />
-        <van-cell title="单元格" value="xxxx" is-link to="/categories" />
+        <van-cell title="下拉刷新" value="🆘" is-link to="/pull-refresh" />
+        <van-cell title="列表" value="示例" is-link to="/list" />
       </van-cell-group>
     </div>
 
@@ -27,6 +38,8 @@
 </template>
 
 <script setup lang="ts">
+import { useDark, useToggle } from '@vueuse/core';
+
 definePage({
   meta: {
     // layout: 'default',
@@ -35,6 +48,9 @@ definePage({
     showFooter: true,
   },
 });
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 </script>
 
 <style scoped>

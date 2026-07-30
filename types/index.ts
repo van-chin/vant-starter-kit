@@ -11,3 +11,5 @@
 export * from './api/response';
 export * from './api/auth';
 export * from './api/tab-items';
+
+export * from './api/app/tabbars';

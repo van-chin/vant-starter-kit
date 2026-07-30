@@ -12,7 +12,9 @@
     overscroll 放开：主内容区越界手势传给 body → body 焊死无法位移
     → 浏览器触发 Pull-to-Refresh → 用户可下拉刷新。
   -->
-  <div class="layout-default vh-full flex flex-col overflow-hidden bg-gray-50">
+  <div
+    class="layout-default vh-full flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-950 dark:text-gray-100"
+  >
     <!-- header: 不伸缩，钉在顶部 -->
     <component :is="activeHeader" class="flex-none" v-if="activeHeader" />
     <!-- main: 唯一滚动容器，越界手势放开以支持下拉刷新 -->

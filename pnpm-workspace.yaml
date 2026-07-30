@@ -3,7 +3,7 @@ catalog:
   vite-plus: 0.2.6
   vue: '^3.6.0-rc.2'
   vant: '^4.10.0'
-  '@vueuse/core': '^14.3.0'
+  '@vueuse/core': '^14.4.0'
   '@unhead/vue': '^3.2.3'
   '@vant/touch-emulator': '^1.5.0'
   pinia: '^4.0.2'

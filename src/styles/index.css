@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * ─── 跨平台滚动条兼容性修复 ────────────────────────────────────
  * macOS 使用 overlay 滚动条（不占布局空间），Windows 使用非 overlay 滚动条（占 ~17px）。
@@ -33,6 +35,19 @@ body {
   /* iOS 防橡皮筋：把 body 固定在视口内，不被手势位移 */
   position: fixed;
   inset: 0;
+  /* 深色模式过渡 */
+  background-color: #fff;
+  color: #333;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.dark body,
+body.dark,
+.dark {
+  background-color: #111;
+  color: #eee;
 }
 
 /*
