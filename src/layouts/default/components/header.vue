@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky top-0 z-50 bg-white">
+  <header class="sticky top-0 z-50 bg-white dark:bg-gray-950">
     <van-nav-bar :title="pageTitle" />
   </header>
 </template>
