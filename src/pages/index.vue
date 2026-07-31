@@ -17,16 +17,18 @@
       <div
         v-for="product in products"
         :key="product.id"
-        class="overflow-hidden rounded-lg bg-white p-2 shadow-sm"
+        class="overflow-hidden rounded-lg bg-white p-2 shadow-sm dark:bg-gray-800"
       >
         <div
-          class="mb-2 flex h-32 items-center justify-center rounded bg-gray-100 text-3xl text-gray-400"
+          class="mb-2 flex h-32 items-center justify-center rounded bg-gray-100 text-3xl text-gray-400 dark:bg-gray-700 dark:text-gray-500"
         >
           {{ product.emoji }}
         </div>
-        <div class="text-sm font-medium">{{ product.name }}</div>
+        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ product.name }}</div>
         <div class="mt-1 flex items-center justify-between">
-          <span class="text-sm font-bold text-red-500">&yen;{{ product.price }}</span>
+          <span class="text-sm font-bold text-red-500 dark:text-red-400"
+            >&yen;{{ product.price }}</span
+          >
           <van-button size="small" type="primary" @click="addToCart(product)"> 加购 </van-button>
         </div>
       </div>
