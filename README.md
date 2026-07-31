@@ -233,6 +233,43 @@ const { data: tabItems } = useRequest(tabbarsMethod, { initialData: [] });
 | `VITE_PUBLIC_PATH`  | 应用基础路径       | `/`           |
 | `VITE_ENV_NAME`     | 环境名称           | `development` |
 
+## CI/CD 自动部署（Cloudflare Workers）
+
+推送 `main` 分支后，GitHub Actions 自动构建并部署到 Cloudflare Workers，无需手动执行 `vp run wrangler:deploy`：
+
+```
+git push origin main
+      │
+      ▼
+GitHub Actions (ubuntu-latest)
+  ├─ pnpm install --frozen-lockfile   (pnpm 11.18.0 / Node 24)
+  ├─ pnpm build                       (tsc && vp build)
+  └─ wrangler deploy                  (工作目录 .output/server，wrangler 4.116.0)
+      │
+      ▼
+Cloudflare Workers (van-chin-vant-starter-kit)
+```
+
+### 首次配置（一次性）
+
+在 GitHub 仓库 **Settings → Secrets and variables → Actions** 添加两个 secrets：
+
+| Secret                    | 获取方式                                                                                       |
+| ------------------------- | ---------------------------------------------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`    | Cloudflare 控制台 → 右上角头像 → **My Profile → API Tokens → Create Token**，选择 *Edit Cloudflare Workers* 模板 |
+| `CLOUDFLARE_ACCOUNT_ID`   | Cloudflare 控制台 → **Workers & Pages** 右侧栏的 Account ID                                    |
+
+> ⚠️ **先配置 secrets，再推送 workflow 文件**，否则首次运行会因缺少 token 失败。
+
+### 触发方式
+
+- **自动**：推送 `main` 分支
+- **手动**：GitHub Actions 页面 → Deploy to Cloudflare Workers → **Run workflow**
+
+### 构建期环境变量
+
+CI 构建默认注入 `VITE_ENV_NAME=production`。如需其他 `VITE_*` 变量（如 `VITE_TCC_APP_ID`），在 `.github/workflows/deploy.yml` 的 Build 步骤按注释追加（也可存为 Actions secret 后引用，如 `${{ secrets.VITE_TCC_APP_ID }}`）。
+
 ## 服务端 API
 
 项目使用 [Nitro](https://nitro.unjs.io/) 提供服务端能力，支持 SQLite 数据库开箱即用：

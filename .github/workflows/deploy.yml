@@ -1,0 +1,44 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # 支持手动触发
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false # 防止并发部署竞争
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.18.0 # 与 devEngines 一致
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version # 24.18.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+        env:
+          VITE_ENV_NAME: production
+          # 其他构建期变量可按需追加，例如：
+          # VITE_TCC_APP_ID: ${{ secrets.VITE_TCC_APP_ID }}
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} # wrangler.json 无此字段，必须显式传
+          command: deploy
+          workingDirectory: .output/server # 相对路径 ../public 在此解析
+          wranglerVersion: '4.116.0' # 与本地 catalog 版本一致，避免行为漂移
