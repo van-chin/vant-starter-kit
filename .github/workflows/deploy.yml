@@ -31,6 +31,8 @@ jobs:
         run: pnpm build
         env:
           VITE_ENV_NAME: production
+          # vConsole 移动端调试面板：prod 默认启用（也可通过 ?vconsole 按需开启）
+          VITE_ENABLE_VCONSOLE: 'true'
           # 其他构建期变量可按需追加，例如：
           # VITE_TCC_APP_ID: ${{ secrets.VITE_TCC_APP_ID }}
 

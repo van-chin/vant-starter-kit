@@ -6,14 +6,17 @@
     <link rel="icon" href="/pwa-icon.svg" sizes="any" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- 状态栏颜色：JS 运行时动态切换（浅色 #fff / 深色 #1c1c1e，与导航栏同色） -->
+    <!-- 状态栏颜色：由 useStatusBar 通过 Unhead 动态管理（浅色 #fff / 深色 #1c1c1e，与导航栏同色）。
+         注意：不要在此添加第二个 theme-color meta（如 media 变体）——Unhead 会在导航时
+         按自身状态重建 head，多余 meta 会造成状态栏颜色失效 -->
     <meta name="theme-color" content="#ffffff" />
-    <!-- 系统级深色模式预判：JS 加载前减少白闪 -->
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1c1c1e" />
     <!-- iOS PWA 状态栏：black-translucent 让内容延伸到状态栏下方（CSS safe-area 兜底） -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <!-- ─── SEO / Meta 标签（静态兜底，运行时由 @unhead/vue 动态接管） ─── -->
-    <meta name="description" content="基于 Vue 3 + Vant 4 的移动端 H5 / PWA 快速启动模板，支持 App Shell 布局、深色模式、国际化" />
+    <meta
+      name="description"
+      content="基于 Vue 3 + Vant 4 的移动端 H5 / PWA 快速启动模板，支持 App Shell 布局、深色模式、国际化"
+    />
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="vant-starter-kit" />
