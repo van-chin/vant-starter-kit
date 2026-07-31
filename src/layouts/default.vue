@@ -27,6 +27,9 @@
     </main>
     <!-- footer: 不伸缩，钉在底部 -->
     <component :is="activeFooter" class="flex-none" v-if="activeFooter" />
+
+    <!-- PWA 安装提示条：浏览器判定可安装时自动出现（fixed 定位，不影响布局流） -->
+    <PwaInstallPrompt />
   </div>
 </template>
 
@@ -34,6 +37,7 @@
 import { useI18n } from 'vue-i18n';
 import DefaultHeader from './default/components/header.vue';
 import DefaultFooter from './default/components/footer.vue';
+import PwaInstallPrompt from '@/components/PwaInstallPrompt.vue';
 
 defineOptions({ name: 'LayoutDefault' });
 

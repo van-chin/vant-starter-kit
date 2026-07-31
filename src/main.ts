@@ -11,6 +11,11 @@ import { i18n } from '@/plugins/i18n';
 import { setupRouter } from '@/router';
 
 import { setupStore } from '@/stores';
+import { initPwaEvents } from '@/utils/pwa';
+
+// 初始化 PWA 事件监听（beforeinstallprompt / appinstalled / SW 诊断）
+// Toast 反馈由 usePwaInstall composable 中的 onPwaInstalled 订阅处理
+initPwaEvents();
 
 /*
  * ─── 精确视口高度测量 ──────────────────────────────────────────

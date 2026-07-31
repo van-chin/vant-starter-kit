@@ -44,6 +44,8 @@ export function createPwaPlugin(): PluginOption {
 
     // Web App Manifest
     manifest: {
+      // 唯一标识符：Chrome 使用 id 来唯一确定 PWA 身份，避免与同源其他 PWA 冲突
+      id: '/',
       name: 'vant-starter-kit',
       short_name: 'VSK',
       description: '基于 Vue 3 + Vant 4 的移动端启动模板',
@@ -52,6 +54,8 @@ export function createPwaPlugin(): PluginOption {
       theme_color: '#f5f5f5',
       background_color: '#f5f5f5',
       display: 'standalone',
+      display_override: ['standalone', 'minimal-ui'],
+      categories: ['utilities', 'productivity'],
       icons: [
         { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
         { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
@@ -63,6 +67,16 @@ export function createPwaPlugin(): PluginOption {
           purpose: 'maskable',
         },
       ],
+      // TODO: 添加产品截图（建议 3-5 张，1280x720 或 1920x1080，展示核心功能页面）
+      // screenshots: [
+      //   {
+      //     src: 'screenshots/home.png',
+      //     sizes: '1280x720',
+      //     type: 'image/png',
+      //     form_factor: 'narrow',
+      //     label: '首页 - 商品浏览',
+      //   },
+      // ],
     },
   });
 }
