@@ -38,5 +38,5 @@ types/automatics
 # 构建/开发时自动生成的版本文件
 public/version.json
 
-# Wrangler 本地运行状态（Durable Objects / KV / 缓存等）
-.wrangler/state/
+# Wrangler 本地运行产物（deploy 配置 / 本地运行状态等）
+.wrangler/
