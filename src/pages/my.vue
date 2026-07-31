@@ -19,7 +19,7 @@
     </div>
     <div class="py-2">
       <van-cell-group inset>
-        <van-cell title="版本变化v02" value="github-ci" />
+        <van-cell title="版本变化v03" value="github-ci deployment POLL_INTERVAL" />
         <van-cell title="商品详细示例页面" is-link to="/good" />
       </van-cell-group>
     </div>

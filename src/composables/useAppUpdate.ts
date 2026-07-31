@@ -21,7 +21,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
  * 请求体极小（~50B no-store），频率成本可忽略；
  * 更短间隔（如 30s）无感知提升，徒增移动端耗电。
  */
-const POLL_INTERVAL = 60 * 1000;
+const POLL_INTERVAL = 2 * 60 * 1000;
 
 /** 当前缓存的版本号 */
 let currentVersion = '';
