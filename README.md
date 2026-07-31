@@ -7,7 +7,7 @@
 ## ✨ 特性
 
 - 🏗️ **App Shell 架构** — 移动端视口锁定方案，body 焊死永不滚动，头/脚钉死，只有 main 内部滚动。浏览器保留下拉刷新，PWA 模式提供类原生 App 体验
-- 🌓 **深色模式** — 应用自控主题（`useTheme`）+ Tailwind CSS v4 `@custom-variant` + Vant `ConfigProvider` 三方协同，一键切换
+- 🌓 **深色模式** — VueUse `useDark` + Tailwind CSS v4 `@custom-variant` + Vant `ConfigProvider` 三方协同，一键切换
 - 📱 **Vant 4** — 移动端 UI 组件库，自动导入组件，支持深色模式
 - 🎨 **Tailwind CSS v4** — 原子化 CSS，`@custom-variant` 扩展能力
 - 🗂️ **文件系统路由** — `vue-router/auto-routes` + `vite-plugin-vue-layouts-next` 布局系统
@@ -28,7 +28,7 @@
 | 框架      | [Vue 3.6 RC](https://vuejs.org/)（Composition API, `<script setup>`）                            |
 | 编译模式  | VDOM（标准）— [Vapor Mode](https://vuejs.org/guide/extras/vapor-mode) 已就绪，等待生态成熟后启用 |
 | UI 库     | [Vant 4](https://vant-ui.github.io/)                                                             |
-| 工具库    | [VueUse](https://vueuse.org/) (useColorMode, useToggle 等)                                      |
+| 工具库    | [VueUse](https://vueuse.org/) (useDark, useToggle)                                               |
 | 状态管理  | [Pinia](https://pinia.vuejs.org/)                                                                |
 | 路由      | [Vue Router 5](https://router.vuejs.org/) + 文件系统路由                                         |
 | HTTP 请求 | [Alova](https://alova.js.org/) + Axios 适配器                                                    |
@@ -177,12 +177,12 @@ html/body: overflow:hidden + position:fixed    ← 焊死，永不滚动
 
 ### 深色模式
 
-`useTheme`（应用自控，不跟随系统）+ Tailwind CSS v4 `@custom-variant` + Vant `ConfigProvider` 三方协同：
+VueUse `useDark` + Tailwind CSS v4 `@custom-variant` + Vant `ConfigProvider` 三方协同：
 
-- **状态管理**：`useTheme()` 单例（基于 VueUse `useColorMode`），默认深色，`localStorage` 持久化；固定 `initialValue` 且切换永不写回 `auto`，系统主题不影响应用
+- **状态管理**：`useDark()` 单例，默认跟随系统主题（夜晚自动深色、白天自动浅色），手动切换时以用户为准并 `localStorage` 持久化
 - **Tailwind**：`@custom-variant dark` 启用 class-based dark mode，`dark:bg-*` / `dark:text-*` 变量
 - **Vant**：`<van-config-provider :theme="vantTheme">` 在 App.vue 中全局包裹，Vant 组件自动切暗色
-- **状态栏**：`useStatusBar(isDark)` 同步浏览器模式状态栏；PWA standalone 状态栏由 manifest `theme_color`（#1c1c1e）控制
+- **状态栏**：`useStatusBar(isDark)` 跟随应用主题同步浏览器模式状态栏；PWA standalone 状态栏由 manifest `theme_color`（#1c1c1e）控制
 - **切换入口**：`my.vue` 中的 `van-switch`
 
 ### 布局系统

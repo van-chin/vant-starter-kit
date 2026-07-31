@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { useToggle } from '@vueuse/core';
+import { useDark, useToggle } from '@vueuse/core';
 import { useRouter } from 'vue-router';
 import { showToast } from 'vant';
 
@@ -52,7 +52,7 @@ definePage({
   },
 });
 
-const { isDark } = useTheme();
+const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const router = useRouter();
 const authStore = useAuthStore();
