@@ -19,8 +19,9 @@ import { watch } from 'vue';
  * @param isDark 共享的深色模式布尔 ref（来自 App.vue 的 `useDark()`）
  */
 export function useStatusBar(isDark: Ref<boolean>): void {
+  // 与导航栏背景一致（van-nav-bar 使用 --van-background-2：浅色 #fff / 深色 #1c1c1e）
   const LIGHT_COLOR = '#ffffff';
-  const DARK_COLOR = '#111111';
+  const DARK_COLOR = '#1c1c1e';
 
   // 初始化：保留第一个 meta[name="theme-color"]，移除其余（包括带 media 的）
   const allMetas = document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
