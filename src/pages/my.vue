@@ -19,7 +19,7 @@
     </div>
     <div class="py-2">
       <van-cell-group inset>
-        <van-cell title="单元格v1234" value="我是新修改的内容" />
+        <van-cell title="单元格666 测试修改Banbury" value="我是新修改的内容" />
         <van-cell title="商品详细示例页面" is-link to="/good" />
       </van-cell-group>
     </div>
