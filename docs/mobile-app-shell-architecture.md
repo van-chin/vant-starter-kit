@@ -188,14 +188,12 @@ min-height: auto（默认 ── ✗）   |   min-height: 0（修复 ── ✓�
 
 #### 3.3.3 overscroll-behavior 分层策略
 
-```css
-/* body 层：禁止页面级越界 */
-html,
-body {
-  overscroll-behavior: none;
-}
+本项目的 `overscroll-behavior` 遵循"默认保留原生体验、仅在 PWA 模式收紧"的策略：
 
-/* PWA 模式：standalone 有独立手势，需加强制止 */
+```css
+/* 浏览器模式：不设置 overscroll-behavior，保留原生下拉刷新体验 */
+
+/* PWA 模式（display-mode: standalone）：禁用页面级越界 */
 @media (display-mode: standalone) {
   html,
   body {
@@ -230,7 +228,7 @@ PWA 模式:   无浏览器 UI，Chrome 的 Pull-to-Refresh 在浏览器层面拦
 
 PWA 模式:   浏览器的下拉刷新被 CSS 阻止（standalone 模式下会破坏布局）
              → 导航栏右侧提供手动刷新按钮（SVG 图标）
-             → usePwaRefresh() composable 检测 PWA 模式并暴露刷新方法
+             → useAppUpdate() composable 轮询 /version.json 检测新版本，暴露 hasUpdate 和 applyUpdate
              → 同时 vite-plugin-pwa 的 autoUpdate 在后台自动拉取新版本
 ```
 
@@ -251,7 +249,6 @@ html,
 body {
   height: var(--app-height, 100dvh);
   margin: 0;
-  overscroll-behavior: none;
   position: fixed; /* iOS 防橡皮筋 */
   inset: 0;
 }
@@ -314,27 +311,46 @@ window.addEventListener('resize', setAppHeight);
 - `overflow-y: auto` — 只有 main 出滚动条
 - `overscroll-contain` — main 滚到头/底时不接力给 body
 
-### 4.4 PWA 刷新能力
+### 4.4 版本更新检测
 
-**文件：`src/composables/usePwaRefresh.ts`**
+**文件：`src/composables/useAppUpdate.ts`**
 
 ```typescript
-export function usePwaRefresh() {
-  const isPwa = ref(false);
+export function useAppUpdate() {
+  const hasUpdate = ref(false);
 
-  onMounted(() => {
-    isPwa.value = window.matchMedia('(display-mode: standalone)').matches;
-  });
+  // 定时轮询 /version.json，检测部署更新
+  // 用户切回标签页时主动检查一次
+  // 版本号不一致 → hasUpdate = true → 显示更新提示
 
-  const pwaRefresh = () => window.location.reload();
+  function applyUpdate(): void {
+    window.location.reload();
+  }
 
-  return { isPwa, pwaRefresh };
+  return { hasUpdate, applyUpdate };
 }
 ```
 
-自动导入，在 PWA 模式下导航栏渲染刷新按钮。
+适用于 H5 和 PWA：H5 轮询 version.json 检测部署更新；PWA 由 SW update + version.json 双重保障。自动导入，在检测到新版本时渲染更新提示组件。
 
-### 4.5 五层防御体系
+### 4.5 PWA 安装提示
+
+**文件：`src/composables/usePwaInstall.ts`**
+
+```typescript
+export function usePwaInstall() {
+  // 三重检测避免重复提示：
+  //   1. display-mode: standalone → 已在 PWA 中运行
+  //   2. localStorage pwa-installed → 之前已安装过
+  //   3. localStorage pwa-dismissed → 用户关闭过，7 天内不提示
+
+  return { showPrompt, installing, install, dismiss };
+}
+```
+
+自动导入，监听 `beforeinstallprompt` 事件，在浏览器支持且未安装时显示安装引导组件。
+
+### 4.6 五层防御体系
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -349,8 +365,8 @@ export function usePwaRefresh() {
 │  第3层  main { overflow-y:auto }                            │
 │         → 滚动唯一发生在 main 内部                           │
 │                                                              │
-│  第4层  { overscroll-behavior: contain/none }               │
-│         → 越界手势不传播、不触发浏览器行为                   │
+│  第4层  { overscroll-behavior: contain }                     │
+│         → PWA 模式下越界手势不传播、不触发浏览器行为         │
 │                                                              │
 │  第5层  --app-height (JS) + 100dvh (CSS)                    │
 │         → 视口高度始终精确，工具栏变化不抖动                 │
@@ -411,4 +427,4 @@ export function usePwaRefresh() {
 
 4. **iOS / Android 双端覆盖** — `position: fixed` 锁 iOS 体、`safe-area-inset-bottom` 适配齐刘海、`dvh` 兼容双端工具栏变化
 
-5. **可组合式** — `useLayoutConfig`（显隐控制）+ `useLayoutCustomization`（组件替换）+ `usePwaRefresh`（PWA 刷新）提供开放 API 供业务层扩展
+5. **可组合式** — `useLayoutConfig`（显隐控制）+ `useLayoutCustomization`（组件替换）+ `useAppUpdate`（版本更新）+ `usePwaInstall`（安装引导）提供开放 API 供业务层扩展

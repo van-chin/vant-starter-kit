@@ -1,6 +1,6 @@
 # PWA 集成方案
 
-> 文档日期：2026-07-29
+> 文档日期：2026-07-31
 
 ---
 
@@ -130,25 +130,21 @@ export function createPwaPlugin(): PluginOption {
       ],
     },
     manifest: {
+      id: '/',
       name: 'vant-starter-kit',
       short_name: 'VSK',
       description: '基于 Vue 3 + Vant 4 的移动端启动模板',
-      theme_color: '#ffffff',
-      background_color: '#ffffff',
+      theme_color: '#f5f5f5',
+      background_color: '#f5f5f5',
       display: 'standalone',
+      display_override: ['standalone', 'minimal-ui'],
+      categories: ['utilities', 'productivity'],
       icons: [
+        { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
+        { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+        { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
         {
-          src: 'pwa-192x192.png',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          src: 'pwa-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-        },
-        {
-          src: 'pwa-512x512.png',
+          src: 'maskable-icon-512x512.png',
           sizes: '512x512',
           type: 'image/png',
           purpose: 'maskable',
@@ -211,23 +207,28 @@ Workbox 提供 5 种标准缓存策略：
 
 | 字段               | 值                                     | 说明                               |
 | ------------------ | -------------------------------------- | ---------------------------------- |
+| `id`               | `/`                                    | 唯一标识符，避免同源 PWA 冲突      |
 | `name`             | `vant-starter-kit`                     | 完整应用名称（安装提示中显示）     |
 | `short_name`       | `VSK`                                  | 桌面快捷方式下的短名称（≤12 字符） |
 | `description`      | `基于 Vue 3 + Vant 4 的移动端启动模板` | 应用描述                           |
-| `theme_color`      | `#ffffff`                              | 工具栏/状态栏颜色                  |
-| `background_color` | `#ffffff`                              | 启动闪屏背景色                     |
+| `theme_color`      | `#f5f5f5`                              | 工具栏/状态栏颜色                  |
+| `background_color` | `#f5f5f5`                              | 启动闪屏背景色                     |
 | `display`          | `standalone`                           | 隐藏浏览器 UI，全屏展示            |
+| `display_override` | `['standalone', 'minimal-ui']`         | 声明支持的显示模式降级链           |
+| `categories`       | `['utilities', 'productivity']`        | 应用商店分类（Chrome Web Store）   |
 
 ### 5.4 PWA 图标规格
 
-需要在 `public/` 目录下放置以下图标文件：
+需要在 `public/` 目录下放置以下图标文件（由 `@vite-pwa/assets-generator` 从 `public/pwa-icon.svg` 自动生成）：
 
-| 文件              | 尺寸    | 用途                             |
-| ----------------- | ------- | -------------------------------- |
-| `pwa-192x192.png` | 192×192 | 主屏幕图标（Android）            |
-| `pwa-512x512.png` | 512×512 | 启动闪屏图标 + maskable 遮罩图标 |
-
-建议同时提供 `apple-touch-icon.png`（180×180）和 `favicon.svg`（本模板已有）以覆盖 iOS Safari。
+| 文件                           | 尺寸    | 用途                             |
+| ------------------------------ | ------- | -------------------------------- |
+| `pwa-64x64.png`                | 64×64   | 小尺寸主屏幕图标                 |
+| `pwa-192x192.png`              | 192×192 | 主屏幕图标（Android）            |
+| `pwa-512x512.png`              | 512×512 | 大尺寸启动图标                   |
+| `maskable-icon-512x512.png`    | 512×512 | 遮罩适配图标（Android 自适应）   |
+| `apple-touch-icon-180x180.png` | 180×180 | iOS Safari 主屏幕图标            |
+| `favicon.ico`                  | 48×48   | 浏览器标签页图标                 |
 
 ---
 
@@ -353,14 +354,20 @@ VitePWA({
 
 ## 九、相关文件
 
-| 文件                     | 作用                                                                 |
-| ------------------------ | -------------------------------------------------------------------- |
-| `pnpm-workspace.yaml`    | PWA 依赖版本声明（vite-plugin-pwa / workbox-build / workbox-window） |
-| `package.json`           | PWA 依赖引用（devDependencies）                                      |
-| `build/plugins/pwa.ts`   | PWA 插件工厂函数，配置 manifest + workbox 策略                       |
-| `build/index.ts`         | 插件注册入口，条件加载 PWA 插件（生产构建）                          |
-| `public/pwa-192x192.png` | PWA 图标 192×192（从 logo.svg 生成）                                 |
-| `public/pwa-512x512.png` | PWA 图标 512×512 + maskable（从 logo.svg 生成）                      |
+| 文件                                | 作用                                                                 |
+| ----------------------------------- | -------------------------------------------------------------------- |
+| `pnpm-workspace.yaml`               | PWA 依赖版本声明（vite-plugin-pwa / workbox-build / workbox-window） |
+| `package.json`                      | PWA 依赖引用（devDependencies）+ `pwa:assets:generator` 脚本         |
+| `build/plugins/pwa.ts`              | PWA 插件工厂函数，配置 manifest + workbox 策略                       |
+| `build/index.ts`                    | 插件注册入口，条件加载 PWA 插件（生产构建）                          |
+| `pwa-assets.config.ts`              | `@vite-pwa/assets-generator` 配置，从 `pwa-icon.svg` 生成所有图标   |
+| `public/pwa-icon.svg`               | PWA 图标源文件（512×512 SVG），供 assets-generator 渲染导出          |
+| `public/pwa-64x64.png`              | PWA 图标 64×64                                                       |
+| `public/pwa-192x192.png`            | PWA 图标 192×192                                                     |
+| `public/pwa-512x512.png`            | PWA 图标 512×512                                                     |
+| `public/maskable-icon-512x512.png`  | PWA 遮罩适配图标 512×512                                             |
+| `public/apple-touch-icon-180x180.png` | iOS Safari 图标 180×180                                             |
+| `public/favicon.ico`                | 浏览器标签页图标                                                     |
 
 ---
 
@@ -405,32 +412,34 @@ export function createPwaPlugin(): PluginOption {
 
 ### 图标生成
 
-所有图标（`favicon.svg`、`icons.svg`、PWA PNG）均以 `public/logo.svg` 为源文件生成。
+所有 PWA 图标均以 `public/pwa-icon.svg` 为源文件生成。
 
-使用 `@resvg/resvg-js` 生成 PNG：
+使用 `@vite-pwa/assets-generator` 自动生成：
 
 ```bash
-# 安装依赖
-pnpm add -D @resvg/resvg-js
-
-# 使用 Node.js 脚本生成
-node scripts/generate-icons.mjs
+# 执行图标生成命令
+pnpm pwa:assets:generator
 ```
 
-该脚本会遍历 `public/` 目录下的源文件，生成所有图标变体：
+配置文件 `pwa-assets.config.ts`：
 
-| 目标文件                 | 尺寸    | 生成方式                   |
-| ------------------------ | ------- | -------------------------- |
-| `public/favicon.svg`     | 32×32   | 直接派生自 logo.svg        |
-| `public/icons.svg`       | 512×512 | 直接派生自 logo.svg        |
-| `public/pwa-192x192.png` | 192×192 | `@resvg/resvg-js` 渲染导出 |
-| `public/pwa-512x512.png` | 512×512 | `@resvg/resvg-js` 渲染导出 |
+```ts
+import { defineConfig, minimal2023Preset as preset } from '@vite-pwa/assets-generator/config';
 
-> macOS 用户也可使用 `sips` 命令快捷转换：
->
-> ```bash
-> sips -s format png -z 192 192 public/logo.svg --out public/pwa-192x192.png
-> sips -s format png -z 512 512 public/logo.svg --out public/pwa-512x512.png
-> ```
->
-> 但 `sips` 不支持透明背景的 SVG 完美渲染，建议使用 `@resvg/resvg-js`。
+export default defineConfig({
+  headLinkOptions: { preset: '2023' },
+  preset,
+  images: ['public/pwa-icon.svg'],
+});
+```
+
+该命令会根据 `pwa-assets.config.ts` 配置，从 `public/pwa-icon.svg` 自动渲染生成以下图标：
+
+| 目标文件                         | 尺寸    | 生成方式                                             |
+| -------------------------------- | ------- | ---------------------------------------------------- |
+| `public/favicon.ico`             | 48×48   | `@vite-pwa/assets-generator` 渲染 ICO                |
+| `public/pwa-64x64.png`           | 64×64   | `@vite-pwa/assets-generator` 渲染 PNG                |
+| `public/pwa-192x192.png`         | 192×192 | `@vite-pwa/assets-generator` 渲染 PNG                |
+| `public/pwa-512x512.png`         | 512×512 | `@vite-pwa/assets-generator` 渲染 PNG                |
+| `public/maskable-icon-512x512.png` | 512×512 | `@vite-pwa/assets-generator` 渲染 maskable PNG     |
+| `public/apple-touch-icon-180x180.png` | 180×180 | `@vite-pwa/assets-generator` 渲染 Apple 图标      |

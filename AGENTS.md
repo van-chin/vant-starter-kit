@@ -20,17 +20,20 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 ## 技术栈
 
 - **构建工具**: Vite+ (v0.2.6) — 基于 Vite 的统一工具链
-- **框架**: **Vue 3.6 RC** (Composition API, `<script setup>`)
+- **框架**: **Vue 3.6** (Composition API, `<script setup>`)
 - **UI 库**: Vant 4 (移动端组件库，自动导入)
 - **工具库**: VueUse (useDark, useToggle 等)
-- **状态管理**: Pinia
+- **状态管理**: Pinia + pinia-plugin-persistedstate
 - **路由**: Vue Router 5 + 文件系统路由 + 布局系统
 - **HTTP 请求**: Alova + Axios 适配器
 - **CSS**: Tailwind CSS v4
 - **服务端**: Nitro (全栈 / SSR)
+- **国际化**: Vue I18n v11 (zh-CN / en)
+- **SEO**: @unhead/vue v3 (动态 title / meta / OG)
+- **调试**: vConsole (移动端控制台)
 - **日期**: Day.js (中文 locale 配置)
 - **包管理**: pnpm 11.x (catalog 协议统一版本)
-- **语言**: TypeScript 6.x, 严格模式 (`noUncheckedIndexedAccess`)
+- **语言**: TypeScript, 严格模式 (`noUncheckedIndexedAccess`)
 
 ## 项目结构
 
@@ -42,6 +45,7 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 │       ├── nitro.ts       # Nitro 服务端集成
 │       ├── tailwindcss.ts # Tailwind CSS v4
 │       ├── pwa.ts         # PWA 插件 (vite-plugin-pwa)
+│       ├── version.ts     # version.json 生成 (前端版本检测)
 │       └── https-reverse-proxy.ts  # 开发 HTTPS 反向代理
 ├── server/                 # Nitro 服务端 API
 │   └── api/
@@ -58,11 +62,18 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 │   │       ├── oss.ts     # 阿里云 OSS
 │   │       └── tabs.ts    # Tab 列表
 │   ├── components/        # 组件
+│   │   ├── AppUpdatePrompt.vue  # 版本更新提示条
+│   │   ├── PwaInstallPrompt.vue # PWA 安装提示条
 │   │   └── businesses/    # 业务组件
 │   ├── composables/       # 组合式函数 (自动导入)
-│   │   ├── useEnv.ts      # 环境变量类型安全访问
-│   │   ├── useLayoutConfig.ts  # 布局头尾显隐控制
-│   │   └── useLayoutCustomization.ts  # 布局组件替换 (provide/inject)
+│   │   ├── useAppUpdate.ts      # 版本检测（轮询 version.json）
+│   │   ├── useEnv.ts            # 环境变量类型安全访问
+│   │   ├── useLayoutConfig.ts   # 布局头尾显隐控制
+│   │   ├── useLayoutCustomization.ts  # 布局组件替换 (provide/inject)
+│   │   ├── useLoading.ts       # 全局 Loading 状态
+│   │   ├── useNetworkStatus.ts # 网络在线/离线检测
+│   │   ├── usePwaInstall.ts    # PWA 安装状态管理
+│   │   └── useStatusBar.ts     # 状态栏颜色控制 (深色模式适配)
 │   ├── layouts/           # 布局 (vite-plugin-vue-layouts-next)
 │   │   ├── default.vue    # 移动端默认布局 (App Shell)
 │   │   ├── screen.vue     # 数据大屏布局 (深色主题 + 全屏)
@@ -70,12 +81,22 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 │   │   ├── default/components/  # header/footer 等子组件
 │   │   ├── screen/components/   # header/footer/fullscreen 等
 │   │   └── admin/components/    # sidebar/navbar 等
+│   ├── locales/           # 国际化文案
+│   │   ├── zh-CN.ts       # 简体中文
+│   │   └── en.ts          # 英文
 │   ├── pages/             # 文件系统路由页面
 │   ├── plugins/           # 插件配置
-│   │   └── dayjs.ts       # Day.js 配置 (中文 locale、相对时间、UTC/时区)
+│   │   ├── dayjs.ts       # Day.js 配置 (中文 locale、相对时间、UTC/时区)
+│   │   ├── head.ts        # @unhead/vue 实例 (SEO title/meta/OG)
+│   │   ├── i18n.ts        # Vue I18n 实例
+│   │   └── vconsole.ts    # vConsole 调试面板 (条件初始化)
 │   ├── stores/            # Pinia 状态管理
-│   │   ├── index.ts       # Pinia 初始化 (SSR 兼容)
-│   │   └── auth.ts        # 认证 Store (登录/登出/JWT)
+│   │   ├── index.ts       # Pinia 初始化 (SSR 兼容 + persist)
+│   │   ├── app.ts         # 应用全局状态 (locale/isFirstLaunch)
+│   │   ├── auth.ts        # 认证 Store (登录/登出/JWT)
+│   │   └── cart.ts        # 购物车 Store (增删改查/总价)
+│   ├── utils/             # 工具模块
+│   │   └── pwa.ts         # PWA 事件系统 (pub/sub + SW 诊断)
 │   └── styles/            # 全局样式
 │       └── index.css      # Tailwind CSS v4 入口 + App Shell + 深色模式
 ├── types/                 # 类型定义 (路径别名 #types)
@@ -258,10 +279,14 @@ const count = ref(0);
 3. **自动导入**: Vue / Vue Router / Pinia API、Vant 组件、`src/composables/` 自动导入
 4. **HTTP 请求**: 统一使用 `src/api/index.ts` 中的 `baseAlova` 实例，自带业务码拦截
 5. **API 方法**: 放在 `src/api/methods/` 下，按模块拆分，方法返回 Method 实例供 `useRequest` 直接使用
-6. **状态管理**: 使用 Pinia + Composition API 风格 `defineStore('name', () => { ... })`
-7. **环境变量**: 通过 `useEnv()` composable 类型安全访问
+6. **状态管理**: 使用 Pinia + Composition API 风格 `defineStore('name', () => { ... })`，`app`/`cart` store 使用 `pinia-plugin-persistedstate` 持久化
+7. **环境变量**: 通过 `useEnv()` composable 类型安全访问，`.env.example` 为模板文件
 8. **服务端**: API 使用 Nitro `defineHandler`，类型通过 `#types` 与客户端共享
 9. **依赖版本**: 使用 pnpm catalog 在 `pnpm-workspace.yaml` 统一管理
 10. **App Shell**: 所有布局继承此架构，新布局模板从 default/screen/admin 参考
-11. **Vapor Mode**: 保持 Composition API + `<script setup>` 风格，为后续迁移准备
-12. **深色模式**: 通过 VueUse `useDark()` 管理状态，Vant `ConfigProvider` 同步组件主题，Tailwind `dark:` 前缀控制样式
+11. **深色模式**: 通过 VueUse `useDark()` 管理状态，Vant `ConfigProvider` 同步组件主题，Tailwind `dark:` 前缀控制样式，`useStatusBar(isDark)` 同步状态栏颜色
+12. **SEO**: 通过 `@unhead/vue` 管理 `<head>` 标签，router `afterEach` 自动更新 `<title>`，`index.html` 中有 OG/Twitter Card 静态兜底
+13. **PWA 安装**: 使用 `PwaInstallPrompt` 组件提供页面内安装入口，三重检测避免重复提示
+14. **版本更新**: `useAppUpdate` 轮询 `version.json`，检测新版本后通过 `AppUpdatePrompt` 提示刷新
+15. **移动端调试**: vConsole 在 prod/dev 环境默认启用，也可通过 `?vconsole` URL 参数按需开启
+16. **国际化**: 使用 `vue-i18n` v11 Composition API，文案在 `src/locales/` 维护

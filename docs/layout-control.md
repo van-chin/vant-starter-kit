@@ -39,7 +39,7 @@ H5 应用中的部分页面可能：
 
 ## 核心实现
 
-### 1. TypeScript 类型扩展（`env.d.ts`）
+### 1. TypeScript 类型扩展（`types/router.d.ts`）
 
 ```ts
 declare module 'vue-router' {
@@ -127,18 +127,23 @@ export function useLayoutConfig(options: LayoutConfigOptions = {}) {
 </template>
 
 <script setup lang="ts">
-const { showHeader, showFooter } = useLayoutConfig({
-  permissionCheck: (component) => {
-    // 示例：只有登录用户才显示 Footer
-    const authStore = useAuthStore();
-    if (component === 'footer') return authStore.isLoggedIn;
-    return true;
-  },
-});
+const { showHeader, showFooter } = useLayoutConfig();
 </script>
 ```
 
 由于 `src/composables/` 已配置为**自动导入**，`useLayoutConfig` 无需手动 `import`。
+
+> **注意**：当前 `default.vue` 调用 `useLayoutConfig()` 不传任何参数。`permissionCheck` 回调作为未来扩展点保留在 `useLayoutConfig` 的类型定义和实现中，但尚未在默认布局中接线。如需按权限控制显隐，可在 layout 的 `<script setup>` 中传入 `permissionCheck` 回调，例如：
+>
+> ```ts
+> const { showHeader, showFooter } = useLayoutConfig({
+>   permissionCheck: (component) => {
+>     const authStore = useAuthStore();
+>     if (component === 'footer') return authStore.isLoggedIn;
+>     return true;
+>   },
+> });
+> ```
 
 ### 4. 页面声明默认值（`src/pages/good.vue`）
 
@@ -269,7 +274,7 @@ interface LayoutConfigOptions {
 | ------------------------------------ | --------------------------------------- |
 | `src/composables/useLayoutConfig.ts` | 核心 composable 实现                    |
 | `src/layouts/default.vue`            | 使用 composable 的 layout               |
-| `env.d.ts`                           | RouteMeta 类型扩展                      |
+| `types/router.d.ts`                           | RouteMeta 类型扩展                      |
 | `src/pages/*.vue`                    | 各页面通过 `definePage meta` 声明默认值 |
 
 ---

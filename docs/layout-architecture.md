@@ -21,7 +21,7 @@
 │    useCustomFooter 可替换            │     不滚动
 └─────────────────────────────────────┘
 
-        容器：h-screen flex-col overflow-hidden
+        容器：vh-full flex-col overflow-hidden
 ```
 
 核心：**容器固定视口高度，main 内部滚动，header/footer 自然排列不滚动。**
@@ -33,7 +33,7 @@
 ### 阶段 1：文档流滚动（最初）
 
 ```html
-<div class="min-h-screen flex-col">
+<div class="min-vh-full flex-col">
   <header />
   <main class="flex-1" />
   <footer><van-tabbar fixed /></footer>
@@ -49,7 +49,7 @@
 ### 阶段 2：内部滚动 + fixed padding-bottom
 
 ```html
-<div class="h-screen flex-col overflow-hidden">
+<div class="vh-full flex-col overflow-hidden">
   <header />
   <main class="flex-1 overflow-y-auto pb-tabbar" />
   <footer><van-tabbar fixed /></footer>
@@ -58,7 +58,7 @@
 
 改进：
 
-- `h-screen` 固定视口，只有 main 滚动
+- `vh-full` 固定视口，只有 main 滚动
 - header/footer 始终可见
 
 问题：
@@ -69,7 +69,7 @@
 ### 阶段 3：内部滚动 + flex 自然流（当前✅）
 
 ```html
-<div class="h-screen flex-col overflow-hidden">
+<div class="vh-full flex-col overflow-hidden">
   <component :is="activeHeader" v-if="activeHeader" />
   <main class="flex-1 overflow-y-auto" />
   <component :is="activeFooter" v-if="activeFooter" />
@@ -79,19 +79,19 @@
 
 ```
 DefaultFooter (van-tabbar, 高 50px)
-    h-screen
+    vh-full
     ├── header    高 46px
     ├── main      高 calc(100vh - 46px - 50px)  ← flex-1 自动计算
     └── footer    高 50px                         ← 自然流占位
 
 CustomFooter (TestFooter, 高 80px)
-    h-screen
+    vh-full
     ├── header    高 46px
     ├── main      高 calc(100vh - 46px - 80px)  ← flex-1 自动适配
     └── footer    高 80px                         ← 自然流占位
 
 showFooter=false
-    h-screen
+    vh-full
     ├── header    高 46px
     └── main      高 calc(100vh - 46px)          ← footer DOM 移除
 ```
@@ -211,7 +211,7 @@ useCustomFooter(CustomFooter);
 ```vue
 <!-- src/layouts/default.vue -->
 <template>
-  <div class="layout-default flex h-screen flex-col overflow-hidden bg-gray-50">
+  <div class="layout-default flex vh-full flex-col overflow-hidden bg-gray-50">
     <component :is="activeHeader" v-if="activeHeader" />
     <main class="flex-1 overflow-y-auto px-2">
       <router-view />
@@ -249,7 +249,7 @@ const { activeHeader, activeFooter } = useLayoutProvider(DefaultHeader, DefaultF
 </template>
 ```
 
-`van-tabbar :fixed="false"` 是关键——利用 `h-screen flex-col` 布局保证其自然固定在视口底部，同时高度由 flex 自动处理。
+`van-tabbar :fixed="false"` 是关键——利用 `vh-full flex-col` 布局保证其自然固定在视口底部，同时高度由 flex 自动处理。
 
 ---
 
@@ -274,7 +274,7 @@ const { activeHeader, activeFooter } = useLayoutProvider(DefaultHeader, DefaultF
 | `src/layouts/default/components/footer.vue` | 默认 Footer（van-tabbar，`:fixed="false"`） |
 | `src/composables/useLayoutConfig.ts`        | 显隐控制 composable                         |
 | `src/composables/useLayoutCustomization.ts` | 组件替换 composable（provide/inject）       |
-| `env.d.ts`                                  | RouteMeta 类型扩展                          |
+| `types/router.d.ts`                         | RouteMeta 类型扩展                          |
 | `src/pages/test.vue`                        | 测试页面                                    |
 | `src/pages/test/components/TestHeader.vue`  | 测试用自定义 Header                         |
 | `src/pages/test/components/TestFooter.vue`  | 测试用自定义 Footer                         |
