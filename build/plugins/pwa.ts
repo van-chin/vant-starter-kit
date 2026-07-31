@@ -49,9 +49,11 @@ export function createPwaPlugin(): PluginOption {
       name: 'vant-starter-kit',
       short_name: 'VSK',
       description: '基于 Vue 3 + Vant 4 的移动端启动模板',
-      // 状态栏颜色由运行时 JS 动态控制（见 src/composables/useStatusBar.ts），
-      // manifest 设一个中间值兜底，避免极端情况下出现纯白/纯黑的割裂感
-      theme_color: '#f5f5f5',
+      // 状态栏颜色：standalone 模式下 Android 忽略 <meta name="theme-color">，
+      // 只认 manifest 的 theme_color（useStatusBar 仅对浏览器模式生效）。
+      // 取深色 header 同色 #1c1c1e（Vant dark background-2），深色模式下
+      // 状态栏与页面顶部融为一体；已安装的 PWA 需重新安装才能生效。
+      theme_color: '#1c1c1e',
       background_color: '#f5f5f5',
       display: 'standalone',
       display_override: ['standalone', 'minimal-ui'],
