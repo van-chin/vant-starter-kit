@@ -178,10 +178,10 @@ html/body: overflow:hidden + position:fixed    ← 焊死，永不滚动
 
 ## 🌓 深色模式
 
-三方协同实现，状态由 VueUse `useDark()` 单例管理：
+三方协同实现，状态由 `useTheme()` 单例管理（**应用自控，不跟随系统**）：
 
 ```
-useDark() 单例 (localStorage 持久化)
+useTheme() 单例 (useColorMode + localStorage 持久化，固定 initialValue)
       │
   ┌───┼───────────────┐
   ▼                   ▼
@@ -195,11 +195,15 @@ dark:* 类          :theme="vantTheme"
 布局背景/文字暗色   Vant 组件暗色主题
 ```
 
+> 为什么不用 `useDark()`：它委托 `useColorMode` 的 auto 模式，主题跟随系统
+> `prefers-color-scheme`；`useTheme()` 固定 `initialValue` 且切换时永不写回
+> `auto`，系统主题不影响应用。切换开关在 `src/pages/my.vue`。
+
 ### 实现要点
 
 | 层级     | 技术                                             | 文件                   |
 | -------- | ------------------------------------------------ | ---------------------- |
-| 状态     | `useDark()` + `useToggle()`                      | `src/pages/my.vue`     |
+| 状态     | `useTheme()` + `useToggle()`（应用自控）         | `src/composables/useTheme.ts` / `src/pages/my.vue` |
 | Vant     | `<van-config-provider :theme>`                   | `src/App.vue`          |
 | Tailwind | `@custom-variant dark (&:where(.dark, .dark *))` | `src/styles/index.css` |
 | 布局     | `dark:bg-*` / `dark:text-*`                      | 各 layout 文件         |
@@ -288,7 +292,7 @@ const count = ref(0);
 8. **服务端**: API 使用 Nitro `defineHandler`，类型通过 `#types` 与客户端共享
 9. **依赖版本**: 使用 pnpm catalog 在 `pnpm-workspace.yaml` 统一管理
 10. **App Shell**: 所有布局继承此架构，新布局模板从 default/screen/admin 参考
-11. **深色模式**: 通过 VueUse `useDark()` 管理状态，Vant `ConfigProvider` 同步组件主题，Tailwind `dark:` 前缀控制样式，`useStatusBar(isDark)` 同步状态栏颜色
+11. **深色模式**: 通过 `useTheme()` 管理状态（应用自控、不跟随系统），Vant `ConfigProvider` 同步组件主题，Tailwind `dark:` 前缀控制样式，`useStatusBar(isDark)` 同步状态栏颜色
 12. **SEO**: 通过 `@unhead/vue` 管理 `<head>` 标签，router `afterEach` 自动更新 `<title>`，`index.html` 中有 OG/Twitter Card 静态兜底
 13. **PWA 安装**: 使用 `PwaInstallPrompt` 组件提供页面内安装入口，三重检测避免重复提示
 14. **版本更新**: `useAppUpdate` 轮询 `version.json`，检测新版本后通过 `AppUpdatePrompt` 提示刷新
