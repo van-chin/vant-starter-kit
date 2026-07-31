@@ -1,5 +1,5 @@
 import type { Ref } from 'vue';
-import { computed } from 'vue';
+import { computed, watchEffect } from 'vue';
 import { useHead } from '@unhead/vue';
 
 /**
@@ -22,4 +22,22 @@ export function useStatusBar(isDark: Ref<boolean>): void {
   useHead({
     meta: [{ name: 'theme-color', content: themeColor }],
   });
+
+  // 调试埋点（仅 ?vconsole 时启用）：确认 meta 标签的实际状态
+  // 用于排查 Chrome 手机端状态栏不跟随切换的问题
+  if (typeof window !== 'undefined' && window.location.search.includes('vconsole')) {
+    watchEffect(() => {
+      const log = () => {
+        const metas = document.querySelectorAll('meta[name="theme-color"]');
+        const meta = metas[0];
+        console.log(
+          `[useStatusBar] isDark=${isDark.value} 目标=${themeColor.value} ` +
+            `实际=${meta?.getAttribute('content') ?? '无meta'} 数量=${metas.length}`,
+        );
+      };
+      log();
+      // unhead 异步应用，延迟再确认一次
+      setTimeout(log, 300);
+    });
+  }
 }
