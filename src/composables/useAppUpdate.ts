@@ -14,8 +14,14 @@ import { ref, onMounted, onUnmounted } from 'vue';
  *   - PWA: SW update + version.json 双重保障
  */
 
-/** 轮询间隔（毫秒），默认 5 分钟 */
-const POLL_INTERVAL = 5 * 60 * 1000;
+/**
+ * 轮询间隔（毫秒），默认 1 分钟
+ *
+ * 与 CI 部署节奏匹配：部署完成后 ~1 分钟内弹出更新提示。
+ * 请求体极小（~50B no-store），频率成本可忽略；
+ * 更短间隔（如 30s）无感知提升，徒增移动端耗电。
+ */
+const POLL_INTERVAL = 60 * 1000;
 
 /** 当前缓存的版本号 */
 let currentVersion = '';
