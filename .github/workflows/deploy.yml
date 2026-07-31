@@ -35,10 +35,12 @@ jobs:
           # VITE_TCC_APP_ID: ${{ secrets.VITE_TCC_APP_ID }}
 
       - name: Deploy to Cloudflare Workers
+        # 必须从仓库根目录部署：Nitro 构建时生成 .wrangler/deploy/config.json
+        # 指向 .output/server/wrangler.json，wrangler 在根目录自动发现并解析
+        # （若从 .output/server 运行会与 wrangler.json 冲突报错）
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} # wrangler.json 无此字段，必须显式传
           command: deploy
-          workingDirectory: .output/server # 相对路径 ../public 在此解析
           wranglerVersion: '4.116.0' # 与本地 catalog 版本一致，避免行为漂移

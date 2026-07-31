@@ -244,7 +244,7 @@ git push origin main
 GitHub Actions (ubuntu-latest)
   ├─ pnpm install --frozen-lockfile   (pnpm 11.18.0 / Node 24)
   ├─ pnpm build                       (tsc && vp build)
-  └─ wrangler deploy                  (工作目录 .output/server，wrangler 4.116.0)
+  └─ wrangler deploy                  (仓库根目录，wrangler 4.116.0)
       │
       ▼
 Cloudflare Workers (van-chin-vant-starter-kit)
