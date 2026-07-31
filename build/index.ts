@@ -4,6 +4,7 @@ import { createPwaPlugin } from './plugins/pwa.ts';
 import { createTailwindcssPlugin } from './plugins/tailwindcss.ts';
 import { createVuePlugin } from './plugins/vue.ts';
 import { createHttpsReverseProxyPlugin } from './plugins/https-reverse-proxy.ts';
+import { createVersionPlugin } from './plugins/version.ts';
 
 /**
  * 创建所有 Vite 插件
@@ -17,6 +18,9 @@ export function createVitePlugins(isBuild: boolean = false, proxyTarget?: string
     createTailwindcssPlugin(),
 
     createNitroPlugin(),
+
+    // 版本检测文件（dev 写入 public/，build 写入 output dir）
+    createVersionPlugin(),
   ];
 
   // HTTPS 反向代理（仅开发环境）

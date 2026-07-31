@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@alova/adapter-axios": "catalog:",
+    "@unhead/vue": "catalog:",
     "@vueuse/core": "catalog:",
     "alova": "catalog:",
     "dayjs": "catalog:",
@@ -32,6 +33,7 @@
     "pinia-plugin-persistedstate": "catalog:",
     "tailwindcss": "catalog:",
     "vant": "catalog:",
+    "vconsole": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:"
   },
@@ -55,7 +57,6 @@
     "unplugin-auto-import": "catalog:",
     "unplugin-https-reverse-proxy": "catalog:",
     "unplugin-vue-components": "catalog:",
-    "vconsole": "catalog:",
     "vite": "catalog:",
     "vite-plugin-pwa": "catalog:",
     "vite-plugin-vue-devtools": "catalog:",
@@ -65,7 +66,8 @@
     "vue-i18n": "^11.4.8",
     "vue-tsc": "catalog:",
     "workbox-build": "catalog:",
-    "workbox-window": "catalog:"
+    "workbox-window": "catalog:",
+    "wrangler": "catalog:"
   },
   "devEngines": {
     "packageManager": {

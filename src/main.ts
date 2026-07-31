@@ -7,6 +7,7 @@ import '@/plugins/dayjs';
 
 import App from './App.vue';
 
+import { head } from '@/plugins/head';
 import { i18n } from '@/plugins/i18n';
 import { setupRouter } from '@/router';
 
@@ -51,6 +52,9 @@ const initApplication = async () => {
   // 设置国际化
   app.use(i18n);
 
+  // 设置 Head 管理（SEO: title / meta / OG）
+  app.use(head);
+
   // 设置状态管理
   setupStore(app);
 
@@ -58,6 +62,9 @@ const initApplication = async () => {
   setupRouter(app);
 
   app.mount('#app');
+
+  // 异步初始化 vConsole 调试面板（不阻塞首屏）
+  import('@/plugins/vconsole').then((m) => m.initVConsole());
 };
 
 await initApplication();

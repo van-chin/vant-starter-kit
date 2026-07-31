@@ -30,6 +30,9 @@
 
     <!-- PWA 安装提示条：浏览器判定可安装时自动出现（fixed 定位，不影响布局流） -->
     <PwaInstallPrompt />
+
+    <!-- 版本更新提示条：检测到新版本时从顶部滑入 -->
+    <AppUpdatePrompt />
   </div>
 </template>
 
@@ -38,6 +41,7 @@ import { useI18n } from 'vue-i18n';
 import DefaultHeader from './default/components/header.vue';
 import DefaultFooter from './default/components/footer.vue';
 import PwaInstallPrompt from '@/components/PwaInstallPrompt.vue';
+import AppUpdatePrompt from '@/components/AppUpdatePrompt.vue';
 
 defineOptions({ name: 'LayoutDefault' });
 

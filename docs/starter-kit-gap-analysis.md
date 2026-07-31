@@ -104,32 +104,30 @@
 - 无 `rollup-plugin-visualizer`（包体积分析）
 - 无 `@vitejs/plugin-legacy`（老旧浏览器兼容）
 
-### 3.3 SEO / Meta 标签
+### 3.3 ~~SEO / Meta 标签~~ ✅
 
-`index.html` 缺少：
+| 项目                          | 状态 | 说明                                                              |
+| ----------------------------- | ---- | ----------------------------------------------------------------- |
+| ~~`<meta name="description">`~~ | ✅   | index.html 静态兜底 + `@unhead/vue` 运行时接管（2026-07-31）      |
+| ~~Open Graph 标签~~           | ✅   | `og:title/description/image/type`（2026-07-31）                   |
+| ~~Twitter Card 标签~~         | ✅   | `twitter:card/title/description/image`（2026-07-31）              |
+| ~~动态 title~~                | ✅   | `@unhead/vue` v3 + router `afterEach`，自动读取 `meta.title`（2026-07-31） |
+| ~~`@unhead/vue` 安装~~        | ✅   | v3.2.3，`src/plugins/head.ts` + `main.ts` 注册（2026-07-31）      |
 
-- `<meta name="description">`
-- Open Graph 标签
-- 动态 title（`@unhead/vue` 已在 workspace catalog，未安装使用）
+**实现架构**：
+```
+index.html (静态兜底) → @unhead/vue (运行时接管)
+                           ├── router afterEach → 自动更新 <title>
+                           └── 各页面 useHead() → 自定义 meta/OG 覆盖
+```
 
-### 3.4 监控/埋点
-
-- 无 Sentry / 错误上报
-- 无 Google Analytics / 百度统计
-
-### 3.5 无障碍 (a11y)
-
-- 无 ARIA 属性
-- 无 focus 管理
-- 无 skip-to-content
-
-### 3.6 ~~env 文件~~ ✅
+### 3.4 ~~env 文件~~ ✅
 
 - ~~`.env.production`~~ 已创建
 - ~~`.env.test`~~ 已创建
 - ~~建议的 env 变量 `VITE_APP_TITLE`、`VITE_APP_VERSION`、`VITE_ENABLE_MOCK`~~ 已添加
 
-### 3.7 ~~Dayjs 插件~~ ✅
+### 3.5 ~~Dayjs 插件~~ ✅
 
 - ~~`customParseFormat`~~ 已添加
 - ~~`calendar`~~ 已添加（含中文日历格式）
@@ -137,7 +135,7 @@
 - ~~`weekOfYear`~~ 已添加
 - ~~时区默认 `Asia/Shanghai`~~ 已启用
 
-### 3.8 PWA 功能状态
+### 3.6 PWA 功能状态
 
 | 功能                                     | 状态 | 说明                                                          |
 | ---------------------------------------- | ---- | ------------------------------------------------------------- |
@@ -154,7 +152,7 @@
 | ~~`beforeinstallprompt` 事件~~           | ✅   | 监听 + `promptInstall()` 手动触发安装（2026-07-31 新增）      |
 | ~~开发环境 HTTPS 反向代理~~              | ✅   | `unplugin-https-reverse-proxy`，但需释放 443 端口（见下方）   |
 
-### 3.9 PWA 跨浏览器兼容性
+### 3.7 PWA 跨浏览器兼容性
 
 | 浏览器      | PWA 安装 | 状态栏着色 (`theme-color`) | 备注                                                              |
 | ----------- | -------- | -------------------------- | ----------------------------------------------------------------- |
@@ -172,24 +170,14 @@
 > - `promptInstall()` → 手动触发安装对话框
 > - SW 注册诊断日志 → Console 输出 SW 状态
 
-### 3.10 HTTPS 反向代理端口冲突
-
-Docker openresty 容器占用 443 端口，`sudo vp dev` 启动 HTTPS 反向代理失败：
-
-```
-Error: listen tcp :443: bind: address already in use
-```
-
-**解决**：`docker stop openresty` → `sudo vp dev`（开发完后 `docker start openresty` 恢复）
-
-### 3.11 ~~常用移动端组件~~ ✅
+### 3.8 ~~常用移动端组件~~ ✅
 
 ~~建议至少为 popup、swipe-cell、empty、skeleton 提供使用示例~~
 
 - `src/pages/components-demo.vue` — Popup / SwipeCell / Skeleton / Empty 完整示例
 - `my.vue` 中有入口链接
 
-### 3.12 ~~PWA 图标~~ ✅
+### 3.9 ~~PWA 图标~~ ✅
 
 - ~~`@vite-pwa/assets-generator`~~ 已配置
 - ~~`public/pwa-icon.svg`~~ 为专用源文件（80% 填充率）
@@ -207,11 +195,7 @@ Error: listen tcp :443: bind: address already in use
 ⏳ 待完成（低优先级）：
   ├── CI/CD（GitHub Actions）
   ├── Build 优化（code splitting + compression + visualizer）
-  ├── SEO / Meta 完善（description + OG + @unhead/vue）
-  ├── 监控/埋点（Sentry / Analytics）
-  ├── a11y 基础改造
-  ├── PWA SW 策略增强（图片/字体缓存 + CacheableResponsePlugin + navigationFallback）
-  └── PWA manifest screenshots（需产品截图）
+  └── PWA SW 策略增强（图片/字体缓存 + CacheableResponsePlugin + navigationFallback + screenshots）
 ```
 
 ---
@@ -227,5 +211,4 @@ Error: listen tcp :443: bind: address already in use
 | 测试覆盖   | ⭐⭐       | —    | 11 tests（useEnv + cart store），核心 composable 覆盖           |
 | 工程化     | ⭐⭐⭐     | —    | 持久化 store + i18n + env 文件 + PWA 图标生成 + SW 监控         |
 | 国际化     | ⭐⭐⭐⭐   | —    | vue-i18n v11，zh-CN/en 双语言                                   |
-| 无障碍     | ☆          | —    | 暂无                                                            |
 | 文档       | ⭐⭐⭐⭐⭐ | —    | 5 份架构文档 + gap-analysis                                    |

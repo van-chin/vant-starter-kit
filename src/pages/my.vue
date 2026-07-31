@@ -19,14 +19,14 @@
     </div>
     <div class="py-2">
       <van-cell-group inset>
-        <van-cell title="单元格" value="我是新修改的内容" />
+        <van-cell title="单元格v1234" value="我是新修改的内容" />
         <van-cell title="商品详细示例页面" is-link to="/good" />
       </van-cell-group>
     </div>
 
     <div class="py-2">
       <van-cell-group inset>
-        <van-cell title="下拉刷新" value="🆘" is-link to="/pull-refresh" />
+        <van-cell title="下拉刷新xxx" value="🆘" is-link to="/pull-refresh" />
         <van-cell title="列表" value="示例" is-link to="/list" />
         <van-cell title="Vant 组件示例" value="🧩" is-link to="/components-demo" />
       </van-cell-group>

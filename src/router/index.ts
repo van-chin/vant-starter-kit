@@ -3,6 +3,9 @@ import type { RouteRecordRaw } from 'vue-router';
 import { setupLayouts } from 'virtual:generated-layouts';
 import { createRouter, createWebHistory } from 'vue-router';
 import { routes, handleHotUpdate } from 'vue-router/auto-routes';
+import { head } from '@/plugins/head';
+
+const DEFAULT_TITLE = 'vant-starter-kit';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +32,15 @@ router.beforeEach(async (to) => {
       return { path: '/login', query: { redirect: to.fullPath } };
     }
   }
+});
+
+// ─── 动态页面标题 ──────────────────────────────────────────────────
+// 从 route.meta.title 读取页面标题，自动更新 <title> 标签
+router.afterEach((to) => {
+  const pageTitle = to.meta.title as string | undefined;
+  head.push({
+    title: pageTitle ? `${pageTitle} — ${DEFAULT_TITLE}` : DEFAULT_TITLE,
+  });
 });
 
 export const setupRouter = (app: App<Element>) => {

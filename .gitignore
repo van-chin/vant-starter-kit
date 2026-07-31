@@ -34,3 +34,6 @@ dist-ssr
 types/automatics
 
 .output
+
+# 构建/开发时自动生成的版本文件
+public/version.json
