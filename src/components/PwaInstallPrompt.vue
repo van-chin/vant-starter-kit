@@ -57,18 +57,20 @@
 
         <!-- 展开内容：2×2 亮点网格 + 安装按钮（常驻渲染） -->
         <div class="px-4 pb-4">
-          <!-- 亮点：2×2 卡片，每项 emoji + 标题 + 完整介绍 -->
+          <!-- 亮点：2×2 卡片，每卡两行（第1行 emoji+标题，第2行介绍） -->
           <div class="grid grid-cols-2 gap-3">
             <div
               v-for="benefit in BENEFITS"
               :key="benefit.title"
               class="rounded-xl bg-gray-50 p-3 dark:bg-gray-800"
             >
-              <div class="text-xl leading-none">{{ benefit.icon }}</div>
-              <div class="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">
-                {{ benefit.title }}
+              <div class="flex items-center gap-1.5">
+                <span class="text-base leading-none">{{ benefit.icon }}</span>
+                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  {{ benefit.title }}
+                </span>
               </div>
-              <div class="mt-0.5 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+              <div class="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
                 {{ benefit.desc }}
               </div>
             </div>
