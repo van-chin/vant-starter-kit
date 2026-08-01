@@ -3,6 +3,8 @@
 > 基于 **Vue 3 + Vant 4 + Vite+** 的移动端 H5 / PWA 极速启动模板
 
 [![Deploy](https://img.shields.io/badge/deploy-Cloudflare%20Workers-orange)](https://vant.starter.kit.inlin.com.cn)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/van-chin/vant-starter-kit)
+[![Ask zread.ai](https://img.shields.io/badge/Ask-zread.ai-6b5ce7)](https://zread.ai/van-chin/vant-starter-kit)
 
 ---
 
