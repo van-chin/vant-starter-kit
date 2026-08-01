@@ -11,11 +11,11 @@
 
 移动端 PWA / 浏览器全屏应用中，存在以下三类连锁异常：
 
-| #   | 现象 | 触发条件 |
-| --- | ---- | -------- |
-| ①   | **下拉触发整页刷新**（Pull-to-Refresh） | 页面滚动到顶部后继续下拉 |
-| ②   | **Header / Footer 不在视窗内** | 页面刷新后向上/下滚动 |
-| ③   | **边界橡皮筋 / 滚动链** | 滚动到最顶/底部后继续拖拽 |
+| #   | 现象                                    | 触发条件                  |
+| --- | --------------------------------------- | ------------------------- |
+| ①   | **下拉触发整页刷新**（Pull-to-Refresh） | 页面滚动到顶部后继续下拉  |
+| ②   | **Header / Footer 不在视窗内**          | 页面刷新后向上/下滚动     |
+| ③   | **边界橡皮筋 / 滚动链**                 | 滚动到最顶/底部后继续拖拽 |
 
 三类现象**总是同时出现**，刷新只是扳机，真正的病灶在页面刷新前后高度变化时暴露。
 
@@ -44,20 +44,20 @@ header   越界下拉       越界上拉
 
 **病根只有一个：本该固定的"外壳"（body / shell）变成了可滚的画布。**
 
-| 脸谱 | 直接原因 |
-| ---- | -------- |
-| ① 下拉刷新 | body 可滚 → 顶部越界下拉被浏览器解释为刷新手势 |
-| ② 头/脚消失 | header/footer 躺在文档流中，body 一滚就跟着跑 |
+| 脸谱         | 直接原因                                                 |
+| ------------ | -------------------------------------------------------- |
+| ① 下拉刷新   | body 可滚 → 顶部越界下拉被浏览器解释为刷新手势           |
+| ② 头/脚消失  | header/footer 躺在文档流中，body 一滚就跟着跑            |
 | ③ 边界橡皮筋 | body 内层滚动到边界后，手势"接力"到 body → 越界 → 橡皮筋 |
 
 ### 1.4 四个元凶（按危害排序）
 
-| 优先级 | 元凶 | 说明 |
-| ------ | ---- | ---- |
-| ★★★★★ | **`min-height: auto`** | flex 子项默认 `min-height: auto`，拒绝收缩到比内容矮。内容一多就把外壳撑破 |
-| ★★★★ | **`100vh` 含栏高度** | 移动端 `100vh` 包含工具栏空间，工具栏展开/收起时与实际可视区域不匹配 |
-| ★★★ | **异步内容 reflow** | 图片/字体/动态组件刷新后渲染，总高"+1px"就把 body 推过临界线 |
-| ★★ | **sticky 粘错容器** | `position: sticky` 以最近的可滚动祖先为参考系，祖先若为 body 则跟着 body 跑 |
+| 优先级 | 元凶                   | 说明                                                                        |
+| ------ | ---------------------- | --------------------------------------------------------------------------- |
+| ★★★★★  | **`min-height: auto`** | flex 子项默认 `min-height: auto`，拒绝收缩到比内容矮。内容一多就把外壳撑破  |
+| ★★★★   | **`100vh` 含栏高度**   | 移动端 `100vh` 包含工具栏空间，工具栏展开/收起时与实际可视区域不匹配        |
+| ★★★    | **异步内容 reflow**    | 图片/字体/动态组件刷新后渲染，总高"+1px"就把 body 推过临界线                |
+| ★★     | **sticky 粘错容器**    | `position: sticky` 以最近的可滚动祖先为参考系，祖先若为 body 则跟着 body 跑 |
 
 ---
 
@@ -136,39 +136,52 @@ min-height: auto（默认 ── ✗）          min-height: 0（修复 ── �
 
 /* PWA 模式：禁用页面级越界，防止浏览器拦截手势 */
 @media (display-mode: standalone) {
-  html, body { overscroll-behavior: contain; }
+  html,
+  body {
+    overscroll-behavior: contain;
+  }
 }
 
 /* main 容器：内部滚动到边界即止，不接力给 body */
-.main { overscroll-behavior: contain; }
+.main {
+  overscroll-behavior: contain;
+}
 ```
 
 #### 2.3.4 浏览器 vs PWA 模式差异
 
-| 维度 | 浏览器模式 | PWA 模式 |
-|------|-----------|---------|
-| 地址栏 | 有，工具栏动态展开/收起 | 无浏览器 UI |
-| 视口 | `100dvh` 适配即可 | 需 JS `--app-height` 精确测量 |
-| 下拉刷新 | ✅ 保留原生体验 | ❌ 禁用（破坏布局），导航栏提供手动刷新 |
-| 版本更新 | 轮询 `/version.json` | SW 自动更新 + version.json 双重保障 |
+| 维度     | 浏览器模式              | PWA 模式                                |
+| -------- | ----------------------- | --------------------------------------- |
+| 地址栏   | 有，工具栏动态展开/收起 | 无浏览器 UI                             |
+| 视口     | `100dvh` 适配即可       | 需 JS `--app-height` 精确测量           |
+| 下拉刷新 | ✅ 保留原生体验         | ❌ 禁用（破坏布局），导航栏提供手动刷新 |
+| 版本更新 | 轮询 `/version.json`    | SW 自动更新 + version.json 双重保障     |
 
 ### 2.4 实现代码
 
 **全局样式** — `src/styles/index.css`：
+
 ```css
-html { overflow-x: hidden; }
-html, body {
+html {
+  overflow-x: hidden;
+}
+html,
+body {
   height: var(--app-height, 100dvh);
   margin: 0;
-  position: fixed;  /* iOS 防橡皮筋 */
+  position: fixed; /* iOS 防橡皮筋 */
   inset: 0;
 }
 @media (display-mode: standalone) {
-  html, body { overscroll-behavior: contain; }
+  html,
+  body {
+    overscroll-behavior: contain;
+  }
 }
 ```
 
 **JS 测量** — `src/main.ts`（Vue 挂载前执行）：
+
 ```ts
 const setAppHeight = () => {
   document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
@@ -178,6 +191,7 @@ window.addEventListener('resize', setAppHeight);
 ```
 
 **布局模板** — `src/layouts/default.vue`：
+
 ```html
 <div class="layout-default flex vh-full flex-col overflow-hidden">
   <component :is="activeHeader" class="flex-none" v-if="activeHeader" />
@@ -190,14 +204,14 @@ window.addEventListener('resize', setAppHeight);
 
 关键 CSS 类（定义在 `src/styles/index.css`）：
 
-| 类名 | 作用 |
-|------|------|
-| `vh-full` | `height: var(--app-height, 100dvh)` |
-| `flex-none` | header/footer 不伸缩，高度由内容决定 |
-| `flex-1` | main 吃掉剩余空间 |
-| `min-h-0` | ★ 允许 main 收缩到比内容矮 |
-| `overflow-y-auto` | 只有 main 出滚动条 |
-| `overflow-hidden` | 外壳自身不滚 |
+| 类名              | 作用                                 |
+| ----------------- | ------------------------------------ |
+| `vh-full`         | `height: var(--app-height, 100dvh)`  |
+| `flex-none`       | header/footer 不伸缩，高度由内容决定 |
+| `flex-1`          | main 吃掉剩余空间                    |
+| `min-h-0`         | ★ 允许 main 收缩到比内容矮           |
+| `overflow-y-auto` | 只有 main 出滚动条                   |
+| `overflow-hidden` | 外壳自身不滚                         |
 
 ### 2.5 布局演进史
 
@@ -233,12 +247,12 @@ composable 默认值 ({ defaultHeader: true }) ← 全局兜底
 permissionCheck                            ← 只减不增
 ```
 
-| 层级 | 来源 | 场景 |
-|------|------|------|
-| 1 | URL query | WebView 嵌入 |
-| 2 | `definePage meta` | 页面声明默认值 |
-| 3 | composable 默认值 | 全局兜底 |
-| 4 | permissionCheck | 权限限制（只减不增） |
+| 层级 | 来源              | 场景                 |
+| ---- | ----------------- | -------------------- |
+| 1    | URL query         | WebView 嵌入         |
+| 2    | `definePage meta` | 页面声明默认值       |
+| 3    | composable 默认值 | 全局兜底             |
+| 4    | permissionCheck   | 权限限制（只减不增） |
 
 ### 3.2 页面声明
 
@@ -305,21 +319,21 @@ useCustomHeader(() => import('./components/ArticleHeader.vue'));
 
 ### 4.3 替换 + 显隐的交互
 
-| 状态 | 行为 |
-|------|------|
-| `showFooter=true` + 未替换 | 显示默认 `DefaultFooter` |
-| `showFooter=true` + 已替换 | 显示自定义组件 |
-| `showFooter=false` | **不显示任何内容**（无论是否替换） |
-| 页面卸载 | 自动恢复默认 |
+| 状态                       | 行为                               |
+| -------------------------- | ---------------------------------- |
+| `showFooter=true` + 未替换 | 显示默认 `DefaultFooter`           |
+| `showFooter=true` + 已替换 | 显示自定义组件                     |
+| `showFooter=false`         | **不显示任何内容**（无论是否替换） |
+| 页面卸载                   | 自动恢复默认                       |
 
 ### 4.4 为什么用 Provide/Inject
 
-| 方式 | 问题 |
-|------|------|
-| ✅ Provide/Inject | 自动绑定组件树，卸载自动清理 |
-| ❌ Pinia store | 需手动清理，多页面并发状态污染 |
-| ❌ Module-level ref | 跨路由持久化，必须手动 reset |
-| ❌ Route meta | 需可序列化，不能存组件引用 |
+| 方式                | 问题                           |
+| ------------------- | ------------------------------ |
+| ✅ Provide/Inject   | 自动绑定组件树，卸载自动清理   |
+| ❌ Pinia store      | 需手动清理，多页面并发状态污染 |
+| ❌ Module-level ref | 跨路由持久化，必须手动 reset   |
+| ❌ Route meta       | 需可序列化，不能存组件引用     |
 
 ---
 
@@ -370,24 +384,24 @@ useCustomHeader(() => import('./components/ArticleHeader.vue'));
 
 ### 验证清单
 
-| # | 验证项 | 方法 | 预期结果 |
-|---|--------|------|---------|
-| 1 | body 焊死 | `document.scrollingElement.scrollTop` 始终为 0 | ✅ 不滚动 |
-| 2 | 内容撑不破外壳 | 在 main 中塞超长内容 | ✅ 只有 main 出滚动条 |
-| 3 | 下拉刷新 | 页面顶部用力下拉 | ✅ 浏览器模式触发刷新；PWA 模式不触发 |
-| 4 | 边界无橡皮筋 | main 滚到顶/底继续拽 | ✅ 手势不传给 body |
-| 5 | 工具栏变化 | 旋转屏幕 / 弹出键盘 | ✅ 头脚位置不变 |
+| #   | 验证项         | 方法                                           | 预期结果                              |
+| --- | -------------- | ---------------------------------------------- | ------------------------------------- |
+| 1   | body 焊死      | `document.scrollingElement.scrollTop` 始终为 0 | ✅ 不滚动                             |
+| 2   | 内容撑不破外壳 | 在 main 中塞超长内容                           | ✅ 只有 main 出滚动条                 |
+| 3   | 下拉刷新       | 页面顶部用力下拉                               | ✅ 浏览器模式触发刷新；PWA 模式不触发 |
+| 4   | 边界无橡皮筋   | main 滚到顶/底继续拽                           | ✅ 手势不传给 body                    |
+| 5   | 工具栏变化     | 旋转屏幕 / 弹出键盘                            | ✅ 头脚位置不变                       |
 
 ---
 
 ## 七、浏览器兼容性
 
-| 特性 | Chrome Android | Safari iOS | Firefox Android |
-|------|:---:|:---:|:---:|
-| `100dvh` | 108+ ✅ | 15.4+ ✅ | 101+ ✅ |
-| `overscroll-behavior` | 63+ ✅ | 16+ ⚠️ | 59+ ✅ |
-| `env(safe-area-inset-bottom)` | 69+ ✅ | 11+ ✅ | 64+ ✅ |
-| `position: fixed` iOS 锁体 | — | 全版本 ✅ | — |
+| 特性                          | Chrome Android | Safari iOS | Firefox Android |
+| ----------------------------- | :------------: | :--------: | :-------------: |
+| `100dvh`                      |    108+ ✅     |  15.4+ ✅  |     101+ ✅     |
+| `overscroll-behavior`         |     63+ ✅     |   16+ ⚠️   |     59+ ✅      |
+| `env(safe-area-inset-bottom)` |     69+ ✅     |   11+ ✅   |     64+ ✅      |
+| `position: fixed` iOS 锁体    |       —        | 全版本 ✅  |        —        |
 
 > iOS 注意：`overscroll-behavior` 在 iOS 上支持较晚且不彻底。`position: fixed; inset: 0` 是 iOS 上锁住页面的有效手段，已包含在方案中。
 
@@ -395,33 +409,33 @@ useCustomHeader(() => import('./components/ArticleHeader.vue'));
 
 ## 八、架构优势总结
 
-| 维度 | 传统做法 | 本方案 |
-|------|---------|--------|
-| **视口锁定** | `100vh` 硬编码，工具栏变化时溢出 | `--app-height` + `100dvh` 三层回退 |
-| **滚动隔离** | body 滚动，头脚跟着跑 | body 焊死，main 唯一滚动 |
-| **Tabbar 定位** | `position:fixed` + `padding-bottom` hack | `:fixed="false"` 回归自然流 |
-| **WebView 嵌入** | 需后端配合或单独部署 | URL query 一行控制 |
-| **页面级控制** | 每个页面手动 `v-if` | `definePage meta` 声明式 |
-| **组件替换** | 全局状态，跨页面污染 | Provide/Inject，卸载自动清理 |
-| **版本更新** | 无感知 | 轮询 + 提示条，H5/PWA 通用 |
-| **PWA 安装** | 依赖浏览器菜单 | 页面内引导，三重防重复 |
+| 维度             | 传统做法                                 | 本方案                             |
+| ---------------- | ---------------------------------------- | ---------------------------------- |
+| **视口锁定**     | `100vh` 硬编码，工具栏变化时溢出         | `--app-height` + `100dvh` 三层回退 |
+| **滚动隔离**     | body 滚动，头脚跟着跑                    | body 焊死，main 唯一滚动           |
+| **Tabbar 定位**  | `position:fixed` + `padding-bottom` hack | `:fixed="false"` 回归自然流        |
+| **WebView 嵌入** | 需后端配合或单独部署                     | URL query 一行控制                 |
+| **页面级控制**   | 每个页面手动 `v-if`                      | `definePage meta` 声明式           |
+| **组件替换**     | 全局状态，跨页面污染                     | Provide/Inject，卸载自动清理       |
+| **版本更新**     | 无感知                                   | 轮询 + 提示条，H5/PWA 通用         |
+| **PWA 安装**     | 依赖浏览器菜单                           | 页面内引导，三重防重复             |
 
 ---
 
 ## 九、相关文件
 
-| 文件 | 作用 |
-|------|------|
-| `src/layouts/default.vue` | 默认布局：App Shell 容器 + 动态 Header/Footer |
-| `src/layouts/default/components/header.vue` | 默认 Header（van-nav-bar + 智能返回） |
-| `src/layouts/default/components/footer.vue` | 默认 Footer（van-tabbar，`:fixed="false"`） |
-| `src/composables/useLayoutConfig.ts` | 显隐控制 composable（四层优先级） |
-| `src/composables/useLayoutCustomization.ts` | 组件替换 composable（Provide/Inject） |
-| `src/composables/useAppUpdate.ts` | 版本检测 composable（轮询 /version.json） |
-| `src/composables/usePwaInstall.ts` | PWA 安装引导 composable |
-| `src/components/AppUpdatePrompt.vue` | 版本更新提示条 UI |
-| `src/components/PwaInstallPrompt.vue` | PWA 安装提示条 UI |
-| `src/styles/index.css` | App Shell CSS（`vh-full` / body 焊死 / overscroll） |
-| `src/main.ts` | `--app-height` 精确测量 |
-| `types/router.d.ts` | RouteMeta 类型扩展 |
-| `docs/dark-mode-architecture.md` | 深色模式 & 状态栏颜色架构 |
+| 文件                                        | 作用                                                |
+| ------------------------------------------- | --------------------------------------------------- |
+| `src/layouts/default.vue`                   | 默认布局：App Shell 容器 + 动态 Header/Footer       |
+| `src/layouts/default/components/header.vue` | 默认 Header（van-nav-bar + 智能返回）               |
+| `src/layouts/default/components/footer.vue` | 默认 Footer（van-tabbar，`:fixed="false"`）         |
+| `src/composables/useLayoutConfig.ts`        | 显隐控制 composable（四层优先级）                   |
+| `src/composables/useLayoutCustomization.ts` | 组件替换 composable（Provide/Inject）               |
+| `src/composables/useAppUpdate.ts`           | 版本检测 composable（轮询 /version.json）           |
+| `src/composables/usePwaInstall.ts`          | PWA 安装引导 composable                             |
+| `src/components/AppUpdatePrompt.vue`        | 版本更新提示条 UI                                   |
+| `src/components/PwaInstallPrompt.vue`       | PWA 安装提示条 UI                                   |
+| `src/styles/index.css`                      | App Shell CSS（`vh-full` / body 焊死 / overscroll） |
+| `src/main.ts`                               | `--app-height` 精确测量                             |
+| `types/router.d.ts`                         | RouteMeta 类型扩展                                  |
+| `docs/dark-mode-architecture.md`            | 深色模式 & 状态栏颜色架构                           |

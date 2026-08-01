@@ -221,14 +221,14 @@ Workbox 提供 5 种标准缓存策略：
 
 需要在 `public/` 目录下放置以下图标文件（由 `@vite-pwa/assets-generator` 从 `public/pwa-icon.svg` 自动生成）：
 
-| 文件                           | 尺寸    | 用途                             |
-| ------------------------------ | ------- | -------------------------------- |
-| `pwa-64x64.png`                | 64×64   | 小尺寸主屏幕图标                 |
-| `pwa-192x192.png`              | 192×192 | 主屏幕图标（Android）            |
-| `pwa-512x512.png`              | 512×512 | 大尺寸启动图标                   |
-| `maskable-icon-512x512.png`    | 512×512 | 遮罩适配图标（Android 自适应）   |
-| `apple-touch-icon-180x180.png` | 180×180 | iOS Safari 主屏幕图标            |
-| `favicon.ico`                  | 48×48   | 浏览器标签页图标                 |
+| 文件                           | 尺寸    | 用途                           |
+| ------------------------------ | ------- | ------------------------------ |
+| `pwa-64x64.png`                | 64×64   | 小尺寸主屏幕图标               |
+| `pwa-192x192.png`              | 192×192 | 主屏幕图标（Android）          |
+| `pwa-512x512.png`              | 512×512 | 大尺寸启动图标                 |
+| `maskable-icon-512x512.png`    | 512×512 | 遮罩适配图标（Android 自适应） |
+| `apple-touch-icon-180x180.png` | 180×180 | iOS Safari 主屏幕图标          |
+| `favicon.ico`                  | 48×48   | 浏览器标签页图标               |
 
 ---
 
@@ -354,20 +354,20 @@ VitePWA({
 
 ## 九、相关文件
 
-| 文件                                | 作用                                                                 |
-| ----------------------------------- | -------------------------------------------------------------------- |
-| `pnpm-workspace.yaml`               | PWA 依赖版本声明（vite-plugin-pwa / workbox-build / workbox-window） |
-| `package.json`                      | PWA 依赖引用（devDependencies）+ `pwa:assets:generator` 脚本         |
-| `build/plugins/pwa.ts`              | PWA 插件工厂函数，配置 manifest + workbox 策略                       |
-| `build/index.ts`                    | 插件注册入口，条件加载 PWA 插件（生产构建）                          |
-| `pwa-assets.config.ts`              | `@vite-pwa/assets-generator` 配置，从 `pwa-icon.svg` 生成所有图标   |
-| `public/pwa-icon.svg`               | PWA 图标源文件（512×512 SVG），供 assets-generator 渲染导出          |
-| `public/pwa-64x64.png`              | PWA 图标 64×64                                                       |
-| `public/pwa-192x192.png`            | PWA 图标 192×192                                                     |
-| `public/pwa-512x512.png`            | PWA 图标 512×512                                                     |
-| `public/maskable-icon-512x512.png`  | PWA 遮罩适配图标 512×512                                             |
-| `public/apple-touch-icon-180x180.png` | iOS Safari 图标 180×180                                             |
-| `public/favicon.ico`                | 浏览器标签页图标                                                     |
+| 文件                                  | 作用                                                                 |
+| ------------------------------------- | -------------------------------------------------------------------- |
+| `pnpm-workspace.yaml`                 | PWA 依赖版本声明（vite-plugin-pwa / workbox-build / workbox-window） |
+| `package.json`                        | PWA 依赖引用（devDependencies）+ `pwa:assets:generator` 脚本         |
+| `build/plugins/pwa.ts`                | PWA 插件工厂函数，配置 manifest + workbox 策略                       |
+| `build/index.ts`                      | 插件注册入口，条件加载 PWA 插件（生产构建）                          |
+| `pwa-assets.config.ts`                | `@vite-pwa/assets-generator` 配置，从 `pwa-icon.svg` 生成所有图标    |
+| `public/pwa-icon.svg`                 | PWA 图标源文件（512×512 SVG），供 assets-generator 渲染导出          |
+| `public/pwa-64x64.png`                | PWA 图标 64×64                                                       |
+| `public/pwa-192x192.png`              | PWA 图标 192×192                                                     |
+| `public/pwa-512x512.png`              | PWA 图标 512×512                                                     |
+| `public/maskable-icon-512x512.png`    | PWA 遮罩适配图标 512×512                                             |
+| `public/apple-touch-icon-180x180.png` | iOS Safari 图标 180×180                                              |
+| `public/favicon.ico`                  | 浏览器标签页图标                                                     |
 
 ---
 
@@ -435,11 +435,11 @@ export default defineConfig({
 
 该命令会根据 `pwa-assets.config.ts` 配置，从 `public/pwa-icon.svg` 自动渲染生成以下图标：
 
-| 目标文件                         | 尺寸    | 生成方式                                             |
-| -------------------------------- | ------- | ---------------------------------------------------- |
-| `public/favicon.ico`             | 48×48   | `@vite-pwa/assets-generator` 渲染 ICO                |
-| `public/pwa-64x64.png`           | 64×64   | `@vite-pwa/assets-generator` 渲染 PNG                |
-| `public/pwa-192x192.png`         | 192×192 | `@vite-pwa/assets-generator` 渲染 PNG                |
-| `public/pwa-512x512.png`         | 512×512 | `@vite-pwa/assets-generator` 渲染 PNG                |
-| `public/maskable-icon-512x512.png` | 512×512 | `@vite-pwa/assets-generator` 渲染 maskable PNG     |
-| `public/apple-touch-icon-180x180.png` | 180×180 | `@vite-pwa/assets-generator` 渲染 Apple 图标      |
+| 目标文件                              | 尺寸    | 生成方式                                       |
+| ------------------------------------- | ------- | ---------------------------------------------- |
+| `public/favicon.ico`                  | 48×48   | `@vite-pwa/assets-generator` 渲染 ICO          |
+| `public/pwa-64x64.png`                | 64×64   | `@vite-pwa/assets-generator` 渲染 PNG          |
+| `public/pwa-192x192.png`              | 192×192 | `@vite-pwa/assets-generator` 渲染 PNG          |
+| `public/pwa-512x512.png`              | 512×512 | `@vite-pwa/assets-generator` 渲染 PNG          |
+| `public/maskable-icon-512x512.png`    | 512×512 | `@vite-pwa/assets-generator` 渲染 maskable PNG |
+| `public/apple-touch-icon-180x180.png` | 180×180 | `@vite-pwa/assets-generator` 渲染 Apple 图标   |

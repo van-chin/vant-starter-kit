@@ -106,15 +106,16 @@
 
 ### 3.3 ~~SEO / Meta 标签~~ ✅
 
-| 项目                          | 状态 | 说明                                                              |
-| ----------------------------- | ---- | ----------------------------------------------------------------- |
-| ~~`<meta name="description">`~~ | ✅   | index.html 静态兜底 + `@unhead/vue` 运行时接管（2026-07-31）      |
-| ~~Open Graph 标签~~           | ✅   | `og:title/description/image/type`（2026-07-31）                   |
-| ~~Twitter Card 标签~~         | ✅   | `twitter:card/title/description/image`（2026-07-31）              |
-| ~~动态 title~~                | ✅   | `@unhead/vue` v3 + router `afterEach`，自动读取 `meta.title`（2026-07-31） |
-| ~~`@unhead/vue` 安装~~        | ✅   | v3.2.3，`src/plugins/head.ts` + `main.ts` 注册（2026-07-31）      |
+| 项目                            | 状态 | 说明                                                                       |
+| ------------------------------- | ---- | -------------------------------------------------------------------------- |
+| ~~`<meta name="description">`~~ | ✅   | index.html 静态兜底 + `@unhead/vue` 运行时接管（2026-07-31）               |
+| ~~Open Graph 标签~~             | ✅   | `og:title/description/image/type`（2026-07-31）                            |
+| ~~Twitter Card 标签~~           | ✅   | `twitter:card/title/description/image`（2026-07-31）                       |
+| ~~动态 title~~                  | ✅   | `@unhead/vue` v3 + router `afterEach`，自动读取 `meta.title`（2026-07-31） |
+| ~~`@unhead/vue` 安装~~          | ✅   | v3.2.3，`src/plugins/head.ts` + `main.ts` 注册（2026-07-31）               |
 
 **实现架构**：
+
 ```
 index.html (静态兜底) → @unhead/vue (运行时接管)
                            ├── router afterEach → 自动更新 <title>
@@ -137,34 +138,35 @@ index.html (静态兜底) → @unhead/vue (运行时接管)
 
 ### 3.6 PWA 功能状态
 
-| 功能                                     | 状态 | 说明                                                          |
-| ---------------------------------------- | ---- | ------------------------------------------------------------- |
-| ~~Service Worker（Workbox）~~            | ✅   | `registerType: 'autoUpdate'`，预缓存 + API 缓存               |
-| ~~PWA 图标生成~~                         | ✅   | `@vite-pwa/assets-generator`，全套 icon（含 maskable）        |
-| ~~manifest.webmanifest~~                 | ✅   | name / short_name / icons / display / scope                   |
-| ~~manifest `id` 字段~~                   | ✅   | `id: '/'`，Chrome PWA 唯一标识（2026-07-31 新增）             |
-| `screenshots`                            | ⚠️   | manifest 中留有 TODO 占位，需要产品截图（3-5 张）             |
-| `navigationFallback`                     | ⚠️   | Workbox `NavigationRoute` 已配置但 precache 无 `index.html`   |
-| 图片/字体缓存策略                        | ❌   | 仅缓存 API 请求，无图片/字体/外部 CDN 静态资源缓存            |
-| `CacheableResponsePlugin`（状态码过滤）  | ❌   | 未配置，0xx/3xx 响应也可能被缓存                              |
-| SW 注册错误监控                           | ✅   | `src/utils/pwa.ts` 提供 Console 日志诊断（2026-07-31 新增）   |
-| ~~`appinstalled` 事件处理~~              | ✅   | 安装完成后弹出 Toast "安装成功！应用已添加到桌面"（2026-07-31）|
-| ~~`beforeinstallprompt` 事件~~           | ✅   | 监听 + `promptInstall()` 手动触发安装（2026-07-31 新增）      |
-| ~~开发环境 HTTPS 反向代理~~              | ✅   | `unplugin-https-reverse-proxy`，但需释放 443 端口（见下方）   |
+| 功能                                    | 状态 | 说明                                                            |
+| --------------------------------------- | ---- | --------------------------------------------------------------- |
+| ~~Service Worker（Workbox）~~           | ✅   | `registerType: 'autoUpdate'`，预缓存 + API 缓存                 |
+| ~~PWA 图标生成~~                        | ✅   | `@vite-pwa/assets-generator`，全套 icon（含 maskable）          |
+| ~~manifest.webmanifest~~                | ✅   | name / short_name / icons / display / scope                     |
+| ~~manifest `id` 字段~~                  | ✅   | `id: '/'`，Chrome PWA 唯一标识（2026-07-31 新增）               |
+| `screenshots`                           | ⚠️   | manifest 中留有 TODO 占位，需要产品截图（3-5 张）               |
+| `navigationFallback`                    | ⚠️   | Workbox `NavigationRoute` 已配置但 precache 无 `index.html`     |
+| 图片/字体缓存策略                       | ❌   | 仅缓存 API 请求，无图片/字体/外部 CDN 静态资源缓存              |
+| `CacheableResponsePlugin`（状态码过滤） | ❌   | 未配置，0xx/3xx 响应也可能被缓存                                |
+| SW 注册错误监控                         | ✅   | `src/utils/pwa.ts` 提供 Console 日志诊断（2026-07-31 新增）     |
+| ~~`appinstalled` 事件处理~~             | ✅   | 安装完成后弹出 Toast "安装成功！应用已添加到桌面"（2026-07-31） |
+| ~~`beforeinstallprompt` 事件~~          | ✅   | 监听 + `promptInstall()` 手动触发安装（2026-07-31 新增）        |
+| ~~开发环境 HTTPS 反向代理~~             | ✅   | `unplugin-https-reverse-proxy`，但需释放 443 端口（见下方）     |
 
 ### 3.7 PWA 跨浏览器兼容性
 
-| 浏览器      | PWA 安装 | 状态栏着色 (`theme-color`) | 备注                                                              |
-| ----------- | -------- | -------------------------- | ----------------------------------------------------------------- |
-| Chrome 安卓 | ✅ 正常  | ✅ 正常                     | WebAPK 后台创建需 10-60s，`appinstalled` 事件可及时反馈用户      |
-| Edge 安卓   | ✅ 正常  | ❌ 不支持                   | caniuse 标注 Edge 150 不支持 meta theme-color                    |
-| Safari iOS  | ✅ 正常  | ✅ 正常                     | `apple-mobile-web-app-status-bar-style`                           |
+| 浏览器      | PWA 安装 | 状态栏着色 (`theme-color`) | 备注                                                        |
+| ----------- | -------- | -------------------------- | ----------------------------------------------------------- |
+| Chrome 安卓 | ✅ 正常  | ✅ 正常                    | WebAPK 后台创建需 10-60s，`appinstalled` 事件可及时反馈用户 |
+| Edge 安卓   | ✅ 正常  | ❌ 不支持                  | caniuse 标注 Edge 150 不支持 meta theme-color               |
+| Safari iOS  | ✅ 正常  | ✅ 正常                    | `apple-mobile-web-app-status-bar-style`                     |
 
 > **Chrome PWA 安装优化说明**：
 > Chrome 在用户确认安装后，通过 Google Play Services 在后台创建 WebAPK
 > （约 10-60 秒）。期间浏览器无任何进度提示，容易让用户以为安装失败。
 >
 > 已实施的优化：
+>
 > - `appinstalled` 事件监听 → 安装完成弹出 Toast "安装成功！应用已添加到桌面"
 > - `beforeinstallprompt` 事件 → 支持自定义安装按钮流程
 > - `promptInstall()` → 手动触发安装对话框
@@ -211,4 +213,4 @@ index.html (静态兜底) → @unhead/vue (运行时接管)
 | 测试覆盖   | ⭐⭐       | —    | 11 tests（useEnv + cart store），核心 composable 覆盖           |
 | 工程化     | ⭐⭐⭐     | —    | 持久化 store + i18n + env 文件 + PWA 图标生成 + SW 监控         |
 | 国际化     | ⭐⭐⭐⭐   | —    | vue-i18n v11，zh-CN/en 双语言                                   |
-| 文档       | ⭐⭐⭐⭐⭐ | —    | 5 份架构文档 + gap-analysis                                    |
+| 文档       | ⭐⭐⭐⭐⭐ | —    | 5 份架构文档 + gap-analysis                                     |

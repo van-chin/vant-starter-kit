@@ -40,11 +40,11 @@ body 焊死(overflow:hidden) → main 唯一滚动 → header/footer 钉死
 
 VueUse `useDark()` 单例驱动，三路并行：
 
-| 机制 | 影响范围 |
-|------|---------|
-| Tailwind `dark:` 前缀 | 页面所有元素 |
-| `<van-config-provider :theme>` | Vant 组件内部 |
-| `<meta name="theme-color">` | 浏览器/PWA 系统状态栏 |
+| 机制                           | 影响范围              |
+| ------------------------------ | --------------------- |
+| Tailwind `dark:` 前缀          | 页面所有元素          |
+| `<van-config-provider :theme>` | Vant 组件内部         |
+| `<meta name="theme-color">`    | 浏览器/PWA 系统状态栏 |
 
 📖 详见 [深色模式架构](./docs/dark-mode-architecture.md)
 
@@ -57,14 +57,14 @@ VueUse `useDark()` 单例驱动，三路并行：
 
 ### 🧩 开发者体验
 
-| 能力 | 工具/方案 |
-|------|----------|
-| 自动导入 | Vue/VueRouter/Pinia API + Vant 组件 + composables + stores |
-| 文件系统路由 | `src/pages/` 目录结构即路由，支持 HMR |
-| 布局系统 | 3 套开箱布局（default / admin / screen），声明式切换 |
-| 移动端调试 | vConsole 生产可用 + `?vconsole` 按需开启 |
-| 统一 HTTP | Alova + Axios + 业务码拦截 + Toast 通知 |
-| 类型安全 | TypeScript 严格模式 + `noUncheckedIndexedAccess` |
+| 能力         | 工具/方案                                                  |
+| ------------ | ---------------------------------------------------------- |
+| 自动导入     | Vue/VueRouter/Pinia API + Vant 组件 + composables + stores |
+| 文件系统路由 | `src/pages/` 目录结构即路由，支持 HMR                      |
+| 布局系统     | 3 套开箱布局（default / admin / screen），声明式切换       |
+| 移动端调试   | vConsole 生产可用 + `?vconsole` 按需开启                   |
+| 统一 HTTP    | Alova + Axios + 业务码拦截 + Toast 通知                    |
+| 类型安全     | TypeScript 严格模式 + `noUncheckedIndexedAccess`           |
 
 ---
 
@@ -126,34 +126,36 @@ vp preview    # 本地预览生产版本
 
 **文件替换后就生效，无需改代码：**
 
-| 文件 | 用途 | 尺寸 |
-|------|------|------|
-| `public/logo.svg` | 项目 Logo（参考用） | SVG |
-| `public/pwa-icon.svg` | PWA 图标源文件 | 512×512 SVG |
-| `public/favicon.ico` | 浏览器标签页图标 | 48×48 |
-| `public/apple-touch-icon-180x180.png` | iOS 桌面图标 | 180×180 |
+| 文件                                  | 用途                | 尺寸        |
+| ------------------------------------- | ------------------- | ----------- |
+| `public/logo.svg`                     | 项目 Logo（参考用） | SVG         |
+| `public/pwa-icon.svg`                 | PWA 图标源文件      | 512×512 SVG |
+| `public/favicon.ico`                  | 浏览器标签页图标    | 48×48       |
+| `public/apple-touch-icon-180x180.png` | iOS 桌面图标        | 180×180     |
 
 修改 `public/pwa-icon.svg` 后重新生成 PWA 整套图标：
+
 ```bash
 vpr pwa:assets:generator
 ```
 
 ### 环境变量说明
 
-| 变量 | 说明 | 默认值 |
-|------|------|--------|
-| `VITE_API_BASE_URL` | API 基础路径 | `/api` |
-| `VITE_APP_TITLE` | 应用标题（浏览器标签 + PWA 名） | `vant-starter-kit` |
-| `VITE_PUBLIC_PATH` | 应用基础路径 | `/` |
-| `VITE_ENV_NAME` | 环境名称 | `development` |
-| `VITE_ENABLE_VCONSOLE` | vConsole 调试面板 | `true`（dev）/ `false`（prod 推荐） |
-| `VITE_EXTERNAL_API_<NAME>` | 外部 API（可配置多个，见下方） | 空 |
-| `VITE_TCC_APP_ID` | 腾讯云 IM 应用 ID | 空 |
-| `VITE_ALLOWED_HOST` | 允许的 Host 域名 | 空 |
-| `VITE_PROXY_TARGET` | HTTPS 代理目标域名 | 空 |
-| `VITE_DEV_SERVER_HOST` | Dev Server 地址 | `0.0.0.0` |
+| 变量                       | 说明                            | 默认值                              |
+| -------------------------- | ------------------------------- | ----------------------------------- |
+| `VITE_API_BASE_URL`        | API 基础路径                    | `/api`                              |
+| `VITE_APP_TITLE`           | 应用标题（浏览器标签 + PWA 名） | `vant-starter-kit`                  |
+| `VITE_PUBLIC_PATH`         | 应用基础路径                    | `/`                                 |
+| `VITE_ENV_NAME`            | 环境名称                        | `development`                       |
+| `VITE_ENABLE_VCONSOLE`     | vConsole 调试面板               | `true`（dev）/ `false`（prod 推荐） |
+| `VITE_EXTERNAL_API_<NAME>` | 外部 API（可配置多个，见下方）  | 空                                  |
+| `VITE_TCC_APP_ID`          | 腾讯云 IM 应用 ID               | 空                                  |
+| `VITE_ALLOWED_HOST`        | 允许的 Host 域名                | 空                                  |
+| `VITE_PROXY_TARGET`        | HTTPS 代理目标域名              | 空                                  |
+| `VITE_DEV_SERVER_HOST`     | Dev Server 地址                 | `0.0.0.0`                           |
 
 模板文件：
+
 - `.env.example` — 所有变量的完整模板
 - `.env.development.example` — 开发环境推荐值
 - `.env.production.example` — 生产环境推荐值
@@ -193,13 +195,13 @@ definePage({
 </script>
 ```
 
-| meta 字段 | 类型 | 说明 |
-|-----------|------|------|
-| `layout` | `string` | 布局名：`default` / `admin` / `screen`（默认 `default`） |
-| `title` | `string` | 页面标题（Header 导航栏 + 浏览器 title） |
-| `showHeader` | `boolean` | 是否显示 Header（默认 `true`） |
-| `showFooter` | `boolean` | 是否显示 Footer（默认 `true`） |
-| `requiresAuth` | `boolean` | 是否需要登录（默认 `false`） |
+| meta 字段      | 类型      | 说明                                                     |
+| -------------- | --------- | -------------------------------------------------------- |
+| `layout`       | `string`  | 布局名：`default` / `admin` / `screen`（默认 `default`） |
+| `title`        | `string`  | 页面标题（Header 导航栏 + 浏览器 title）                 |
+| `showHeader`   | `boolean` | 是否显示 Header（默认 `true`）                           |
+| `showFooter`   | `boolean` | 是否显示 Footer（默认 `true`）                           |
+| `requiresAuth` | `boolean` | 是否需要登录（默认 `false`）                             |
 
 ### 添加 API 接口
 
@@ -229,7 +231,7 @@ export const getHello = () => baseAlova.Get<{ hello: string }>('/hello');
 import { useRequest } from 'alova/client';
 import { getHello } from '@/api/methods/hello';
 
-	const { data, loading } = useRequest(getHello());
+const { data, loading } = useRequest(getHello());
 ```
 
 **外部 API**（支持多个后端，开发环境自动代理跨域）：
@@ -256,6 +258,7 @@ const { data: data2 } = useRequest(thirdApi.Get('/orders'));
 ```
 
 > **工作原理**：
+>
 > - 开发环境：请求 `/api-external-other/users` → Vite proxy → `http://www.xxx.com/api/users`
 > - 生产环境：直接请求 `http://www.xxx.com/api/users`
 > - **零跨域**：开发环境由 Vite dev server 自动转发，生产环境需外部 API 配置 CORS
@@ -297,9 +300,9 @@ Composables 在 `src/composables/` 下**自动导入**，无需手动 `import`�
 
 ```ts
 import MyFooter from './components/MyFooter.vue';
-useCustomFooter(MyFooter);   // 同步
+useCustomFooter(MyFooter); // 同步
 
-useCustomHeader(() => import('./MyHeader.vue'));  // 异步 Code Split
+useCustomHeader(() => import('./MyHeader.vue')); // 异步 Code Split
 ```
 
 页面卸载时自动恢复默认。
@@ -398,32 +401,32 @@ src/
 
 ## 🛠️ 技术栈
 
-| 类别 | 技术 |
-|------|------|
-| 框架 | Vue 3 (Composition API + `<script setup>`) |
-| UI 库 | Vant 4（移动端） |
-| 构建 | Vite+ v0.2.7 |
-| CSS | Tailwind CSS v4 |
-| 状态管理 | Pinia + persist 插件 |
-| 路由 | Vue Router（文件系统路由 + 布局系统） |
-| HTTP | Alova + Axios |
-| 服务端 | Nitro（全栈 SSR） |
-| 国际化 | Vue I18n v11 |
-| SEO | @unhead/vue v3 |
-| PWA | vite-plugin-pwa（Workbox） |
-| 测试 | Vitest + Vue Test Utils |
-| 部署 | Cloudflare Workers |
+| 类别     | 技术                                       |
+| -------- | ------------------------------------------ |
+| 框架     | Vue 3 (Composition API + `<script setup>`) |
+| UI 库    | Vant 4（移动端）                           |
+| 构建     | Vite+ v0.2.7                               |
+| CSS      | Tailwind CSS v4                            |
+| 状态管理 | Pinia + persist 插件                       |
+| 路由     | Vue Router（文件系统路由 + 布局系统）      |
+| HTTP     | Alova + Axios                              |
+| 服务端   | Nitro（全栈 SSR）                          |
+| 国际化   | Vue I18n v11                               |
+| SEO      | @unhead/vue v3                             |
+| PWA      | vite-plugin-pwa（Workbox）                 |
+| 测试     | Vitest + Vue Test Utils                    |
+| 部署     | Cloudflare Workers                         |
 
 ---
 
 ## 📚 文档
 
-| 文档 | 内容 |
-|------|------|
-| [Layout 布局架构](./docs/layout-architecture.md) | App Shell 原理 + 显隐控制 + 组件替换 ★ 亮点 |
-| [深色模式架构](./docs/dark-mode-architecture.md) | CSS/Vant/状态栏三路协同 |
-| [PWA 集成方案](./docs/pwa-integration.md) | Service Worker + Manifest + 图标 + 部署 |
-| [功能缺口分析](./docs/starter-kit-gap-analysis.md) | 已完成功能清单 + 优先级路线图 |
+| 文档                                               | 内容                                        |
+| -------------------------------------------------- | ------------------------------------------- |
+| [Layout 布局架构](./docs/layout-architecture.md)   | App Shell 原理 + 显隐控制 + 组件替换 ★ 亮点 |
+| [深色模式架构](./docs/dark-mode-architecture.md)   | CSS/Vant/状态栏三路协同                     |
+| [PWA 集成方案](./docs/pwa-integration.md)          | Service Worker + Manifest + 图标 + 部署     |
+| [功能缺口分析](./docs/starter-kit-gap-analysis.md) | 已完成功能清单 + 优先级路线图               |
 
 ---
 

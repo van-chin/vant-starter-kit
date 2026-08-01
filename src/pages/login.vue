@@ -1,75 +1,127 @@
 <template>
-  <div class="flex h-full flex-col overflow-hidden" :style="{ backgroundColor: '#f8f9fa' }">
-    <!-- Welcome Section -->
-    <div class="flex flex-1 flex-col items-center justify-center px-6">
-      <div class="w-full max-w-sm">
-        <!-- Headline -->
-        <div class="mb-1 text-2xl font-bold text-gray-900">
-          {{ t('login.welcome') }}
+  <div
+    class="login-page relative flex h-full flex-col overflow-hidden bg-[#F8F9FA] dark:bg-gray-950"
+  >
+    <!-- Chakra decorative logo: top-right, partially off-screen (Figma: x=270, clipped ~93px) -->
+    <img
+      src="/images/chakra-logo.svg"
+      alt=""
+      class="pointer-events-none absolute top-[55px] -right-[93px] h-[198px] w-[198px] opacity-[0.15] select-none"
+    />
+
+    <div class="flex flex-1 flex-col items-center overflow-hidden px-6">
+      <div class="flex w-full max-w-[345px] flex-col" style="padding-top: var(--login-pt)">
+        <!-- Title Section -->
+        <div class="login-title">
+          <h1
+            class="font-poppins text-[24px] leading-[36px] font-medium text-[#1F1F1F] dark:text-gray-100"
+          >
+            {{ t('login.welcome') }}
+          </h1>
+          <p class="font-poppins mt-2 text-base leading-6 text-[#757575] dark:text-gray-400">
+            {{ t('login.subtitle') }}
+          </p>
         </div>
-        <div class="mb-8 text-sm text-gray-500">
-          {{ t('login.subtitle') }}
-        </div>
+
+        <!-- Gap to form (Figma: title→form, responsive) -->
+        <div style="height: var(--login-gap)" />
 
         <!-- Form -->
-        <van-form @submit="onSubmit">
+        <van-form @submit="onSubmit" autocomplete="off">
           <!-- Username -->
-          <van-field
-            v-model="form.username"
-            name="username"
-            :placeholder="t('login.placeholderUsername')"
-            :rules="[{ required: true, message: t('login.placeholderUsername') }]"
-            class="!mb-3 !rounded-xl !bg-white"
-            input-align="left"
-            left-icon="user-o"
-          />
-
-          <!-- Password -->
-          <van-field
-            v-model="form.password"
-            type="password"
-            name="password"
-            :placeholder="t('login.placeholderPassword')"
-            :rules="[{ required: true, message: t('login.placeholderPassword') }]"
-            class="!mb-3 !rounded-xl !bg-white"
-            input-align="left"
-            left-icon="lock-o"
-          />
-
-          <!-- Forgot password -->
-          <div class="mb-6 flex justify-end">
-            <span class="text-sm text-blue-500">{{ t('login.forgotPassword') }}</span>
+          <div class="field-wrapper">
+            <van-field
+              v-model="form.username"
+              name="username"
+              autocomplete="off"
+              :placeholder="t('login.placeholderUsername')"
+              :rules="[{ required: true, message: t('login.placeholderUsername') }]"
+              class="login-field"
+              input-align="left"
+            />
           </div>
 
-          <!-- Login button -->
-          <van-button
-            round
-            block
-            type="primary"
-            native-type="submit"
-            :loading="loading"
-            :loading-text="t('login.logging')"
-            class="!h-12 !text-base !font-medium"
+          <!-- Password -->
+          <div class="field-wrapper" style="margin-top: 14px">
+            <van-field
+              v-model="form.password"
+              :type="showPassword ? 'text' : 'password'"
+              name="password"
+              autocomplete="new-password"
+              :placeholder="t('login.placeholderPassword')"
+              :rules="[{ required: true, message: t('login.placeholderPassword') }]"
+              class="login-field"
+              input-align="left"
+            >
+              <template #right-icon>
+                <button
+                  type="button"
+                  class="flex h-5 w-5 items-center justify-center"
+                  @click="showPassword = !showPassword"
+                >
+                  <img
+                    src="/images/eye-off.svg"
+                    alt="toggle password"
+                    class="h-5 w-5 opacity-40"
+                    :class="{ 'opacity-70': showPassword }"
+                  />
+                </button>
+              </template>
+            </van-field>
+          </div>
+
+          <!-- Forgot Password -->
+          <div class="forgot-pwd-row flex justify-end" style="padding: 8px 0; margin-top: 7px">
+            <button
+              type="button"
+              class="font-poppins text-xs font-medium text-[#3883FF]"
+              @click="onForgotPassword"
+            >
+              {{ t('login.forgotPassword') }}
+            </button>
+          </div>
+
+          <!-- Login Button -->
+          <button
+            type="submit"
+            :disabled="loading"
+            class="login-btn font-poppins flex h-[52px] w-full items-center justify-center rounded-2xl bg-[linear-gradient(25deg,#89C6FF,#BC91D3)] text-base font-semibold text-white shadow-[0px_2px_4px_rgba(0,0,0,0.15)] transition-opacity duration-200 active:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+            style="margin-top: var(--login-btn-mt)"
           >
-            {{ t('login.submit') }}
-          </van-button>
+            <template v-if="loading">
+              <span class="loading-spinner mr-2" />
+              {{ t('login.logging') }}
+            </template>
+            <template v-else>
+              {{ t('login.submit') }}
+            </template>
+          </button>
         </van-form>
 
-        <!-- Divider -->
-        <div class="my-6 flex items-center gap-3">
-          <div class="h-px flex-1 bg-gray-200"></div>
-          <span class="text-xs text-gray-400">{{ t('login.orContinue') }}</span>
-          <div class="h-px flex-1 bg-gray-200"></div>
+        <!-- OR Divider -->
+        <div class="flex items-center gap-3" style="margin-top: var(--login-divider-mt)">
+          <div
+            class="h-px flex-1 bg-[linear-gradient(90deg,rgba(139,139,139,1)_0%,rgba(248,249,250,0)_80%)] dark:bg-[linear-gradient(90deg,rgba(139,139,139,1)_0%,rgba(30,30,32,0)_80%)]"
+          />
+          <span
+            class="shrink-0 text-xs text-[#757575] dark:text-gray-400"
+            style="font-family: Inter, sans-serif"
+          >
+            {{ t('login.orContinue') }}
+          </span>
+          <div
+            class="h-px flex-1 bg-[linear-gradient(270deg,rgba(139,139,139,1)_0%,rgba(248,249,250,0)_80%)] dark:bg-[linear-gradient(270deg,rgba(139,139,139,1)_0%,rgba(30,30,32,0)_80%)]"
+          />
         </div>
 
         <!-- Social Login -->
-        <div class="flex items-center justify-center gap-5">
+        <div
+          class="flex items-center justify-center gap-[42px]"
+          style="margin-top: var(--login-social-mt)"
+        >
           <!-- Google -->
-          <div
-            class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-gray-100 active:bg-gray-200"
-            @click="onSocialLogin('google')"
-          >
-            <svg class="h-5 w-5" viewBox="0 0 24 24">
+          <button class="social-btn" @click="onSocialLogin('google')">
+            <svg class="h-6 w-6" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
@@ -87,40 +139,40 @@
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-          </div>
+          </button>
 
           <!-- Apple -->
-          <div
-            class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-gray-100 active:bg-gray-200"
-            @click="onSocialLogin('apple')"
-          >
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+          <button class="social-btn" @click="onSocialLogin('apple')">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"
               />
             </svg>
-          </div>
+          </button>
 
           <!-- Facebook -->
-          <div
-            class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-gray-100 active:bg-gray-200"
-            @click="onSocialLogin('facebook')"
-          >
-            <svg class="h-5 w-5" viewBox="0 0 24 24">
+          <button class="social-btn" @click="onSocialLogin('facebook')">
+            <svg class="h-6 w-6" viewBox="0 0 24 24">
               <path
                 fill="#1877F2"
                 d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
               />
             </svg>
-          </div>
+          </button>
         </div>
 
         <!-- Sign Up Link -->
-        <div class="mt-8 text-center">
-          <span class="text-sm text-gray-600">{{ t('login.noAccount') }} </span>
-          <span class="text-sm font-medium text-blue-500" @click="onGoSignUp">
-            {{ t('login.signUp') }}
+        <div class="text-center" style="margin-top: var(--login-signup-mt)">
+          <span class="font-poppins text-xs text-[#525252] dark:text-gray-400">
+            {{ t('login.noAccount') }}
           </span>
+          <button
+            type="button"
+            class="font-poppins text-xs font-medium text-[#3883FF]"
+            @click="onGoSignUp"
+          >
+            {{ t('login.signUp') }}
+          </button>
         </div>
       </div>
     </div>
@@ -145,6 +197,7 @@ const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
 const loading = ref(false);
+const showPassword = ref(false);
 
 const form = reactive({
   username: '',
@@ -175,4 +228,179 @@ function onGoSignUp() {
   // TODO: 注册页完成后跳转 /signup
   showToast('注册页待接入');
 }
+
+/** 忘记密码 */
+function onForgotPassword() {
+  // TODO: 忘记密码页完成后跳转
+  showToast('忘记密码功能待接入');
+}
 </script>
+
+<style scoped>
+/* ─── Responsive Spacing Variables (defaults for large screens) ─── */
+.login-page {
+  --login-pt: 88px;
+  --login-gap: 138px;
+  --login-btn-mt: 54px;
+  --login-divider-mt: 44px;
+  --login-social-mt: 32px;
+  --login-signup-mt: 44px;
+}
+
+/* ─── Field Wrapper: reserve space for error messages ─── */
+.field-wrapper {
+  position: relative;
+  /* 28px bottom = 14px visual gap + 14px error text reserve */
+  padding-bottom: 28px;
+  overflow: visible;
+}
+
+/* Override van-cell styles from field-wrapper (reliable ancestor selector) */
+.field-wrapper :deep(.van-cell) {
+  padding: 18px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+}
+
+/* ─── Input Fields ─── */
+.login-field {
+  --van-cell-background: #fff;
+}
+
+.login-field :deep(.van-field__control) {
+  font-size: 12px;
+  font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+}
+
+.login-field :deep(.van-field__control::placeholder) {
+  color: #757575;
+  font-size: 12px;
+}
+
+/* ─── Error Message: absolutely positioned → never pushes content ─── */
+.login-field :deep(.van-field__error-message) {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  font-size: 10px;
+  line-height: 1.2;
+  color: #ee0a24;
+}
+
+/* ─── Social Buttons ─── */
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+  padding: 12px 26px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  border: 1px solid #ffffff;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.social-btn:active {
+  opacity: 0.7;
+}
+
+/* ─── Loading Spinner ─── */
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Dark Mode ─── */
+:global(.dark) .field-wrapper :deep(.van-cell) {
+  background: #2c2c2e;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+:global(.dark) .login-field :deep(.van-field__control) {
+  color: #eee;
+}
+
+:global(.dark) .login-field :deep(.van-field__control::placeholder) {
+  color: #8e8e93;
+}
+
+:global(.dark) .social-btn {
+  background: #2c2c2e;
+  border-color: #3a3a3c;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* ─── Small Screen Adaptation ─── */
+/* iPhone SE & compact phones: viewport height ≤ 667px → CSS viewport = 375×667 */
+/* Strategy: proportional scaling (~60% of large-screen spacings), capped for extreme gaps */
+@media (max-height: 667px) {
+  /* ── Spacing variables: ~55-75% of large-screen values ── */
+  .login-page {
+    --login-pt: 44px;
+    --login-gap: 54px;
+    --login-btn-mt: 32px;
+    --login-divider-mt: 28px;
+    --login-social-mt: 24px;
+    --login-signup-mt: 28px;
+  }
+
+  /* ── Title: maintain readability ── */
+  .login-title h1 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+  .login-title p {
+    font-size: 14px;
+    margin-top: 6px;
+  }
+
+  /* ── Field wrappers: moderately tighter ── */
+  .field-wrapper {
+    padding-bottom: 22px;
+  }
+  .field-wrapper :deep(.van-cell) {
+    padding: 16px;
+  }
+  .field-wrapper + .field-wrapper {
+    margin-top: 12px !important;
+  }
+
+  /* ── Forgot password row ── */
+  .forgot-pwd-row {
+    padding: 6px 0 !important;
+    margin-top: 4px !important;
+  }
+
+  /* ── Login button ── */
+  .login-btn {
+    height: 48px;
+  }
+
+  /* ── OR divider: reduce gap ── */
+  .login-page .gap-3 {
+    gap: 0.5rem;
+  }
+
+  /* ── Social buttons ── */
+  .social-btn {
+    height: 44px;
+    min-width: 44px;
+    padding: 10px 22px;
+  }
+}
+</style>

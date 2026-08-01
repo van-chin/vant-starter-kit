@@ -67,6 +67,7 @@ body.dark,
 @theme {
   --font-sans: ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, monospace;
+  --font-poppins: 'Poppins', ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer utilities {

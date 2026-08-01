@@ -26,11 +26,11 @@
 
 三路并行生效：
 
-| 路 | 机制 | 影响范围 |
-|----|------|---------|
-| **CSS** | VueUse `useDark()` → `html.dark` class → Tailwind `dark:` variant + 全局 CSS | 页面所有元素 |
-| **Vant** | `computed(() => isDark.value ? 'dark' : 'light')` → `<van-config-provider :theme>` | Vant 组件内部样式 |
-| **状态栏** | `useStatusBar(isDark)` → `<meta name="theme-color">` | 浏览器工具栏 / 系统状态栏 |
+| 路         | 机制                                                                               | 影响范围                  |
+| ---------- | ---------------------------------------------------------------------------------- | ------------------------- |
+| **CSS**    | VueUse `useDark()` → `html.dark` class → Tailwind `dark:` variant + 全局 CSS       | 页面所有元素              |
+| **Vant**   | `computed(() => isDark.value ? 'dark' : 'light')` → `<van-config-provider :theme>` | Vant 组件内部样式         |
+| **状态栏** | `useStatusBar(isDark)` → `<meta name="theme-color">`                               | 浏览器工具栏 / 系统状态栏 |
 
 ---
 
@@ -69,11 +69,11 @@ useDark()
 
 ### 2.3 状态值含义
 
-| `store.value` | `isDark.value` | 含义 |
-|--------------|----------------|------|
-| `'auto'` | 跟随系统 `prefers-color-scheme` | 初次访问默认值 |
-| `'dark'` | `true` | 用户手动选深色 |
-| `'light'` | `false` | 用户手动选浅色 |
+| `store.value` | `isDark.value`                  | 含义           |
+| ------------- | ------------------------------- | -------------- |
+| `'auto'`      | 跟随系统 `prefers-color-scheme` | 初次访问默认值 |
+| `'dark'`      | `true`                          | 用户手动选深色 |
+| `'light'`     | `false`                         | 用户手动选浅色 |
 
 ---
 
@@ -92,14 +92,19 @@ useDark()
 ### 3.2 全局 Body 样式
 
 ```css
-html, body {
-  background-color: #fff;    /* 浅色默认 */
+html,
+body {
+  background-color: #fff; /* 浅色默认 */
   color: #333;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
-.dark body, body.dark, .dark {
-  background-color: #111;    /* 深色 */
+.dark body,
+body.dark,
+.dark {
+  background-color: #111; /* 深色 */
   color: #eee;
 }
 ```
@@ -108,8 +113,9 @@ html, body {
 
 ```css
 @media (display-mode: standalone) {
-  html, body {
-    overscroll-behavior: contain;  /* PWA 禁用下拉刷新 */
+  html,
+  body {
+    overscroll-behavior: contain; /* PWA 禁用下拉刷新 */
   }
 }
 ```
@@ -131,6 +137,7 @@ const vantTheme = computed(() => (isDark.value ? 'dark' : 'light'));
 ```
 
 Vant 4 内部使用 CSS 自定义属性切换主题：
+
 - 浅色：`--van-background-2: #fff`、`--van-text-color: #323233`
 - 深色：`--van-background-2: #1c1c1e`、`--van-text-color: #f5f5f5`
 
@@ -167,41 +174,46 @@ export function useStatusBar(isDark: Ref<boolean>): void {
   });
 
   // 策略 2：直接 DOM 赋值（PWA 硬兜底）
-  watch(themeColor, (color) => {
-    setTimeout(() => {
-      document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')
-        .forEach(meta => { meta.content = color; });
-    }, 0);
-  }, { immediate: true });
+  watch(
+    themeColor,
+    (color) => {
+      setTimeout(() => {
+        document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((meta) => {
+          meta.content = color;
+        });
+      }, 0);
+    },
+    { immediate: true },
+  );
 }
 ```
 
 **为什么需要两个策略？**
 
-| 策略 | 机制 | 适用场景 |
-|------|------|---------|
-| Unhead `useHead` | 管理 `<head>` 标签，与 router 的 `head.push` 共用一个 head 实例 | 正常浏览器模式，SSR 友好 |
-| 直接 DOM `meta.content =` | 直接操作 DOM 属性 | PWA standalone 模式，部分 Android 版本 Unhead 更新后不触发状态栏重绘 |
+| 策略                      | 机制                                                            | 适用场景                                                             |
+| ------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Unhead `useHead`          | 管理 `<head>` 标签，与 router 的 `head.push` 共用一个 head 实例 | 正常浏览器模式，SSR 友好                                             |
+| 直接 DOM `meta.content =` | 直接操作 DOM 属性                                               | PWA standalone 模式，部分 Android 版本 Unhead 更新后不触发状态栏重绘 |
 
 ### 5.4 颜色值选择
 
-| 模式 | 状态栏颜色 | 说明 |
-|------|-----------|------|
-| 浅色 | `#ffffff` | 纯白，与浅色导航栏 (`--van-background-2: #fff`) 一致 |
-| 深色 | `#1c1c1e` | Vant 深色背景色 (`--van-background-2`)，与导航栏融为一体 |
+| 模式 | 状态栏颜色 | 说明                                                     |
+| ---- | ---------- | -------------------------------------------------------- |
+| 浅色 | `#ffffff`  | 纯白，与浅色导航栏 (`--van-background-2: #fff`) 一致     |
+| 深色 | `#1c1c1e`  | Vant 深色背景色 (`--van-background-2`)，与导航栏融为一体 |
 
 ---
 
 ## 六、浏览器兼容性矩阵
 
-| 场景 | Chrome Android | Edge Android | iOS Safari / PWA |
-|------|:---:|:---:|:---:|
-| 浏览器 - 浅色切换 | ✅ | ❌ (不支持 theme-color) | ✅ |
-| 浏览器 - 深色切换 | ✅ | ❌ | ✅ |
-| PWA - 浅色切换 | ✅ | — | ✅ |
-| PWA - 深色切换 | ✅ | — | ✅ |
-| 系统深色 + App 切浅色 | ✅ 状态栏变浅 | — | ✅ |
-| 系统浅色 + App 切深色 | ✅ 状态栏变深 | — | ✅ |
+| 场景                  | Chrome Android |      Edge Android       | iOS Safari / PWA |
+| --------------------- | :------------: | :---------------------: | :--------------: |
+| 浏览器 - 浅色切换     |       ✅       | ❌ (不支持 theme-color) |        ✅        |
+| 浏览器 - 深色切换     |       ✅       |           ❌            |        ✅        |
+| PWA - 浅色切换        |       ✅       |            —            |        ✅        |
+| PWA - 深色切换        |       ✅       |            —            |        ✅        |
+| 系统深色 + App 切浅色 | ✅ 状态栏变浅  |            —            |        ✅        |
+| 系统浅色 + App 切深色 | ✅ 状态栏变深  |            —            |        ✅        |
 
 > Edge Android 对 `<meta name="theme-color">` 不支持（caniuse 数据确认），属于浏览器限制，非代码问题。
 
@@ -216,17 +228,25 @@ export function useStatusBar(isDark: Ref<boolean>): void {
 ```ts
 // 当前
 setTimeout(() => {
-  metas.forEach(meta => { meta.content = color; });
+  metas.forEach((meta) => {
+    meta.content = color;
+  });
 }, 0);
 
 // 建议
 // nextTick 在 DOM 更新后、浏览器绘制前执行，比 setTimeout(0) 更精确
 import { nextTick } from 'vue';
-watch(themeColor, (color) => {
-  nextTick(() => {
-    metas.forEach(meta => { meta.content = color; });
-  });
-}, { immediate: true });
+watch(
+  themeColor,
+  (color) => {
+    nextTick(() => {
+      metas.forEach((meta) => {
+        meta.content = color;
+      });
+    });
+  },
+  { immediate: true },
+);
 ```
 
 **影响**：微小。`setTimeout(0)` 和 `nextTick()` 在大多数情况下行为一致，但 `nextTick` 语义更准确。
@@ -237,10 +257,14 @@ watch(themeColor, (color) => {
 
 ```css
 /* 当前 */
-.dark { background-color: #111; }
+.dark {
+  background-color: #111;
+}
 
 /* 建议：与 Vant 背景色对齐 */
-.dark { background-color: #1c1c1e; }
+.dark {
+  background-color: #1c1c1e;
+}
 ```
 
 **影响**：页面最外层背景与 Vant 组件背景存在微小色差，肉眼不易察觉但不够精确。
@@ -252,6 +276,7 @@ watch(themeColor, (color) => {
 ### 7.4 🟢 Extracting to Pinia Store — 不推荐
 
 将 `isDark` 放入 Pinia store 会增加不必要的间接层。VueUse `useDark()` 已经提供了：
+
 - 全局单例状态
 - localStorage 持久化
 - 系统偏好跟随
@@ -263,11 +288,11 @@ Pinia 不会提供额外价值，保持当前实现即可。
 
 ## 八、相关文件索引
 
-| 文件 | 职责 |
-|------|------|
-| `src/App.vue` | `useDark()` 初始化 + `van-config-provider` + `useStatusBar(isDark)` |
-| `src/pages/my.vue` | 深色模式开关 UI (`van-switch` + `useToggle`) |
-| `src/composables/useStatusBar.ts` | `<meta name="theme-color">` 双策略更新 |
-| `src/styles/index.css` | `@custom-variant dark` + body 全局样式 + PWA overscroll |
-| `build/plugins/pwa.ts` | manifest `theme_color` (PWA splash screen) |
-| `index.html` | 静态 `<meta name="theme-color">` 兜底 |
+| 文件                              | 职责                                                                |
+| --------------------------------- | ------------------------------------------------------------------- |
+| `src/App.vue`                     | `useDark()` 初始化 + `van-config-provider` + `useStatusBar(isDark)` |
+| `src/pages/my.vue`                | 深色模式开关 UI (`van-switch` + `useToggle`)                        |
+| `src/composables/useStatusBar.ts` | `<meta name="theme-color">` 双策略更新                              |
+| `src/styles/index.css`            | `@custom-variant dark` + body 全局样式 + PWA overscroll             |
+| `build/plugins/pwa.ts`            | manifest `theme_color` (PWA splash screen)                          |
+| `index.html`                      | 静态 `<meta name="theme-color">` 兜底                               |

@@ -14,11 +14,11 @@ name: Deploy to Cloudflare Workers
 on:
   push:
     branches: [main]
-  workflow_dispatch:            # 支持手动触发
+  workflow_dispatch: # 支持手动触发
 
 concurrency:
   group: deploy
-  cancel-in-progress: false     # 防止并发部署竞争
+  cancel-in-progress: false # 防止并发部署竞争
 
 jobs:
   deploy:
@@ -28,11 +28,11 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 11.18.0      # 与 devEngines 一致
+          version: 11.18.0 # 与 devEngines 一致
 
       - uses: actions/setup-node@v4
         with:
-          node-version-file: .node-version   # 24.18.0
+          node-version-file: .node-version # 24.18.0
           cache: pnpm
 
       - name: Install dependencies
@@ -49,10 +49,10 @@ jobs:
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}   # wrangler.json 无此字段，必须显式传
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} # wrangler.json 无此字段，必须显式传
           command: deploy
-          workingDirectory: .output/server                  # 相对路径 ../public 在此解析
-          wranglerVersion: '4.116.0'                        # 与本地 catalog 版本一致，避免行为漂移
+          workingDirectory: .output/server # 相对路径 ../public 在此解析
+          wranglerVersion: '4.116.0' # 与本地 catalog 版本一致，避免行为漂移
 ```
 
 ### 关键设计点
@@ -65,6 +65,7 @@ jobs:
 ### 同时更新：`README.md`
 
 新增「🚀 CI/CD 自动部署」章节，说明：
+
 - 工作原理（push main → Actions 构建 → wrangler deploy）
 - 2 个 secrets 的获取方法（Cloudflare 控制台 → My Profile → API Tokens）
 - 注意事项：**先配置 secrets 再推送 workflow 文件**（否则首次运行会因无 token 失败）

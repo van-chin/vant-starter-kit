@@ -43,18 +43,18 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 
 作为移动端 H5 / PWA 快速启动模板，本项目的核心能力：
 
-| 能力 | 实现方案 | 对应文档 |
-|------|---------|---------|
-| 🏗️ App Shell 布局 | body 焊死 + main 唯一滚动 + flex 自然流 | [layout-architecture.md](./docs/layout-architecture.md) |
-| 🌓 深色模式 | VueUse `useDark()` → Tailwind + Vant + 状态栏三路协同 | [dark-mode-architecture.md](./docs/dark-mode-architecture.md) |
-| 📲 PWA | vite-plugin-pwa (Workbox) + 安装引导面板 + 版本更新检测 | [pwa-integration.md](./docs/pwa-integration.md) |
-| 🧭 智能导航栏 | Tabbar 页面隐藏返回 → 非 Tabbar 显示返回（三信号判定） | `src/layouts/default/components/header.vue` |
-| 🎨 布局控制 | 4 层显隐控制 + Provide/Inject 组件替换 | `src/composables/useLayoutConfig.ts` |
-| 🌐 国际化 | vue-i18n v11 (zh-CN / en) | `src/locales/` |
-| 🔍 SEO | @unhead/vue v3 动态 title + OG/Twitter Card | `src/plugins/head.ts` |
-| 🐛 移动端调试 | vConsole 生产可用 + `?vconsole` 按需开启 | `src/plugins/vconsole.ts` |
-| 🔄 版本更新提示 | version.json 轮询 + Cloudflare no-store 缓存策略 | `src/composables/useAppUpdate.ts` |
-| 🚀 一键部署 | Cloudflare Workers (GitHub Actions) | `.github/workflows/deploy.yml` |
+| 能力              | 实现方案                                                | 对应文档                                                      |
+| ----------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
+| 🏗️ App Shell 布局 | body 焊死 + main 唯一滚动 + flex 自然流                 | [layout-architecture.md](./docs/layout-architecture.md)       |
+| 🌓 深色模式       | VueUse `useDark()` → Tailwind + Vant + 状态栏三路协同   | [dark-mode-architecture.md](./docs/dark-mode-architecture.md) |
+| 📲 PWA            | vite-plugin-pwa (Workbox) + 安装引导面板 + 版本更新检测 | [pwa-integration.md](./docs/pwa-integration.md)               |
+| 🧭 智能导航栏     | Tabbar 页面隐藏返回 → 非 Tabbar 显示返回（三信号判定）  | `src/layouts/default/components/header.vue`                   |
+| 🎨 布局控制       | 4 层显隐控制 + Provide/Inject 组件替换                  | `src/composables/useLayoutConfig.ts`                          |
+| 🌐 国际化         | vue-i18n v11 (zh-CN / en)                               | `src/locales/`                                                |
+| 🔍 SEO            | @unhead/vue v3 动态 title + OG/Twitter Card             | `src/plugins/head.ts`                                         |
+| 🐛 移动端调试     | vConsole 生产可用 + `?vconsole` 按需开启                | `src/plugins/vconsole.ts`                                     |
+| 🔄 版本更新提示   | version.json 轮询 + Cloudflare no-store 缓存策略        | `src/composables/useAppUpdate.ts`                             |
+| 🚀 一键部署       | Cloudflare Workers (GitHub Actions)                     | `.github/workflows/deploy.yml`                                |
 
 ## 项目结构
 
