@@ -1,43 +1,46 @@
 import type { Ref } from 'vue';
-import { computed, watchEffect } from 'vue';
+import { computed, watch } from 'vue';
 import { useHead } from '@unhead/vue';
 
 /**
  * 根据深色模式动态切换浏览器/PWA 状态栏颜色
  *
- * 实现说明：通过 Unhead（useHead）管理 <meta name="theme-color">，
- * 而不是直接操作 DOM —— Unhead 会在导航时（router afterEach head.push）
- * 按其内部状态重新渲染 head，直接改 DOM 会被它还原，导致状态栏颜色失效。
+ * 策略：
+ *   1. 通过 Unhead（useHead）管理 <meta name="theme-color">，确保与 router
+ *      afterEach 的 head.push() 共享同一 head 实例，不会互相覆盖。
+ *   2. 同时直接写 DOM 的 meta.content 属性作为硬兜底 —— PWA standalone 模式下
+ *      部分 Android 版本在 Unhead 更新 meta 后不重新渲染状态栏，直接 DOM 赋值
+ *      能强制触发系统重新读取。
  *
  * 浏览器兼容性：
- * - Chrome Android: 完整支持，动态更新即时生效
- * - Edge Android (Chromium): 对 theme-color 响应异常（实测不生效），非本组件可控
+ * - Chrome Android (browser): 完整支持，动态更新即时生效
+ * - Chrome Android (PWA): meta 可覆盖 manifest theme_color，直接 DOM 赋值最可靠
+ * - Edge Android: 对 theme-color 响应异常（非本组件可控）
  *
  * @param isDark 共享的深色模式布尔 ref（来自 App.vue 的 `useDark()`）
  */
 export function useStatusBar(isDark: Ref<boolean>): void {
-  // 与导航栏背景一致（van-nav-bar 使用 --van-background-2：浅色 #fff / 深色 #1c1c1e）
   const themeColor = computed(() => (isDark.value ? '#1c1c1e' : '#ffffff'));
 
+  // 策略 1：Unhead 管理（正常途径，SSR 友好）
   useHead({
     meta: [{ name: 'theme-color', content: themeColor }],
   });
 
-  // 调试埋点（仅 ?vconsole 时启用）：确认 meta 标签的实际状态
-  // 用于排查 Chrome 手机端状态栏不跟随切换的问题
-  if (typeof window !== 'undefined' && window.location.search.includes('vconsole')) {
-    watchEffect(() => {
-      const log = () => {
-        const metas = document.querySelectorAll('meta[name="theme-color"]');
-        const meta = metas[0];
-        console.log(
-          `[useStatusBar] isDark=${isDark.value} 目标=${themeColor.value} ` +
-            `实际=${meta?.getAttribute('content') ?? '无meta'} 数量=${metas.length}`,
-        );
-      };
-      log();
-      // unhead 异步应用，延迟再确认一次
-      setTimeout(log, 300);
-    });
-  }
+  // 策略 2：直接 DOM 赋值（PWA 硬兜底）
+  // 部分 Android PWA 在 Unhead 更新 meta attribute 后不触发状态栏重绘，
+  // 直接设置 meta.content IDL 属性可以强制系统重新读取。
+  watch(
+    themeColor,
+    (color) => {
+      // nextTick 确保 Unhead 已经完成 DOM 更新后再做直接赋值
+      setTimeout(() => {
+        const metas = document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
+        metas.forEach((meta) => {
+          meta.content = color;
+        });
+      }, 0);
+    },
+    { immediate: true },
+  );
 }
