@@ -176,7 +176,7 @@ html/body: overflow:hidden + position:fixed    ← 焊死，永不滚动
 
 - `position: fixed; inset: 0` 锁住 body 防橡皮筋
 - `safe-area-inset-bottom` 适配齐刘海
-- 完整文档：[docs/mobile-app-shell-architecture.md](./docs/mobile-app-shell-architecture.md)
+- 完整文档：[docs/layout-architecture.md](./docs/layout-architecture.md)
 
 ---
 

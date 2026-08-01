@@ -135,8 +135,7 @@ vp preview
 │   │   └── app/tabbars.ts      # 标签栏类型
 │   └── automatics/             # 自动生成类型 (gitignored)
 ├── docs/                       # 项目文档
-│   ├── mobile-app-shell-architecture.md  # App Shell 架构文档 ★ 亮点
-│   ├── layout-architecture.md            # 布局架构 + 显隐控制 + 组件替换（合并文档）
+│   ├── layout-architecture.md            # 布局架构 ★ 亮点（App Shell + 显隐控制 + 组件替换）
 │   ├── dark-mode-architecture.md         # 深色模式 & 状态栏颜色架构
 │   ├── pwa-integration.md                # PWA 集成方案
 │   └── starter-kit-gap-analysis.md       # 功能缺口分析
@@ -177,7 +176,7 @@ html/body: overflow:hidden + position:fixed    ← 焊死，永不滚动
 
 - 浏览器模式保留原生下拉刷新
 - PWA 模式抑制 overscroll，提供类原生 App 体验
-- 完整文档：[docs/mobile-app-shell-architecture.md](./docs/mobile-app-shell-architecture.md)
+- 完整文档：[docs/layout-architecture.md](./docs/layout-architecture.md)
 
 ### 深色模式
 
