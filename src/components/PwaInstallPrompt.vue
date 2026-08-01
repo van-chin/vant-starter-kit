@@ -18,8 +18,7 @@
       :anchors="anchors"
       :duration="0.25"
       class="shadow-[0_-4px_20px_rgba(0,0,0,0.08)] dark:shadow-none"
-      @touchstart.passive="onTouchStart"
-      @touchend="onTouchEnd"
+      @height-change="onHeightChange"
     >
       <!-- 面板内容 -->
       <div class="pwa-content">
@@ -100,11 +99,17 @@ const { showPrompt, installing, install, dismiss } = usePwaInstall();
 /** 折叠态高度：头部 + 紧凑安装条 */
 const COLLAPSED_HEIGHT = 90;
 
-/** 展开态高度：65% 视口（底部留白由视口高度自然产生） */
+/** 关闭阈值：面板高度低于此值 → 关闭（7 天不再提示） */
+const DISMISS_HEIGHT = 40;
+
+/** 展开态高度：65% 视口 */
 const EXPANDED_HEIGHT = typeof window !== 'undefined' ? Math.round(window.innerHeight * 0.65) : 600;
 
-/** 面板锚点：折叠 ↔ 展开 */
-const anchors = [COLLAPSED_HEIGHT, EXPANDED_HEIGHT];
+/**
+ * 三档锚点，利用 FloatingPanel 原生 magnetic 吸附实现下滑关闭：
+ *   [0, 90, 65%] → 向上拖吸附到 65%，停留居中吸附到 90，向下拖吸附到 0 → 关闭
+ */
+const anchors = [0, COLLAPSED_HEIGHT, EXPANDED_HEIGHT];
 
 /** 当前面板高度（v-model:height） */
 const panelHeight = ref(COLLAPSED_HEIGHT);
@@ -117,23 +122,12 @@ const BENEFITS = [
   { icon: '🖥️', title: '沉浸体验', desc: '全屏展示无浏览器工具栏，更专注更流畅' },
 ] as const;
 
-// ─── 下滑关闭检测 ──────────────────────────────────────────────
-let touchStartY = 0;
-let touchStartTime = 0;
-
-function onTouchStart(e: TouchEvent): void {
-  touchStartY = e.touches[0]?.clientY ?? 0;
-  touchStartTime = Date.now();
-}
-
-function onTouchEnd(e: TouchEvent): void {
-  const endY = e.changedTouches[0]?.clientY ?? touchStartY;
-  const deltaY = endY - touchStartY;
-  const duration = Date.now() - touchStartTime;
-
-  // 面板在折叠态 + 快速向下滑动（>80px 且 <500ms）→ 关闭
-  const atCollapsed = panelHeight.value <= COLLAPSED_HEIGHT + 10;
-  if (atCollapsed && deltaY > 80 && duration < 500) {
+/**
+ * 三档锚点吸附回调：拖拽松手后 magnetic 将面板吸附到最近锚点。
+ * 吸附到最低锚点（0）时关闭面板。
+ */
+function onHeightChange({ height }: { height: number }): void {
+  if (height <= DISMISS_HEIGHT) {
     dismiss();
   }
 }
