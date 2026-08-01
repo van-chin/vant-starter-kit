@@ -136,9 +136,10 @@ vp preview
 │   └── automatics/             # 自动生成类型 (gitignored)
 ├── docs/                       # 项目文档
 │   ├── mobile-app-shell-architecture.md  # App Shell 架构文档 ★ 亮点
-│   ├── layout-architecture.md            # 布局架构演进
-│   ├── layout-control.md                 # 显隐控制 + 组件替换方案
-│   └── pwa-integration.md                # PWA 集成方案
+│   ├── layout-architecture.md            # 布局架构 + 显隐控制 + 组件替换（合并文档）
+│   ├── dark-mode-architecture.md         # 深色模式 & 状态栏颜色架构
+│   ├── pwa-integration.md                # PWA 集成方案
+│   └── starter-kit-gap-analysis.md       # 功能缺口分析
 ├── vite.config.ts              # Vite+ 配置
 ├── nitro.config.ts             # Nitro 配置 (SQLite)
 └── pnpm-workspace.yaml         # pnpm catalog 依赖版本
