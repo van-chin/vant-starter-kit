@@ -19,7 +19,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit"
   },
-  "i18n-ally.localesPaths": [
-    "src/locales"
-  ]
+  "i18n-ally.localesPaths": ["src/locales"]
 }
