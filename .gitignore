@@ -29,9 +29,8 @@ dist-ssr
 # dotenv environment variable files
 .env
 .env.*
-!.env.example
-!.env.development.example
-!.env.production.example
+# 但提交所有 .example 模板文件
+!.env*.example
 
 types/automatics
 
