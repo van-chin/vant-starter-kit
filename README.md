@@ -89,7 +89,7 @@ vp install
 cp .env.example .env
 
 # 4. 启动开发
-vp dev
+vpr dev
 # 浏览器打开 http://localhost:3000
 ```
 
@@ -100,15 +100,15 @@ vp dev
 docker stop openresty
 
 # sudo 启动（443 是特权端口）
-sudo vp dev
+sudo vpr dev
 # 通过 https://vant.starter.kit.inlin.test 访问
 ```
 
 ### 生产构建
 
 ```bash
-vp build      # 类型检查 + 构建
-vp preview    # 本地预览生产版本
+vpr build      # 类型检查 + 构建
+vpr preview    # 本地预览生产版本
 ```
 
 ---

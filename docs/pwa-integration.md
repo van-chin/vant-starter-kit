@@ -280,8 +280,8 @@ index.html                          ← Shell（静态 HTML 骨架）
 1. 构建并预览：
 
 ```bash
-vp build
-vp preview
+vpr build
+vpr preview
 ```
 
 2. 打开 Chrome DevTools → **Application** 标签页：

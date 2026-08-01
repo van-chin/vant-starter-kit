@@ -133,9 +133,9 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 
 ```bash
 vp install     # 安装依赖
-vp dev         # 启动开发服务器（Vite+ 内置命令）
-vp build       # 生产构建（Vite+ 内置命令）
-vp preview     # 预览生产构建
+vpr dev        # 启动开发服务器（执行 package.json dev 脚本）
+vpr build      # 生产构建（执行 package.json build 脚本）
+vpr preview    # 预览生产构建（执行 package.json preview 脚本）
 vp check       # 格式化 + 代码检查 + 类型检查
 vp test        # 运行测试
 vpr <script>   # 运行 package.json 中的脚本（v0.2.7+，等价于 vp run <script>）
