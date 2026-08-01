@@ -21,8 +21,8 @@
       @touchstart.passive="onTouchStart"
       @touchend="onTouchEnd"
     >
-      <!-- 面板内容（常驻渲染，供高度测量） -->
-      <div ref="contentRef" class="pwa-content">
+      <!-- 面板内容 -->
+      <div class="pwa-content">
         <!-- 折叠态：紧凑安装条 -->
         <div class="flex items-center gap-2 px-4 pt-1 pb-3">
           <img
@@ -92,31 +92,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { usePwaInstall } from '@/composables/usePwaInstall';
 
 const { showPrompt, installing, install, dismiss } = usePwaInstall();
 
-/** Vant FloatingPanel 默认头部高度（拖拽把手区域） */
-const HEADER_HEIGHT = 30;
-
 /** 折叠态高度：头部 + 紧凑安装条 */
 const COLLAPSED_HEIGHT = 90;
 
-/** 展开态兜底高度（测量失败时使用） */
-const FALLBACK_EXPANDED = 240;
+/** 展开态高度：85% 视口（底部留白由视口高度自然产生） */
+const EXPANDED_HEIGHT = typeof window !== 'undefined' ? Math.round(window.innerHeight * 0.85) : 600;
 
-/** 展开态最高高度：内容高度 + 头部 + 底部留白 */
-const expandedHeight = ref(FALLBACK_EXPANDED);
-
-/** 面板锚点：折叠 ↔ 内容自适应展开 */
-const anchors = computed(() => [COLLAPSED_HEIGHT, expandedHeight.value]);
+/** 面板锚点：折叠 ↔ 展开 */
+const anchors = [COLLAPSED_HEIGHT, EXPANDED_HEIGHT];
 
 /** 当前面板高度（v-model:height） */
 const panelHeight = ref(COLLAPSED_HEIGHT);
-
-/** 内容容器 ref，用于测量真实高度 */
-const contentRef = ref<HTMLElement | null>(null);
 
 /** 安装亮点数据（2×2 卡片：emoji + 标题 + 完整介绍） */
 const BENEFITS = [
@@ -125,41 +116,6 @@ const BENEFITS = [
   { icon: '🏠', title: '桌面图标', desc: '和原生 App 一样出现在主屏幕，一键直达' },
   { icon: '🖥️', title: '沉浸体验', desc: '全屏展示无浏览器工具栏，更专注更流畅' },
 ] as const;
-
-/** 展开态最高高度上限：半屏（内容超过时允许面板内滚动） */
-const MAX_EXPANDED_RATIO = 0.5;
-
-/**
- * 测量内容真实高度，计算展开态最高点：
- * 内容高度 + 头部(30px) + 底部留白(8px)。
- * 内容少 → 完全自适应，无滚动；内容多 → 上限半屏，超出部分面板内滚动。
- */
-function measureExpandedHeight(): void {
-  const el = contentRef.value;
-  if (!el) return;
-  const contentHeight = el.offsetHeight;
-  if (contentHeight <= 0) return;
-  const viewportLimit =
-    (typeof window !== 'undefined' ? window.innerHeight : 600) * MAX_EXPANDED_RATIO;
-  expandedHeight.value = Math.min(contentHeight + HEADER_HEIGHT + 8, viewportLimit);
-}
-
-let resizeObserver: ResizeObserver | null = null;
-
-onMounted(() => {
-  nextTick(measureExpandedHeight);
-
-  // 内容变化时自适应（系统字体缩放、内容变更等）
-  if (contentRef.value && typeof ResizeObserver !== 'undefined') {
-    resizeObserver = new ResizeObserver(measureExpandedHeight);
-    resizeObserver.observe(contentRef.value);
-  }
-});
-
-onUnmounted(() => {
-  resizeObserver?.disconnect();
-  resizeObserver = null;
-});
 
 // ─── 下滑关闭检测 ──────────────────────────────────────────────
 let touchStartY = 0;
