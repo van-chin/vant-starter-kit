@@ -433,3 +433,10 @@ src/
 ## 🤝 贡献
 
 欢迎 Issue / Pull Request。开发前请阅读 [AGENTS.md](./AGENTS.md) 了解项目约定。
+
+---
+
+## 📄 许可证
+
+[MIT](./LICENSE) © 2026 Van Chin
+
