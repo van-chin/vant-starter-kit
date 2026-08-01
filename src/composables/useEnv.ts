@@ -1,7 +1,12 @@
 /**
  * 环境变量类型安全的访问 composable
  *
- * 集中管理所有环境变量，提供类型推断和默认值
+ * 集中管理所有环境变量，提供类型推断和默认值。
+ *
+ * ⚠️ 新增/删除环境变量时需要同步修改：
+ *   1. env.d.ts — TypeScript 类型声明
+ *   2. .env.example — 变量文档模板
+ *   3. 本 composable — 添加访问器
  */
 export function useEnv(env: ImportMetaEnv) {
   return {
@@ -17,6 +22,10 @@ export function useEnv(env: ImportMetaEnv) {
     publicPath: env.VITE_PUBLIC_PATH || '/',
     /** 环境名称 */
     envName: env.VITE_ENV_NAME || 'development',
+    /** 应用标题 */
+    appTitle: env.VITE_APP_TITLE || 'vant-starter-kit',
+    /** 是否启用 vConsole 调试面板 */
+    enableVConsole: env.VITE_ENABLE_VCONSOLE === 'true',
   } as const;
 }
 

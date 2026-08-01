@@ -158,6 +158,14 @@ vpr pwa:assets:generator
 - `.env.production.example` — 生产环境推荐值
 - `.env.local` — 本地覆盖（不提交 Git）
 
+**⚠️ 新增/删除环境变量时，必须同步以下 3 个文件：**
+
+```
+env.d.ts                    ← TypeScript 类型声明（ImportMetaEnv 接口）
+src/composables/useEnv.ts   ← 类型安全访问器 + 默认值
+.env.example               ← 变量文档模板
+```
+
 ---
 
 ## 📖 开发指南
