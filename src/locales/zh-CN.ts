@@ -12,6 +12,8 @@ export default {
   },
   login: {
     title: '手机号登录',
+    welcome: '欢迎回来！',
+    subtitle: '继续你的瑜伽之旅。',
     username: '用户名',
     password: '密码',
     placeholderUsername: '请输入用户名',
@@ -20,6 +22,10 @@ export default {
     logging: '登录中...',
     success: '登录成功',
     fail: '登录失败，请检查用户名和密码',
+    forgotPassword: '忘记密码？',
+    orContinue: '或者继续',
+    noAccount: '还没有账号？',
+    signUp: '立即注册',
   },
   cart: {
     empty: '购物车是空的',
