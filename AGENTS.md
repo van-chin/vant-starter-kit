@@ -231,9 +231,31 @@ dark:* 类          :theme="vantTheme"
 <!-- 切换开关 -->
 <van-switch :model-value="isDark" @click="toggleDark()" />
 
-<!-- 暗色样式：直接使用 dark: 前缀 -->
+<!-- 推荐：使用全局颜色令牌（自动适配深色模式，无需手写 dark: 前缀） -->
+<div class="bg-[var(--color-bg-page)] text-[var(--color-text-primary)]">
+
+<!-- 也可用 Tailwind dark: 前缀处理特殊场景 -->
 <div class="bg-white dark:bg-gray-950 dark:text-gray-100">
 ```
+
+### 全局颜色令牌（Design Tokens）
+
+定义在 `src/styles/index.css` 中，`:root` 浅色 / `.dark` 深色两组值自动切换。
+**新页面优先使用令牌**，避免逐页面手写 `dark:` 覆盖：
+
+| 令牌 | 浅色 | 深色 | 用途 |
+|------|------|------|------|
+| `--color-bg-page` | `#F8F9FA` | `#1c1c1e` | 页面底色 |
+| `--color-bg-surface` | `#fff` | `#2c2c2e` | 卡片/输入框表面 |
+| `--color-bg-elevated` | `#fff` | `#3a3a3c` | 悬浮态表面 |
+| `--color-text-primary` | `#1F1F1F` | `#f5f5f5` | 主文字 |
+| `--color-text-secondary` | `#757575` | `#8e8e93` | 辅助文字 |
+| `--color-text-tertiary` | `#525252` | `#a1a1a6` | 三级文字 |
+| `--color-accent` | `#3883FF` | `#6eb4ff` | 链接/强调色 |
+| `--color-border-subtle` | `rgba(0,0,0,.05)` | `rgba(255,255,255,.08)` | 浅色分割线 |
+
+> 用法：`<div class="bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)]">`
+> Tailwind v4 任意值语法支持 CSS 变量，自动跟随主题切换。
 
 ---
 
@@ -309,7 +331,7 @@ const count = ref(0);
 8. **服务端**: API 使用 Nitro `defineHandler`，类型通过 `#types` 与客户端共享
 9. **依赖版本**: 使用 pnpm catalog 在 `pnpm-workspace.yaml` 统一管理
 10. **App Shell**: 所有布局继承此架构，新布局模板从 default/screen/admin 参考
-11. **深色模式**: 通过 VueUse `useDark()` 管理状态（默认跟随系统，手动切换时以用户为准），Vant `ConfigProvider` 同步组件主题，Tailwind `dark:` 前缀控制样式，`useStatusBar(isDark)` 同步状态栏颜色
+11. **深色模式**: 通过 VueUse `useDark()` 管理状态（默认跟随系统，手动切换时以用户为准），Vant `ConfigProvider` 同步组件主题，**优先使用全局颜色令牌** `var(--color-xxx)` 自动适配深色模式，特殊场景才用 Tailwind `dark:` 前缀，`useStatusBar(isDark)` 同步状态栏颜色
 12. **SEO**: 通过 `@unhead/vue` 管理 `<head>` 标签，router `afterEach` 自动更新 `<title>`，`index.html` 中有 OG/Twitter Card 静态兜底
 13. **PWA 安装**: 使用 `PwaInstallPrompt` 组件提供页面内安装入口，三重检测避免重复提示
 14. **版本更新**: `useAppUpdate` 轮询 `version.json`，检测新版本后通过 `AppUpdatePrompt` 提示刷新

@@ -1,12 +1,10 @@
 <template>
-  <div
-    class="login-page relative flex h-full flex-col overflow-hidden bg-[#F8F9FA] dark:bg-gray-950"
-  >
-    <!-- Chakra decorative logo: top-right, partially off-screen (Figma: x=270, clipped ~93px) -->
+  <div class="login-page relative flex h-full flex-col overflow-hidden bg-[var(--color-bg-page)]">
+    <!-- Chakra decorative logo: top-right, partially off-screen -->
     <img
       src="/images/chakra-logo.svg"
       alt=""
-      class="pointer-events-none absolute top-[55px] -right-[93px] h-[198px] w-[198px] opacity-[0.15] select-none"
+      class="pointer-events-none absolute top-[55px] -right-[93px] h-[198px] w-[198px] opacity-[0.15] select-none dark:opacity-[0.08]"
     />
 
     <div class="flex flex-1 flex-col items-center overflow-hidden px-6">
@@ -14,11 +12,11 @@
         <!-- Title Section -->
         <div class="login-title">
           <h1
-            class="font-poppins text-[24px] leading-[36px] font-medium text-[#1F1F1F] dark:text-gray-100"
+            class="font-poppins text-[24px] leading-[36px] font-medium text-[var(--color-text-primary)]"
           >
             {{ t('login.welcome') }}
           </h1>
-          <p class="font-poppins mt-2 text-base leading-6 text-[#757575] dark:text-gray-400">
+          <p class="font-poppins mt-2 text-base leading-6 text-[var(--color-text-secondary)]">
             {{ t('login.subtitle') }}
           </p>
         </div>
@@ -74,7 +72,7 @@
           <div class="forgot-pwd-row flex justify-end" style="padding: 8px 0; margin-top: 7px">
             <button
               type="button"
-              class="font-poppins text-xs font-medium text-[#3883FF]"
+              class="font-poppins text-xs font-medium text-[var(--color-accent)]"
               @click="onForgotPassword"
             >
               {{ t('login.forgotPassword') }}
@@ -85,7 +83,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="login-btn font-poppins flex h-[52px] w-full items-center justify-center rounded-2xl bg-[linear-gradient(25deg,#89C6FF,#BC91D3)] text-base font-semibold text-white shadow-[0px_2px_4px_rgba(0,0,0,0.15)] transition-opacity duration-200 active:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+            class="login-btn font-poppins flex h-[52px] w-full items-center justify-center rounded-2xl bg-[linear-gradient(25deg,#89C6FF,#BC91D3)] text-base font-semibold text-white shadow-[0px_2px_4px_rgba(0,0,0,0.15)] transition-opacity duration-200 active:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-[linear-gradient(25deg,#5a7fcf,#8b6db8)]"
             style="margin-top: var(--login-btn-mt)"
           >
             <template v-if="loading">
@@ -104,7 +102,7 @@
             class="h-px flex-1 bg-[linear-gradient(90deg,rgba(139,139,139,1)_0%,rgba(248,249,250,0)_80%)] dark:bg-[linear-gradient(90deg,rgba(139,139,139,1)_0%,rgba(30,30,32,0)_80%)]"
           />
           <span
-            class="shrink-0 text-xs text-[#757575] dark:text-gray-400"
+            class="shrink-0 text-xs text-[var(--color-text-secondary)]"
             style="font-family: Inter, sans-serif"
           >
             {{ t('login.orContinue') }}
@@ -143,7 +141,7 @@
 
           <!-- Apple -->
           <button class="social-btn" @click="onSocialLogin('apple')">
-            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
+            <svg class="h-8 w-8 text-black dark:text-white" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"
               />
@@ -163,12 +161,12 @@
 
         <!-- Sign Up Link -->
         <div class="text-center" style="margin-top: var(--login-signup-mt)">
-          <span class="font-poppins text-xs text-[#525252] dark:text-gray-400">
+          <span class="font-poppins text-xs text-[var(--color-text-tertiary)]">
             {{ t('login.noAccount') }}
           </span>
           <button
             type="button"
-            class="font-poppins text-xs font-medium text-[#3883FF]"
+            class="font-poppins text-xs font-medium text-[var(--color-accent)]"
             @click="onGoSignUp"
           >
             {{ t('login.signUp') }}
@@ -260,23 +258,19 @@ function onForgotPassword() {
 .field-wrapper :deep(.van-cell) {
   padding: 18px;
   border-radius: 16px;
-  background: #fff;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+  background: var(--color-bg-surface);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.08);
   overflow: visible;
 }
 
 /* ─── Input Fields ─── */
-.login-field {
-  --van-cell-background: #fff;
-}
-
 .login-field :deep(.van-field__control) {
   font-size: 12px;
   font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
 }
 
 .login-field :deep(.van-field__control::placeholder) {
-  color: #757575;
+  color: var(--color-text-secondary);
   font-size: 12px;
 }
 
@@ -299,9 +293,9 @@ function onForgotPassword() {
   height: 48px;
   padding: 12px 26px;
   border-radius: 8px;
-  background: #f8f9fa;
-  border: 1px solid #ffffff;
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+  background: var(--color-bg-page);
+  border: 1px solid var(--color-bg-surface);
+  box-shadow: 0px 1px 1px var(--color-border-subtle);
   cursor: pointer;
   transition: opacity 0.15s;
 }
@@ -326,24 +320,13 @@ function onForgotPassword() {
   }
 }
 
-/* ─── Dark Mode ─── */
+/* ─── Dark Mode: minimal overrides — most colors handled by global tokens ─── */
 :global(.dark) .field-wrapper :deep(.van-cell) {
-  background: #2c2c2e;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 :global(.dark) .login-field :deep(.van-field__control) {
-  color: #eee;
-}
-
-:global(.dark) .login-field :deep(.van-field__control::placeholder) {
-  color: #8e8e93;
-}
-
-:global(.dark) .social-btn {
-  background: #2c2c2e;
-  border-color: #3a3a3c;
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+  color: var(--color-text-primary);
 }
 
 /* ─── Compact screen (≤736px viewport): tighter spacing + smaller elements ─── */
