@@ -4,12 +4,12 @@
 
     交互设计：
       - 折叠态：紧凑安装条（图标 + 文案 + 安装按钮 + 关闭）
-      - 上拉：展开显示安装亮点（秒开/离线/图标/沉浸）+ 大按钮
+      - 上拉：展开显示亮点（单行，跟在图标后面）+ 大按钮
       - 下滑：关闭面板（7 天内不再提示）
       - X / 暂不安装：同下滑关闭
 
-    拖拽把手使用 Vant 默认样式（居中灰色小条，简洁干净）。
-    按钮使用 van-button（Vant 管理样式，规避 Tailwind 层叠问题）。
+    高度策略：展开内容常驻渲染，通过 offsetHeight 测量真实内容高度，
+    面板最高点 = 内容高度 + 头部 + 底部 8px 留白，内容自适应不浪费空间。
   -->
   <Transition name="pwa-panel">
     <van-floating-panel
@@ -21,8 +21,8 @@
       @touchstart.passive="onTouchStart"
       @touchend="onTouchEnd"
     >
-      <!-- 面板内容 -->
-      <div class="pwa-content">
+      <!-- 面板内容（常驻渲染，供高度测量） -->
+      <div ref="contentRef" class="pwa-content">
         <!-- 折叠态：紧凑安装条 -->
         <div class="flex items-center gap-2 px-4 pt-1 pb-3">
           <img
@@ -37,7 +37,7 @@
               vant-starter-kit
             </div>
             <div class="truncate text-xs text-gray-500 dark:text-gray-400">
-              安装到主屏幕，像原生 App 一样使用
+              添加到主屏幕，获得更好的体验
             </div>
           </div>
           <van-button size="small" type="primary" :loading="installing" @click="install()">
@@ -55,78 +55,110 @@
           </button>
         </div>
 
-        <!-- 展开态：安装亮点 -->
-        <Transition name="pwa-details">
-          <div v-if="isExpanded" class="pwa-details">
-            <!-- 亮点卡片 2×2 -->
-            <div class="grid grid-cols-2 gap-3 px-4 py-4">
+        <!-- 展开内容：亮点单行 + 安装按钮（常驻渲染，面板高度控制可见性） -->
+        <div class="px-4 pb-4">
+          <!-- 亮点：图标 + 4 项同一行 -->
+          <div class="flex items-center gap-3">
+            <img
+              src="/pwa-192x192.png"
+              alt="App Icon"
+              class="h-12 w-12 flex-shrink-0 rounded-xl shadow-md"
+              width="48"
+              height="48"
+            />
+            <div class="grid flex-1 grid-cols-4 gap-1">
               <div
                 v-for="benefit in BENEFITS"
                 :key="benefit.title"
-                class="rounded-xl bg-gray-50 p-3 dark:bg-gray-800"
+                class="flex flex-col items-center text-center"
               >
-                <div class="text-xl">{{ benefit.icon }}</div>
-                <div class="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">
+                <div class="text-base leading-none">{{ benefit.icon }}</div>
+                <div class="mt-1 text-[11px] text-gray-600 dark:text-gray-400">
                   {{ benefit.title }}
                 </div>
-                <div class="mt-0.5 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-                  {{ benefit.desc }}
-                </div>
-              </div>
-            </div>
-
-            <!-- 安装按钮 -->
-            <div class="px-4 pb-4">
-              <van-button
-                type="primary"
-                block
-                size="large"
-                :loading="installing"
-                @click="install()"
-              >
-                {{ installing ? '正在安装…' : '立即安装' }}
-              </van-button>
-              <div class="mt-2 text-center">
-                <span class="cursor-pointer text-xs text-gray-400" @click="dismiss">
-                  暂不安装
-                </span>
               </div>
             </div>
           </div>
-        </Transition>
+
+          <!-- 安装按钮 -->
+          <div class="pt-3">
+            <van-button type="primary" block size="large" :loading="installing" @click="install()">
+              {{ installing ? '正在安装…' : '立即安装' }}
+            </van-button>
+          </div>
+          <div class="mt-2 text-center">
+            <span class="cursor-pointer text-xs text-gray-400" @click="dismiss"> 暂不安装 </span>
+          </div>
+        </div>
       </div>
     </van-floating-panel>
   </Transition>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { usePwaInstall } from '@/composables/usePwaInstall';
 
 const { showPrompt, installing, install, dismiss } = usePwaInstall();
 
-/** 折叠态高度：Vant 默认把手(30px) + 紧凑安装条(~56px) */
+/** Vant FloatingPanel 默认头部高度（拖拽把手区域） */
+const HEADER_HEIGHT = 30;
+
+/** 折叠态高度：头部 + 紧凑安装条 */
 const COLLAPSED_HEIGHT = 90;
 
-/** 展开态高度：85% 视口 */
-const EXPANDED_HEIGHT = typeof window !== 'undefined' ? Math.round(window.innerHeight * 0.85) : 600;
+/** 展开态兜底高度（测量失败时使用） */
+const FALLBACK_EXPANDED = 240;
 
-/** 面板锚点：折叠 ↔ 展开 */
-const anchors = [COLLAPSED_HEIGHT, EXPANDED_HEIGHT];
+/** 展开态最高高度：内容高度 + 头部 + 底部留白 */
+const expandedHeight = ref(FALLBACK_EXPANDED);
+
+/** 面板锚点：折叠 ↔ 内容自适应展开 */
+const anchors = computed(() => [COLLAPSED_HEIGHT, expandedHeight.value]);
 
 /** 当前面板高度（v-model:height） */
 const panelHeight = ref(COLLAPSED_HEIGHT);
 
-/** 是否展开（超过折叠高度 + 阈值） */
-const isExpanded = computed(() => panelHeight.value > COLLAPSED_HEIGHT + 30);
+/** 内容容器 ref，用于测量真实高度 */
+const contentRef = ref<HTMLElement | null>(null);
 
-/** 安装亮点数据 */
+/** 安装亮点数据（单行紧凑展示：emoji + 标题） */
 const BENEFITS = [
-  { icon: '⚡', title: '秒开启动', desc: '安装后从桌面直接打开，无需等待浏览器加载' },
-  { icon: '📴', title: '离线可用', desc: 'Service Worker 缓存资源，断网也能正常访问' },
-  { icon: '🏠', title: '桌面图标', desc: '和原生 App 一样出现在主屏幕，一键直达' },
-  { icon: '🖥️', title: '沉浸体验', desc: '全屏展示无浏览器工具栏，更专注更流畅' },
+  { icon: '⚡', title: '秒开启动' },
+  { icon: '📴', title: '离线可用' },
+  { icon: '🏠', title: '桌面图标' },
+  { icon: '🖥️', title: '沉浸体验' },
 ] as const;
+
+/**
+ * 测量内容真实高度，计算展开态最高点：
+ * 内容高度 + 头部(30px) + 底部留白(8px)，上限 90% 视口。
+ */
+function measureExpandedHeight(): void {
+  const el = contentRef.value;
+  if (!el) return;
+  const contentHeight = el.offsetHeight;
+  if (contentHeight <= 0) return;
+  const viewportLimit = (typeof window !== 'undefined' ? window.innerHeight : 600) * 0.9;
+  expandedHeight.value = Math.min(contentHeight + HEADER_HEIGHT + 8, viewportLimit);
+}
+
+let resizeObserver: ResizeObserver | null = null;
+
+onMounted(() => {
+  nextTick(measureExpandedHeight);
+
+  // 内容变化时自适应（系统字体缩放、内容变更等）
+  if (contentRef.value && typeof ResizeObserver !== 'undefined') {
+    resizeObserver = new ResizeObserver(measureExpandedHeight);
+    resizeObserver.observe(contentRef.value);
+  }
+});
+
+onUnmounted(() => {
+  resizeObserver?.disconnect();
+  resizeObserver = null;
+});
 
 // ─── 下滑关闭检测 ──────────────────────────────────────────────
 let touchStartY = 0;
@@ -165,14 +197,6 @@ watch(showPrompt, (val) => {
 }
 .pwa-panel-enter-from,
 .pwa-panel-leave-to {
-  opacity: 0;
-}
-
-/* 展开内容淡入 */
-.pwa-details-enter-active {
-  transition: opacity 0.2s ease;
-}
-.pwa-details-enter-from {
   opacity: 0;
 }
 </style>
