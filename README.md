@@ -1,292 +1,345 @@
 # vant-starter-kit
 
-基于 **Vite+** 工具链的现代化移动端 H5 / PWA 应用快速启动模板。集成 Vue 3.6、Vant 4、Tailwind CSS v4、Pinia、Alova、Nitro 全栈能力，开箱即用。
+> 基于 **Vue 3 + Vant 4 + Vite+** 的移动端 H5 / PWA 极速启动模板
 
-> 👀 **Vue 3.6 RC** — 已升级至 `3.6.0-rc.2`，Vapor Mode 作为前瞻特性可用，等待正式版发布和生态成熟后全面启用。
+[![Deploy](https://img.shields.io/badge/deploy-Cloudflare%20Workers-orange)](https://vant.starter.kit.inlin.com.cn)
 
-## ✨ 特性
+---
 
-- 🏗️ **App Shell 架构** — 移动端视口锁定方案，body 焊死永不滚动，头/脚钉死，只有 main 内部滚动。浏览器保留下拉刷新，PWA 模式提供类原生 App 体验
-- 🌓 **深色模式** — VueUse `useDark` + Tailwind CSS v4 `@custom-variant` + Vant `ConfigProvider` 三方协同，一键切换
-- 📱 **Vant 4** — 移动端 UI 组件库，自动导入组件，支持深色模式
-- 🎨 **Tailwind CSS v4** — 原子化 CSS，`@custom-variant` 扩展能力
-- 🗂️ **文件系统路由** — `vue-router/auto-routes` + `vite-plugin-vue-layouts-next` 布局系统
-- 🧩 **可组合式布局** — Header/Footer 显隐控制（`useLayoutConfig`）+ 页面级组件替换（`useLayoutCustomization`），提供开放 API 供业务层扩展
-- 📡 **Alova 请求策略** — 统一业务码拦截、method 级缓存策略（`useRequest` composable）
-- 🏪 **Pinia 状态管理** — Composition API 风格的 Store，SSR 兼容
-- 🌐 **Nitro 全栈** — 内置 Nitro 服务端，支持 SQLite 数据库开发 API
-- 📅 **Day.js** — 国际化日期处理，预配中文 locale
-- 🔐 **认证体系** — 登录/登出、JWT Token 管理、未授权拦截
-- 📐 **三种布局** — 移动端默认布局、数据大屏布局、管理后台布局
-- 🔧 **TypeScript 严格模式** — `noUncheckedIndexedAccess` 增强安全性
+## 📦 这是什么？
 
-## 技术栈
+一个**开箱即用**的移动端 Web 应用启动模板。克隆项目 → 安装依赖 → 启动开发 → 开始写业务代码，立刻拥有：
 
-| 类别      | 技术                                                                                             |
-| --------- | ------------------------------------------------------------------------------------------------ |
-| 构建工具  | [Vite+](https://viteplus.dev/) (v0.2.6)                                                          |
-| 框架      | [Vue 3.6 RC](https://vuejs.org/)（Composition API, `<script setup>`）                            |
-| 编译模式  | VDOM（标准）— [Vapor Mode](https://vuejs.org/guide/extras/vapor-mode) 已就绪，等待生态成熟后启用 |
-| UI 库     | [Vant 4](https://vant-ui.github.io/)                                                             |
-| 工具库    | [VueUse](https://vueuse.org/) (useDark, useToggle)                                               |
-| 状态管理  | [Pinia](https://pinia.vuejs.org/)                                                                |
-| 路由      | [Vue Router 5](https://router.vuejs.org/) + 文件系统路由                                         |
-| HTTP 请求 | [Alova](https://alova.js.org/) + Axios 适配器                                                    |
-| CSS       | [Tailwind CSS v4](https://tailwindcss.com/)                                                      |
-| 服务端    | [Nitro](https://nitro.unjs.io/) (全栈/SSR)                                                       |
-| 日期处理  | [Day.js](https://day.js.org/)                                                                    |
-| 语言      | [TypeScript](https://www.typescriptlang.org/) 6.x                                                |
-| 包管理    | [pnpm](https://pnpm.io/) 11.x                                                                    |
+- 🏗️ **App Shell** 视口锁定布局（彻底解决移动端下拉刷新/橡皮筋/头脚消失）
+- 🌓 **深色模式** 三路协同（CSS / Vant / 系统状态栏）
+- 📲 **PWA** 完整集成（离线可用 + 添加到主屏幕 + 安装引导 + 版本更新提示）
+- 🌐 **国际化** 中英文双语
+- 🔍 **SEO** 动态 title + 静态 OG/Twitter Card
+- 🐛 **vConsole** 手机调试面板（生产环境也可用）
+- 🚀 **Cloudflare Workers** 一键部署
 
-## 快速开始
+---
 
-### 前置要求
+## ✨ 核心亮点
 
-- Node.js >= 24.18.0
-- pnpm >= 11.14.0
+### 🏗️ App Shell 布局系统
 
-### 安装与启动
+移动端 H5/PWA 的三大噩梦——**下拉刷新导致导航消失**、**底部 Tabbar 被键盘顶飞**、**iOS 橡皮筋抖动**——全部根治。
+
+```
+body 焊死(overflow:hidden) → main 唯一滚动 → header/footer 钉死
+```
+
+- **弹性 Footer**：任意高度自定义 Footer，主内容区自动适配，无需 `padding-bottom`
+- **4 层显隐控制**：URL 参数 > 页面 meta > 全局默认 > 权限限制
+- **组件替换**：任一页面可注入自定义 Header/Footer，卸载自动恢复
+
+📖 详见 [Layout 布局架构](./docs/layout-architecture.md)
+
+### 🌓 深色模式
+
+VueUse `useDark()` 单例驱动，三路并行：
+
+| 机制 | 影响范围 |
+|------|---------|
+| Tailwind `dark:` 前缀 | 页面所有元素 |
+| `<van-config-provider :theme>` | Vant 组件内部 |
+| `<meta name="theme-color">` | 浏览器/PWA 系统状态栏 |
+
+📖 详见 [深色模式架构](./docs/dark-mode-architecture.md)
+
+### 📲 PWA 完整方案
+
+- **Service Worker**（Workbox）：离线可用 + API 网络优先 + 自动更新
+- **Vant FloatingPanel 安装引导**：折叠态紧凑安装条 → 上拉展开 2×2 亮点卡片 → 下滑关闭
+- **三重防重复**：PWA 模式检测 + localStorage 已安装标记 + 7 天关闭冷却
+- **版本更新提示**：轮询 `version.json`，新版本发布后顶部弹出更新提示条
+
+### 🧩 开发者体验
+
+| 能力 | 工具/方案 |
+|------|----------|
+| 自动导入 | Vue/VueRouter/Pinia API + Vant 组件 + composables + stores |
+| 文件系统路由 | `src/pages/` 目录结构即路由，支持 HMR |
+| 布局系统 | 3 套开箱布局（default / admin / screen），声明式切换 |
+| 移动端调试 | vConsole 生产可用 + `?vconsole` 按需开启 |
+| 统一 HTTP | Alova + Axios + 业务码拦截 + Toast 通知 |
+| 类型安全 | TypeScript 严格模式 + `noUncheckedIndexedAccess` |
+
+---
+
+## 🚀 快速开始
+
+### 环境要求
+
+- **Node.js** >= 24（推荐 24.18.0）
+- **pnpm** >= 11.18.0（`corepack enable` 自动安装）
+
+### 克隆 & 启动
 
 ```bash
-git clone <repo-url> vant-starter-kit
-cd vant-starter-kit
+# 1. 克隆项目
+git clone <your-repo-url> my-app
+cd my-app
 
-# 安装依赖（使用 Vite+ 统一 CLI）
+# 2. 安装依赖
 vp install
 
-# 复制环境变量
+# 3. 复制环境变量
 cp .env.example .env
 
-# 启动开发服务器
+# 4. 启动开发
 vp dev
+# 浏览器打开 http://localhost:3000
+```
+
+### 使用 HTTPS（可选，PWA 开发需要）
+
+```bash
+# 停止 443 端口的其他服务（如 Docker openresty）
+docker stop openresty
+
+# sudo 启动（443 是特权端口）
+sudo vp dev
+# 通过 https://vant.starter.kit.inlin.test 访问
 ```
 
 ### 生产构建
 
 ```bash
-vp build
-vp preview
+vp build      # 类型检查 + 构建
+vp preview    # 本地预览生产版本
 ```
 
-## 项目结构
+---
 
-```
-├── build/                       # Vite+ 插件组合
-│   ├── index.ts                # 插件入口，按环境条件组合
-│   └── plugins/
-│       ├── vue.ts              # Vue 生态插件组
-│       ├── nitro.ts            # Nitro 服务端集成
-│       ├── tailwindcss.ts      # Tailwind CSS v4
-│       ├── pwa.ts              # PWA 插件 (vite-plugin-pwa)
-│       └── https-reverse-proxy.ts # 开发环境 HTTPS 反向代理
-├── server/                      # Nitro 服务端 API
-│   └── api/
-│       ├── app/tabbars.ts      # 底部标签栏数据
-│       ├── tab-items.ts        # Tab 列表数据
-│       └── users.ts            # 用户数据 (SQLite)
-├── src/
-│   ├── api/                    # HTTP 请求层 (Alova)
-│   │   ├── index.ts            # Alova 实例 (统一错误处理、业务码拦截)
-│   │   └── methods/
-│   │       ├── app.ts          # 应用配置 (tabbars 等)
-│   │       ├── auth.ts         # 认证
-│   │       ├── im.ts           # 腾讯云 IM
-│   │       ├── oss.ts          # 阿里云 OSS
-│   │       └── tabs.ts         # Tab 列表
-│   ├── components/             # 组件
-│   │   └── businesses/         # 业务组件
-│   ├── composables/            # 组合式函数 (自动导入)
-│   │   ├── useEnv.ts           # 环境变量类型安全访问
-│   │   ├── useLayoutConfig.ts  # Header/Footer 显隐控制
-│   │   └── useLayoutCustomization.ts # 布局组件替换 (provide/inject)
-│   ├── layouts/                # 布局系统
-│   │   ├── default.vue         # 移动端默认布局 (App Shell)
-│   │   ├── screen.vue          # 数据大屏布局 (深色主题)
-│   │   ├── admin.vue           # 管理后台布局 (可折叠侧边栏)
-│   │   ├── default/components/ # 默认布局子组件
-│   │   ├── screen/components/  # 大屏布局子组件
-│   │   └── admin/components/   # 管理后台子组件
-│   ├── pages/                  # 文件系统路由页面
-│   │   ├── index.vue           # 首页 (/)
-│   │   ├── my.vue              # 我的 (/my) — 含深色模式开关
-│   │   ├── login.vue           # 登录 (/login)
-│   │   ├── good.vue            # 商品详情 (/good) — 布局元素显隐示例
-│   │   ├── admin.vue           # 管理后台 (/admin)
-│   │   ├── screen.vue          # 数据大屏 (/screen)
-│   │   ├── test.vue            # 布局自定义测试 (/test)
-│   │   ├── list.vue            # 列表示例 (/list)
-│   │   ├── pull-refresh.vue    # 下拉刷新示例 (/pull-refresh)
-│   │   ├── cart.vue            # 购物车 (/cart)
-│   │   ├── categories.vue      # 分类 (/categories)
-│   │   └── seed.vue            # 种草 (/seed)
-│   ├── plugins/                # 插件配置
-│   │   └── dayjs.ts            # Day.js 中文 locale + 插件
-│   ├── stores/                 # Pinia 状态管理
-│   │   ├── index.ts            # Pinia 初始化 (SSR 兼容)
-│   │   └── auth.ts             # 认证 Store (登录/登出/JWT)
-│   └── styles/                 # 全局样式
-│       └── index.css           # Tailwind CSS v4 入口 + App Shell + 深色模式
-├── types/                      # 类型定义 (#types)
-│   ├── index.ts                # 统一导出
-│   ├── api/                    # API 类型
-│   │   ├── response.ts         # 通用响应类型
-│   │   ├── auth.ts             # 认证类型
-│   │   ├── tab-items.ts        # Tab 类型
-│   │   └── app/tabbars.ts      # 标签栏类型
-│   └── automatics/             # 自动生成类型 (gitignored)
-├── docs/                       # 项目文档
-│   ├── layout-architecture.md            # 布局架构 ★ 亮点（App Shell + 显隐控制 + 组件替换）
-│   ├── dark-mode-architecture.md         # 深色模式 & 状态栏颜色架构
-│   ├── pwa-integration.md                # PWA 集成方案
-│   └── starter-kit-gap-analysis.md       # 功能缺口分析
-├── vite.config.ts              # Vite+ 配置
-├── nitro.config.ts             # Nitro 配置 (SQLite)
-└── pnpm-workspace.yaml         # pnpm catalog 依赖版本
-```
+## 📖 开发指南
 
-## 可用命令
+### 添加新页面
 
-| 命令              | 说明                          |
-| ----------------- | ----------------------------- |
-| `vp dev`          | 启动开发服务器（Vite+ 内置命令） |
-| `vp build`        | 生产构建（Vite+ 内置命令）    |
-| `vp preview`      | 预览生产构建                  |
-| `vp check`        | 格式化 + 代码检查 + 类型检查  |
-| `vp test`         | 运行测试                      |
-| `vp install`      | 安装依赖                      |
-| `vpr <script>`    | 运行 `package.json` 中的脚本（v0.2.7+） |
-| `vp env doctor`   | 诊断环境问题                  |
-
-> **v0.2.7 起**：`vpr` 是 `vp run` 的快捷方式。`vp dev` 始终运行 Vite+ 内置命令，
-> `vpr dev` 运行 `package.json` 中定义的脚本。两者同名时 `vp` 会提示改用 `vpr`。
-
-## 核心架构
-
-### App Shell（移动端视口锁定）
-
-本 Starter Kit 的核心亮点——彻底解决移动端 PWA / 浏览器中"下拉刷新导致 header/footer 消失""滚动到顶部/底部布局跳动"等长期痛点。
-
-```
-html/body: overflow:hidden + position:fixed    ← 焊死，永不滚动
-└── shell: vh-full / flex-col                  ← 视口高度，三段式
-    ├── header (flex:none)                     ← 钉死在顶部
-    ├── main (flex:1 + min-h:0 + overflow:auto) ← 唯一滚动区域
-    └── footer (flex:none)                     ← 钉死在底部
-```
-
-- 浏览器模式保留原生下拉刷新
-- PWA 模式抑制 overscroll，提供类原生 App 体验
-- 完整文档：[docs/layout-architecture.md](./docs/layout-architecture.md)
-
-### 深色模式
-
-VueUse `useDark` + Tailwind CSS v4 `@custom-variant` + Vant `ConfigProvider` 三方协同：
-
-- **状态管理**：`useDark()` 单例，默认跟随系统主题（夜晚自动深色、白天自动浅色），手动切换时以用户为准并 `localStorage` 持久化
-- **Tailwind**：`@custom-variant dark` 启用 class-based dark mode，`dark:bg-*` / `dark:text-*` 变量
-- **Vant**：`<van-config-provider :theme="vantTheme">` 在 App.vue 中全局包裹，Vant 组件自动切暗色
-- **状态栏**：`useStatusBar(isDark)` 跟随应用主题同步浏览器模式状态栏；PWA standalone 状态栏由 manifest `theme_color`（#1c1c1e）控制
-- **切换入口**：`my.vue` 中的 `van-switch`
-
-### 布局系统
-
-三种布局，通过 `definePage` 指定：
+在 `src/pages/` 下创建 `.vue` 文件，路由自动生成：
 
 ```vue
+<!-- src/pages/my-page.vue -->
+<template>
+  <div>My Page</div>
+</template>
+
 <script setup lang="ts">
 definePage({
   meta: {
-    layout: 'default', // 或 'screen'、'admin'
-    showHeader: false, // 可选：隐藏 Header
-    showFooter: true, // 可选：显示 Footer
+    layout: 'default',
+    title: '我的页面',
+    showHeader: true,
+    showFooter: true,
   },
 });
 </script>
 ```
 
-| 布局      | 用途      | 特点                        |
-| --------- | --------- | --------------------------- |
-| `default` | 移动端 H5 | App Shell + 导航栏 + Tabbar |
-| `screen`  | 数据大屏  | 深色主题 + 全屏 + 实时时钟  |
-| `admin`   | 管理后台  | 可折叠侧边栏 + 顶部导航     |
+| meta 字段 | 类型 | 说明 |
+|-----------|------|------|
+| `layout` | `string` | 布局名：`default` / `admin` / `screen`（默认 `default`） |
+| `title` | `string` | 页面标题（Header 导航栏 + 浏览器 title） |
+| `showHeader` | `boolean` | 是否显示 Header（默认 `true`） |
+| `showFooter` | `boolean` | 是否显示 Footer（默认 `true`） |
+| `requiresAuth` | `boolean` | 是否需要登录（默认 `false`） |
 
-同时支持页面级 Header/Footer 组件替换（`useCustomHeader` / `useCustomFooter`），详见 [layout-architecture.md](./docs/layout-architecture.md)。
+### 添加 API 接口
 
-### HTTP 请求
+**服务端**（`server/api/`）：
 
-```typescript
-// API 方法定义 (src/api/methods/app.ts)
-export function tabbarsMethod() {
-  return baseAlova.Get<AppTabBarItem[]>('/app/tabbars', {
-    cacheFor: { mode: 'restore', expire: 300_000 },
-  });
-}
+```ts
+// server/api/hello.ts
+import { defineHandler } from 'nitro';
 
-// 组件中使用 (自动导入 Alova useRequest)
-const { data: tabItems } = useRequest(tabbarsMethod, { initialData: [] });
-```
-
-## 环境变量
-
-| 变量                | 说明               | 默认值        |
-| ------------------- | ------------------ | ------------- |
-| `VITE_API_BASE_URL` | API 基础路径       | `/api`        |
-| `VITE_TCC_APP_ID`   | 腾讯云 IM 应用 ID  | —             |
-| `VITE_ALLOWED_HOST` | 允许的 Host 域名   | —             |
-| `VITE_PROXY_TARGET` | HTTPS 反向代理目标 | —             |
-| `VITE_PUBLIC_PATH`  | 应用基础路径       | `/`           |
-| `VITE_ENV_NAME`     | 环境名称           | `development` |
-
-## CI/CD 自动部署（Cloudflare Workers）
-
-推送 `main` 分支后，GitHub Actions 自动构建并部署到 Cloudflare Workers，无需手动执行 `vpr wrangler:deploy`：
-
-```
-git push origin main
-      │
-      ▼
-GitHub Actions (ubuntu-latest)
-  ├─ pnpm install --frozen-lockfile   (pnpm 11.18.0 / Node 24)
-  ├─ pnpm build                       (tsc && vp build)
-  └─ wrangler deploy                  (仓库根目录，wrangler 4.116.0)
-      │
-      ▼
-Cloudflare Workers (van-chin-vant-starter-kit)
-```
-
-### 首次配置（一次性）
-
-在 GitHub 仓库 **Settings → Secrets and variables → Actions** 添加两个 secrets：
-
-| Secret                    | 获取方式                                                                                       |
-| ------------------------- | ---------------------------------------------------------------------------------------------- |
-| `CLOUDFLARE_API_TOKEN`    | Cloudflare 控制台 → 右上角头像 → **My Profile → API Tokens → Create Token**，选择 *Edit Cloudflare Workers* 模板 |
-| `CLOUDFLARE_ACCOUNT_ID`   | Cloudflare 控制台 → **Workers & Pages** 右侧栏的 Account ID                                    |
-
-> ⚠️ **先配置 secrets，再推送 workflow 文件**，否则首次运行会因缺少 token 失败。
-
-### 触发方式
-
-- **自动**：推送 `main` 分支
-- **手动**：GitHub Actions 页面 → Deploy to Cloudflare Workers → **Run workflow**
-
-### 构建期环境变量
-
-CI 构建默认注入 `VITE_ENV_NAME=production`。如需其他 `VITE_*` 变量（如 `VITE_TCC_APP_ID`），在 `.github/workflows/deploy.yml` 的 Build 步骤按注释追加（也可存为 Actions secret 后引用，如 `${{ secrets.VITE_TCC_APP_ID }}`）。
-
-## 服务端 API
-
-项目使用 [Nitro](https://nitro.unjs.io/) 提供服务端能力，支持 SQLite 数据库开箱即用：
-
-```typescript
-// server/api/users.ts
 export default defineHandler(async () => {
-  const db = useDatabase();
-  const { rows } = await db.sql`SELECT * FROM users`;
-  return { code: 0, message: 'success!', data: rows };
+  return { code: 0, message: 'ok', data: { hello: 'world' } };
 });
 ```
 
-## 许可证
+**客户端**（`src/api/methods/`）：
 
-[MIT](LICENSE)
+```ts
+// src/api/methods/hello.ts
+import { baseAlova } from '@/api';
+
+export const getHello = () => baseAlova.Get<{ hello: string }>('/hello');
+```
+
+**页面使用**：
+
+```ts
+import { useRequest } from 'alova/client';
+import { getHello } from '@/api/methods/hello';
+
+const { data, loading } = useRequest(getHello());
+```
+
+### 添加 Store
+
+```ts
+// src/stores/my-store.ts
+import { defineStore } from 'pinia';
+
+export const useMyStore = defineStore('my-store', () => {
+  const count = ref(0);
+  const increment = () => count.value++;
+  return { count, increment };
+});
+
+// 如需持久化：store ID 设置为 'my-store' 即可，pinia-plugin-persistedstate 自动接管
+```
+
+### 添加 Composable
+
+```ts
+// src/composables/useMyFeature.ts
+export function useMyFeature() {
+  const state = ref(0);
+  // ... logic
+  return { state };
+}
+```
+
+Composables 在 `src/composables/` 下**自动导入**，无需手动 `import`。
+
+### 自定义 Header/Footer
+
+任一页面可注入自定义组件：
+
+```ts
+import MyFooter from './components/MyFooter.vue';
+useCustomFooter(MyFooter);   // 同步
+
+useCustomHeader(() => import('./MyHeader.vue'));  // 异步 Code Split
+```
+
+页面卸载时自动恢复默认。
+
+### 国际化
+
+```ts
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+t('login.submit'); // 输出: "登录" / "Login"
+```
+
+文案在 `src/locales/zh-CN.ts` 和 `en.ts` 维护。
+
+### 配置 env 变量
+
+```bash
+# .env
+VITE_API_BASE_URL=/api
+VITE_APP_TITLE=我的应用
+VITE_ENABLE_VCONSOLE=true   # 手机调试面板
+```
+
+完整变量列表见 [.env.example](./.env.example)。
+
+---
+
+## 🚀 部署
+
+### Cloudflare Workers（推荐）
+
+```bash
+# 首次：登录 + 部署
+vp dlx wrangler login
+vpr wrangler:deploy
+
+# 后续：推送 main 分支自动部署（GitHub Actions）
+git push origin main
+```
+
+> `.github/workflows/deploy.yml` 已配置：push `main` → 自动构建 → Cloudflare Workers 部署。
+
+### 部署前检查
+
+```bash
+vp check          # 格式化 + Lint + 类型检查
+vp test           # 运行测试（11 tests）
+```
+
+### 自定义域名
+
+1. Cloudflare Dashboard → Workers → 添加自定义域名/路由
+2. 更新 `.env.production` 中的 `VITE_APP_TITLE`
+
+---
+
+## 📁 项目结构
+
+```
+src/
+├── api/              # HTTP 请求层（Alova + Axios）
+│   ├── index.ts      #   实例配置（拦截器/错误处理）
+│   └── methods/      #   接口方法模块
+├── components/       # 全局组件
+│   ├── AppUpdatePrompt.vue      #   版本更新提示条
+│   ├── PwaInstallPrompt.vue     #   PWA 安装引导面板
+│   └── businesses/              #   业务组件
+├── composables/      # 组合式函数（自动导入）
+│   ├── useAppUpdate.ts          #   版本检测轮询
+│   ├── useEnv.ts                #   环境变量访问
+│   ├── useLayoutConfig.ts       #   布局显隐控制
+│   ├── useLayoutCustomization.ts #  组件替换系统
+│   ├── useLoading.ts            #   全局 Loading
+│   ├── useNetworkStatus.ts      #   离线检测
+│   ├── usePwaInstall.ts         #   PWA 安装状态
+│   └── useStatusBar.ts          #   状态栏颜色控制
+├── layouts/          # 布局（3 套）
+│   ├── default.vue               #   移动端 App Shell
+│   ├── admin.vue                 #   管理后台（侧边栏）
+│   └── screen.vue                #   数据大屏（深色全屏）
+├── locales/          # 国际化文案（zh-CN / en）
+├── pages/            # 文件系统路由
+├── plugins/          # 应用级插件
+│   ├── dayjs.ts      #   日期工具
+│   ├── head.ts       #   SEO Head 管理
+│   ├── i18n.ts       #   国际化实例
+│   └── vconsole.ts   #   调试面板
+├── stores/           # Pinia 状态管理
+├── utils/            # 工具函数
+│   └── pwa.ts        #   PWA 事件系统
+└── styles/           # 全局样式
+    └── index.css      #   Tailwind CSS v4 + App Shell
+```
+
+---
+
+## 🛠️ 技术栈
+
+| 类别 | 技术 |
+|------|------|
+| 框架 | Vue 3 (Composition API + `<script setup>`) |
+| UI 库 | Vant 4（移动端） |
+| 构建 | Vite+ v0.2.7 |
+| CSS | Tailwind CSS v4 |
+| 状态管理 | Pinia + persist 插件 |
+| 路由 | Vue Router（文件系统路由 + 布局系统） |
+| HTTP | Alova + Axios |
+| 服务端 | Nitro（全栈 SSR） |
+| 国际化 | Vue I18n v11 |
+| SEO | @unhead/vue v3 |
+| PWA | vite-plugin-pwa（Workbox） |
+| 测试 | Vitest + Vue Test Utils |
+| 部署 | Cloudflare Workers |
+
+---
+
+## 📚 文档
+
+| 文档 | 内容 |
+|------|------|
+| [Layout 布局架构](./docs/layout-architecture.md) | App Shell 原理 + 显隐控制 + 组件替换 ★ 亮点 |
+| [深色模式架构](./docs/dark-mode-architecture.md) | CSS/Vant/状态栏三路协同 |
+| [PWA 集成方案](./docs/pwa-integration.md) | Service Worker + Manifest + 图标 + 部署 |
+| [功能缺口分析](./docs/starter-kit-gap-analysis.md) | 已完成功能清单 + 优先级路线图 |
+
+---
+
+## 🤝 贡献
+
+欢迎 Issue / Pull Request。开发前请阅读 [AGENTS.md](./AGENTS.md) 了解项目约定。
