@@ -100,8 +100,8 @@ const { showPrompt, installing, install, dismiss } = usePwaInstall();
 /** 折叠态高度：头部 + 紧凑安装条 */
 const COLLAPSED_HEIGHT = 90;
 
-/** 展开态高度：85% 视口（底部留白由视口高度自然产生） */
-const EXPANDED_HEIGHT = typeof window !== 'undefined' ? Math.round(window.innerHeight * 0.85) : 600;
+/** 展开态高度：65% 视口（底部留白由视口高度自然产生） */
+const EXPANDED_HEIGHT = typeof window !== 'undefined' ? Math.round(window.innerHeight * 0.65) : 600;
 
 /** 面板锚点：折叠 ↔ 展开 */
 const anchors = [COLLAPSED_HEIGHT, EXPANDED_HEIGHT];
