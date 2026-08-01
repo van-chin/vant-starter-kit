@@ -4,7 +4,7 @@
   </header>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * 模块级基准：应用 JS 首次加载时捕获一次，跨组件重建存活。
  *
