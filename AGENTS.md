@@ -8,13 +8,13 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 
 ## Built-in Commands vs Scripts
 
-`vp <name>` runs a built-in command. `vp run <name>` runs a `package.json` script or a `vite.config.ts` task. Scripts cannot overwrite built-ins, so `vp dev` and `vp run dev` may do different things. Check `package.json` and `vite.config.ts` first, and run `vp run <name>` when the project defines a script or task with that name.
+`vp <name>` runs a built-in command. `vp run <name>` (or the shortcut `vpr <name>`, since v0.2.7) runs a `package.json` script or a `vite.config.ts` task. Scripts cannot overwrite built-ins, so `vp dev` and `vpr dev` may do different things. Check `package.json` and `vite.config.ts` first, and run `vpr <name>` when the project defines a script or task with that name.
 
 ## Review Checklist
 
 - [ ] Run `vp install` after pulling remote changes and before getting started.
 - [ ] Run `vp check` and `vp test` to format, lint, type check and test changes.
-- [ ] Check if there are `vite.config.ts` tasks or `package.json` scripts necessary for validation, run via `vp run <script>`.
+- [ ] Check if there are `vite.config.ts` tasks or `package.json` scripts necessary for validation, run via `vpr <script>`.
 - [ ] If setup, runtime, or package-manager behavior looks wrong, run `vp env doctor` and include its output when asking for help.
 
 <!--VITE PLUS END-->
@@ -23,7 +23,7 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 
 ## 技术栈
 
-- **构建工具**: Vite+ (v0.2.6) — 基于 Vite 的统一工具链
+- **构建工具**: Vite+ (v0.2.7) — 基于 Vite 的统一工具链
 - **框架**: **Vue 3.6** (Composition API, `<script setup>`)
 - **UI 库**: Vant 4 (移动端组件库，自动导入)
 - **工具库**: VueUse (useDark, useToggle 等)
@@ -116,14 +116,18 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 
 ```bash
 vp install     # 安装依赖
-vp dev          # 启动开发服务器
-vp build        # 生产构建 (tsc + vp build)
-vp preview      # 预览生产构建
-vp check        # 格式化 + 代码检查 + 类型检查
-vp test         # 运行测试
-vp run <script> # 运行 package.json 中的脚本
-vp env doctor   # 诊断环境问题
+vp dev         # 启动开发服务器（Vite+ 内置命令）
+vp build       # 生产构建（Vite+ 内置命令）
+vp preview     # 预览生产构建
+vp check       # 格式化 + 代码检查 + 类型检查
+vp test        # 运行测试
+vpr <script>   # 运行 package.json 中的脚本（v0.2.7+，等价于 vp run <script>）
+vp env doctor  # 诊断环境问题
 ```
+
+> **v0.2.7 起**：`vpr` 是 `vp run` 的快捷方式，专门执行 `package.json` 中定义的脚本。
+> 例如 `vpr dev` 会运行 `package.json` 的 `"dev"` 脚本，而 `vp dev` 始终运行 Vite+ 内置的 dev 命令。
+> 当两者同名时，`vp` 会提示改用 `vpr`。
 
 ---
 

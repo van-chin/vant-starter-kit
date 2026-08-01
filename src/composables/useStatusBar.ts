@@ -1,5 +1,5 @@
 import type { Ref } from 'vue';
-import { computed, watch } from 'vue';
+import { computed, nextTick, watch } from 'vue';
 import { useHead } from '@unhead/vue';
 
 /**
@@ -33,13 +33,13 @@ export function useStatusBar(isDark: Ref<boolean>): void {
   watch(
     themeColor,
     (color) => {
-      // nextTick 确保 Unhead 已经完成 DOM 更新后再做直接赋值
-      setTimeout(() => {
+      // nextTick 确保 Unhead 已更新 DOM 后再直接赋值
+      nextTick(() => {
         const metas = document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
         metas.forEach((meta) => {
           meta.content = color;
         });
-      }, 0);
+      });
     },
     { immediate: true },
   );

@@ -148,14 +148,17 @@ vp preview
 
 | 命令              | 说明                          |
 | ----------------- | ----------------------------- |
-| `vp dev`          | 启动开发服务器                |
-| `vp build`        | 生产构建（`tsc && vp build`） |
+| `vp dev`          | 启动开发服务器（Vite+ 内置命令） |
+| `vp build`        | 生产构建（Vite+ 内置命令）    |
 | `vp preview`      | 预览生产构建                  |
 | `vp check`        | 格式化 + 代码检查 + 类型检查  |
 | `vp test`         | 运行测试                      |
 | `vp install`      | 安装依赖                      |
-| `vp run <script>` | 运行 `package.json` 中的脚本  |
+| `vpr <script>`    | 运行 `package.json` 中的脚本（v0.2.7+） |
 | `vp env doctor`   | 诊断环境问题                  |
+
+> **v0.2.7 起**：`vpr` 是 `vp run` 的快捷方式。`vp dev` 始终运行 Vite+ 内置命令，
+> `vpr dev` 运行 `package.json` 中定义的脚本。两者同名时 `vp` 会提示改用 `vpr`。
 
 ## 核心架构
 
@@ -236,7 +239,7 @@ const { data: tabItems } = useRequest(tabbarsMethod, { initialData: [] });
 
 ## CI/CD 自动部署（Cloudflare Workers）
 
-推送 `main` 分支后，GitHub Actions 自动构建并部署到 Cloudflare Workers，无需手动执行 `vp run wrangler:deploy`：
+推送 `main` 分支后，GitHub Actions 自动构建并部署到 Cloudflare Workers，无需手动执行 `vpr wrangler:deploy`：
 
 ```
 git push origin main
