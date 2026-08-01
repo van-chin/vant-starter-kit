@@ -17,6 +17,7 @@
       v-model:height="panelHeight"
       :anchors="anchors"
       :duration="0.25"
+      class="shadow-[0_-4px_20px_rgba(0,0,0,0.08)] dark:shadow-none"
       @touchstart.passive="onTouchStart"
       @touchend="onTouchEnd"
     >
@@ -36,7 +37,7 @@
               vant-starter-kit
             </div>
             <div class="truncate text-xs text-gray-500 dark:text-gray-400">
-              添加到主屏幕，获得更好的体验
+              安装到主屏幕，像原生 App 一样使用
             </div>
           </div>
           <van-button size="small" type="primary" :loading="installing" @click="install()">
@@ -57,25 +58,6 @@
         <!-- 展开态：安装亮点 -->
         <Transition name="pwa-details">
           <div v-if="isExpanded" class="pwa-details">
-            <!-- Hero -->
-            <div class="flex items-center gap-3 px-4 pt-1">
-              <img
-                src="/pwa-192x192.png"
-                alt="App Icon"
-                class="h-14 w-14 rounded-2xl shadow-md"
-                width="56"
-                height="56"
-              />
-              <div>
-                <div class="text-base font-semibold text-gray-900 dark:text-gray-100">
-                  vant-starter-kit
-                </div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">
-                  安装到主屏幕，像原生 App 一样使用
-                </div>
-              </div>
-            </div>
-
             <!-- 亮点卡片 2×2 -->
             <div class="grid grid-cols-2 gap-3 px-4 py-4">
               <div
