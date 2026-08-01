@@ -57,7 +57,7 @@
 
         <!-- 展开内容：亮点单行 + 安装按钮（常驻渲染，面板高度控制可见性） -->
         <div class="px-4 pb-4">
-          <!-- 亮点：图标 + 4 项同一行 -->
+          <!-- 亮点：图标 + 4 项同一行，每项含标题和介绍 -->
           <div class="flex items-center gap-3">
             <img
               src="/pwa-192x192.png"
@@ -66,15 +66,18 @@
               width="48"
               height="48"
             />
-            <div class="grid flex-1 grid-cols-4 gap-1">
+            <div class="grid flex-1 grid-cols-4 gap-2">
               <div
                 v-for="benefit in BENEFITS"
                 :key="benefit.title"
                 class="flex flex-col items-center text-center"
               >
                 <div class="text-base leading-none">{{ benefit.icon }}</div>
-                <div class="mt-1 text-[11px] text-gray-600 dark:text-gray-400">
+                <div class="mt-1 text-xs font-medium text-gray-900 dark:text-gray-100">
                   {{ benefit.title }}
+                </div>
+                <div class="mt-0.5 text-[10px] leading-tight text-gray-500 dark:text-gray-400">
+                  {{ benefit.desc }}
                 </div>
               </div>
             </div>
@@ -122,12 +125,12 @@ const panelHeight = ref(COLLAPSED_HEIGHT);
 /** 内容容器 ref，用于测量真实高度 */
 const contentRef = ref<HTMLElement | null>(null);
 
-/** 安装亮点数据（单行紧凑展示：emoji + 标题） */
+/** 安装亮点数据（单行紧凑展示：emoji + 标题 + 一行介绍） */
 const BENEFITS = [
-  { icon: '⚡', title: '秒开启动' },
-  { icon: '📴', title: '离线可用' },
-  { icon: '🏠', title: '桌面图标' },
-  { icon: '🖥️', title: '沉浸体验' },
+  { icon: '⚡', title: '秒开启动', desc: '桌面直达无需等待' },
+  { icon: '📴', title: '离线可用', desc: '断网也能正常访问' },
+  { icon: '🏠', title: '桌面图标', desc: '像原生 App 一样' },
+  { icon: '🖥️', title: '沉浸体验', desc: '全屏无浏览器干扰' },
 ] as const;
 
 /**
