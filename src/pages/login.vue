@@ -237,14 +237,15 @@ function onForgotPassword() {
 </script>
 
 <style scoped>
-/* ─── Responsive Spacing Variables (defaults for large screens) ─── */
+/* ─── Spacing Variables: large-screen defaults (>736px viewport height) ─── */
+/* Verified: fits iPhone 12 mini through Pro Max with browser chrome */
 .login-page {
-  --login-pt: 88px;
-  --login-gap: 138px;
-  --login-btn-mt: 54px;
-  --login-divider-mt: 44px;
-  --login-social-mt: 32px;
-  --login-signup-mt: 44px;
+  --login-pt: 56px;
+  --login-gap: 64px;
+  --login-btn-mt: 36px;
+  --login-divider-mt: 28px;
+  --login-social-mt: 22px;
+  --login-signup-mt: 28px;
 }
 
 /* ─── Field Wrapper: reserve space for error messages ─── */
@@ -345,62 +346,61 @@ function onForgotPassword() {
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
-/* ─── Small Screen Adaptation ─── */
-/* iPhone SE & compact phones: viewport height ≤ 667px → CSS viewport = 375×667 */
-/* Strategy: proportional scaling (~60% of large-screen spacings), capped for extreme gaps */
-@media (max-height: 667px) {
-  /* ── Spacing variables: ~55-75% of large-screen values ── */
+/* ─── Compact screen (≤736px viewport): tighter spacing + smaller elements ─── */
+/* Covers iPhone SE, iPhone 6/7/8, and older devices */
+@media (max-height: 736px) {
+  /* Spacing variables: reduced for limited vertical space */
   .login-page {
-    --login-pt: 44px;
-    --login-gap: 54px;
-    --login-btn-mt: 32px;
-    --login-divider-mt: 28px;
-    --login-social-mt: 24px;
-    --login-signup-mt: 28px;
+    --login-pt: 28px;
+    --login-gap: 32px;
+    --login-btn-mt: 20px;
+    --login-divider-mt: 16px;
+    --login-social-mt: 12px;
+    --login-signup-mt: 16px;
   }
 
-  /* ── Title: maintain readability ── */
+  /* Title */
   .login-title h1 {
-    font-size: 24px;
-    line-height: 32px;
+    font-size: 20px;
+    line-height: 28px;
   }
   .login-title p {
-    font-size: 14px;
-    margin-top: 6px;
+    font-size: 13px;
+    margin-top: 4px;
   }
 
-  /* ── Field wrappers: moderately tighter ── */
+  /* Field wrappers */
   .field-wrapper {
-    padding-bottom: 22px;
+    padding-bottom: 14px;
   }
   .field-wrapper :deep(.van-cell) {
-    padding: 16px;
+    padding: 12px;
   }
   .field-wrapper + .field-wrapper {
-    margin-top: 12px !important;
+    margin-top: 10px !important;
   }
 
-  /* ── Forgot password row ── */
+  /* Forgot password */
   .forgot-pwd-row {
-    padding: 6px 0 !important;
+    padding: 4px 0 !important;
     margin-top: 4px !important;
   }
 
-  /* ── Login button ── */
+  /* Login button */
   .login-btn {
-    height: 48px;
+    height: 42px;
   }
 
-  /* ── OR divider: reduce gap ── */
+  /* OR divider */
   .login-page .gap-3 {
-    gap: 0.5rem;
+    gap: 0.375rem;
   }
 
-  /* ── Social buttons ── */
+  /* Social buttons */
   .social-btn {
-    height: 44px;
-    min-width: 44px;
-    padding: 10px 22px;
+    height: 36px;
+    min-width: 36px;
+    padding: 6px 20px;
   }
 }
 </style>
