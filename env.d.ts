@@ -39,8 +39,27 @@ interface ImportMetaEnv {
   readonly VITE_APP_TITLE: string;
   /** 是否启用 vConsole 调试面板（true=始终启用，空/未设置=通过 ?vconsole 按需启用） */
   readonly VITE_ENABLE_VCONSOLE: string;
-  /** 外部 API 基础路径（如 http://www.xxx.com/api；开发环境通过 Vite proxy 转发以解决跨域） */
-  readonly VITE_OTHER_API_BASE_URL: string;
+  /**
+   * 外部 API 配置（支持多个）
+   *
+   * 命名规范：VITE_EXTERNAL_API_<NAME>=<URL>
+   *
+   * 示例：
+   *   VITE_EXTERNAL_API_OTHER=http://www.xxx.com/api
+   *   VITE_EXTERNAL_API_THIRD=http://www.yyy.com/v1
+   *
+   * 开发环境：Vite 自动将 /api-external-other、/api-external-third
+   * 等路径代理到对应 URL（解决跨域）
+   *
+   * 代码中使用：
+   *   import { getExternalAlova } from '@/api/external';
+   *   const api = getExternalAlova('other');
+   *   const { data } = useRequest(api.Get('/users'));
+   */
+  readonly VITE_EXTERNAL_API_OTHER: string;
+  readonly VITE_EXTERNAL_API_THIRD: string;
+  // 开发者可在此继续添加 VITE_EXTERNAL_API_<YOUR_NAME>
+  // [key: string]: string | undefined; // 如需完全动态类型，取消此行注释
 }
 
 interface ImportMeta {

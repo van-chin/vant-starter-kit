@@ -26,8 +26,17 @@ export function useEnv(env: ImportMetaEnv) {
     appTitle: env.VITE_APP_TITLE || 'vant-starter-kit',
     /** 是否启用 vConsole 调试面板 */
     enableVConsole: env.VITE_ENABLE_VCONSOLE === 'true',
-    /** 外部 API 基础路径（如 http://www.xxx.com/api；未配置时返回空字符串） */
-    otherApiURL: env.VITE_OTHER_API_BASE_URL || '',
+    /**
+     * 获取所有已配置的外部 API（VITE_EXTERNAL_API_<NAME>=<URL>）
+     * @see src/api/external.ts 中的 getExternalAlova(name)
+     */
+    getExternalApis: () =>
+      Object.keys(env)
+        .filter((k) => k.startsWith('VITE_EXTERNAL_API_'))
+        .map((k) => ({
+          name: k.replace('VITE_EXTERNAL_API_', '').toLowerCase(),
+          url: String(env[k as keyof ImportMetaEnv] || ''),
+        })),
   } as const;
 }
 
