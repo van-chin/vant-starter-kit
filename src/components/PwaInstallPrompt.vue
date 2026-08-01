@@ -17,6 +17,7 @@
       v-model:height="panelHeight"
       :anchors="anchors"
       :duration="0.25"
+      :lock-scroll="false"
       class="shadow-[0_-4px_20px_rgba(0,0,0,0.08)] dark:shadow-none"
       @height-change="onHeightChange"
     >
