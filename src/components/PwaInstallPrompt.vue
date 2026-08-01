@@ -8,7 +8,8 @@
       - 下滑：关闭面板（7 天内不再提示）
       - X / 暂不安装：同下滑关闭
 
-    按钮使用 van-button（Vant 自己管理样式，规避 Tailwind 层叠问题）
+    拖拽把手使用 Vant 默认样式（居中灰色小条，简洁干净）。
+    按钮使用 van-button（Vant 管理样式，规避 Tailwind 层叠问题）。
   -->
   <Transition name="pwa-panel">
     <van-floating-panel
@@ -16,39 +17,17 @@
       v-model:height="panelHeight"
       :anchors="anchors"
       :duration="0.25"
-      class="overflow-hidden"
       @touchstart.passive="onTouchStart"
       @touchend="onTouchEnd"
     >
-      <!-- 拖拽把手 + 折叠态关闭按钮 -->
-      <template #header>
-        <div class="relative flex items-center justify-center">
-          <div class="h-1 w-9 rounded-full bg-gray-300 dark:bg-gray-600" />
-          <button
-            v-if="!isExpanded"
-            class="absolute top-1/2 right-3 -translate-y-1/2 p-1 text-gray-400"
-            aria-label="关闭"
-            @click="dismiss"
-          >
-            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                fill-rule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-        </div>
-      </template>
-
       <!-- 面板内容 -->
       <div class="pwa-content">
         <!-- 折叠态：紧凑安装条 -->
-        <div class="flex items-center gap-3 px-4 pb-3">
+        <div class="flex items-center gap-2 px-4 pt-1 pb-3">
           <img
             src="/pwa-64x64.png"
             alt="App Icon"
-            class="h-10 w-10 flex-shrink-0 rounded-xl"
+            class="h-10 w-10 flex-shrink-0 rounded-lg"
             width="40"
             height="40"
           />
@@ -60,9 +39,19 @@
               添加到主屏幕，获得更好的体验
             </div>
           </div>
-          <van-button size="small" round type="primary" :loading="installing" @click="install()">
+          <van-button size="small" type="primary" :loading="installing" @click="install()">
             {{ installing ? '安装中' : '安装' }}
           </van-button>
+          <!-- 关闭按钮：放在安装按钮后面，正常流布局 -->
+          <button class="flex-shrink-0 p-1 text-gray-400" aria-label="关闭" @click="dismiss">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                fill-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
         </div>
 
         <!-- 展开态：安装亮点 -->
@@ -108,7 +97,6 @@
             <div class="px-4 pb-4">
               <van-button
                 type="primary"
-                round
                 block
                 size="large"
                 :loading="installing"
@@ -135,7 +123,7 @@ import { usePwaInstall } from '@/composables/usePwaInstall';
 
 const { showPrompt, installing, install, dismiss } = usePwaInstall();
 
-/** 折叠态高度：拖拽把手(30px) + 紧凑安装条(~56px) */
+/** 折叠态高度：Vant 默认把手(30px) + 紧凑安装条(~56px) */
 const COLLAPSED_HEIGHT = 90;
 
 /** 展开态高度：85% 视口 */
