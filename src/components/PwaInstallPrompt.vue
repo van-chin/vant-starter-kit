@@ -55,30 +55,21 @@
           </button>
         </div>
 
-        <!-- 展开内容：亮点 2×2 网格（图标与首行同排）+ 安装按钮（常驻渲染） -->
+        <!-- 展开内容：2×2 亮点网格 + 安装按钮（常驻渲染） -->
         <div class="px-4 pb-4">
-          <!-- 亮点：图标在左，2×2 卡片网格在右，图标与首行亮点（秒开启动）同排 -->
-          <div class="flex items-start gap-3">
-            <img
-              src="/pwa-192x192.png"
-              alt="App Icon"
-              class="h-12 w-12 flex-shrink-0 rounded-xl shadow-md"
-              width="48"
-              height="48"
-            />
-            <div class="grid flex-1 grid-cols-2 gap-2">
-              <div
-                v-for="benefit in BENEFITS"
-                :key="benefit.title"
-                class="rounded-xl bg-gray-50 p-2.5 dark:bg-gray-800"
-              >
-                <div class="text-base leading-none">{{ benefit.icon }}</div>
-                <div class="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">
-                  {{ benefit.title }}
-                </div>
-                <div class="mt-0.5 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-                  {{ benefit.desc }}
-                </div>
+          <!-- 亮点：2×2 卡片，每项 emoji + 标题 + 完整介绍 -->
+          <div class="grid grid-cols-2 gap-3">
+            <div
+              v-for="benefit in BENEFITS"
+              :key="benefit.title"
+              class="rounded-xl bg-gray-50 p-3 dark:bg-gray-800"
+            >
+              <div class="text-xl leading-none">{{ benefit.icon }}</div>
+              <div class="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">
+                {{ benefit.title }}
+              </div>
+              <div class="mt-0.5 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                {{ benefit.desc }}
               </div>
             </div>
           </div>
