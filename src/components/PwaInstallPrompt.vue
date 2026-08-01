@@ -126,16 +126,21 @@ const BENEFITS = [
   { icon: '🖥️', title: '沉浸体验', desc: '全屏展示无浏览器工具栏，更专注更流畅' },
 ] as const;
 
+/** 展开态最高高度上限：半屏（内容超过时允许面板内滚动） */
+const MAX_EXPANDED_RATIO = 0.5;
+
 /**
  * 测量内容真实高度，计算展开态最高点：
- * 内容高度 + 头部(30px) + 底部留白(8px)，上限 90% 视口。
+ * 内容高度 + 头部(30px) + 底部留白(8px)。
+ * 内容少 → 完全自适应，无滚动；内容多 → 上限半屏，超出部分面板内滚动。
  */
 function measureExpandedHeight(): void {
   const el = contentRef.value;
   if (!el) return;
   const contentHeight = el.offsetHeight;
   if (contentHeight <= 0) return;
-  const viewportLimit = (typeof window !== 'undefined' ? window.innerHeight : 600) * 0.9;
+  const viewportLimit =
+    (typeof window !== 'undefined' ? window.innerHeight : 600) * MAX_EXPANDED_RATIO;
   expandedHeight.value = Math.min(contentHeight + HEADER_HEIGHT + 8, viewportLimit);
 }
 
