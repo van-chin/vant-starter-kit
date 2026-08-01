@@ -113,6 +113,53 @@ vp preview    # 本地预览生产版本
 
 ---
 
+## 🎨 定制你的应用
+
+### 修改应用名称
+
+1. 编辑 `.env`、`.env.development`、`.env.production` 中的 `VITE_APP_TITLE`
+2. 编辑 `index.html` 中的 `<title>` 和 `<meta name="description">` 为你的应用描述
+3. 编辑 `build/plugins/pwa.ts` 中 manifest 的 `name`、`short_name`、`description`
+4. 编辑 `src/components/PwaInstallPrompt.vue` 中的标题和文案
+
+### 替换 Logo 和图标
+
+**文件替换后就生效，无需改代码：**
+
+| 文件 | 用途 | 尺寸 |
+|------|------|------|
+| `public/logo.svg` | 项目 Logo（参考用） | SVG |
+| `public/pwa-icon.svg` | PWA 图标源文件 | 512×512 SVG |
+| `public/favicon.ico` | 浏览器标签页图标 | 48×48 |
+| `public/apple-touch-icon-180x180.png` | iOS 桌面图标 | 180×180 |
+
+修改 `public/pwa-icon.svg` 后重新生成 PWA 整套图标：
+```bash
+vpr pwa:assets:generator
+```
+
+### 环境变量说明
+
+| 变量 | 说明 | 默认值 |
+|------|------|--------|
+| `VITE_API_BASE_URL` | API 基础路径 | `/api` |
+| `VITE_APP_TITLE` | 应用标题（浏览器标签 + PWA 名） | `vant-starter-kit` |
+| `VITE_PUBLIC_PATH` | 应用基础路径 | `/` |
+| `VITE_ENV_NAME` | 环境名称 | `development` |
+| `VITE_ENABLE_VCONSOLE` | vConsole 调试面板 | `true`（dev）/ `false`（prod 推荐） |
+| `VITE_TCC_APP_ID` | 腾讯云 IM 应用 ID | 空 |
+| `VITE_ALLOWED_HOST` | 允许的 Host 域名 | 空 |
+| `VITE_PROXY_TARGET` | HTTPS 代理目标域名 | 空 |
+| `VITE_DEV_SERVER_HOST` | Dev Server 地址 | `0.0.0.0` |
+
+模板文件：
+- `.env.example` — 所有变量的完整模板
+- `.env.development.example` — 开发环境推荐值
+- `.env.production.example` — 生产环境推荐值
+- `.env.local` — 本地覆盖（不提交 Git）
+
+---
+
 ## 📖 开发指南
 
 ### 添加新页面

@@ -22,18 +22,12 @@ interface ImportMetaEnv {
   readonly VITE_PUBLIC_PATH: string;
   /** 环境名称 */
   readonly VITE_ENV_NAME: string;
-  /** 应用预览模式 */
-  readonly VITE_APP_PREVIEW: string;
-  /** Tauri 开发主机 */
-  readonly VITE_TAURI_DEV_HOST: string;
   /** Dev Server 主机地址 */
   readonly VITE_DEV_SERVER_HOST: string;
-  /** 应用标题 */
+  /** 应用标题（浏览器标签页 + PWA 名称） */
   readonly VITE_APP_TITLE: string;
-  /** 应用版本号 */
-  readonly VITE_APP_VERSION: string;
-  /** 是否启用 Mock 数据 */
-  readonly VITE_ENABLE_MOCK: string;
+  /** 是否启用 vConsole 调试面板（true=始终启用，空=通过 ?vconsole 按需启用） */
+  readonly VITE_ENABLE_VCONSOLE: string;
 }
 
 interface ImportMeta {

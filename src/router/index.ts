@@ -5,7 +5,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { routes, handleHotUpdate } from 'vue-router/auto-routes';
 import { head } from '@/plugins/head';
 
-const DEFAULT_TITLE = 'vant-starter-kit';
+const DEFAULT_TITLE = import.meta.env.VITE_APP_TITLE || 'vant-starter-kit';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
