@@ -147,6 +147,7 @@ vpr pwa:assets:generator
 | `VITE_PUBLIC_PATH` | 应用基础路径 | `/` |
 | `VITE_ENV_NAME` | 环境名称 | `development` |
 | `VITE_ENABLE_VCONSOLE` | vConsole 调试面板 | `true`（dev）/ `false`（prod 推荐） |
+| `VITE_OTHER_API_BASE_URL` | 外部 API 地址（可选） | 空（不使用外部 API） |
 | `VITE_TCC_APP_ID` | 腾讯云 IM 应用 ID | 空 |
 | `VITE_ALLOWED_HOST` | 允许的 Host 域名 | 空 |
 | `VITE_PROXY_TARGET` | HTTPS 代理目标域名 | 空 |
@@ -202,7 +203,7 @@ definePage({
 
 ### 添加 API 接口
 
-**服务端**（`server/api/`）：
+**内置 API**（`server/api/`，同域，无需跨域处理）：
 
 ```ts
 // server/api/hello.ts
@@ -228,8 +229,29 @@ export const getHello = () => baseAlova.Get<{ hello: string }>('/hello');
 import { useRequest } from 'alova/client';
 import { getHello } from '@/api/methods/hello';
 
-const { data, loading } = useRequest(getHello());
+	const { data, loading } = useRequest(getHello());
 ```
+
+**外部 API**（跨域，开发环境自动代理）：
+
+1. 配置 `.env`：
+
+```bash
+# .env.development
+VITE_OTHER_API_BASE_URL=http://www.xxx.com/api
+```
+
+2. 使用外部 API 实例（`src/api/other.ts`）：
+
+```ts
+import { otherAlova } from '@/api/other';
+
+const { data } = useRequest(otherAlova.Get('/your-endpoint'));
+```
+
+> **开发环境**：Vite 自动将 `/api-other/*` 请求代理到 `VITE_OTHER_API_BASE_URL`，零跨域问题。
+> **生产环境**：直接请求外部地址（需外部 API 配置 CORS 或同域部署）。
+> **多外部 API**：复制 `src/api/other.ts`，改 proxy 路径和 env 变量即可。
 
 ### 添加 Store
 

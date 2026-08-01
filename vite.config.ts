@@ -18,6 +18,17 @@ export default defineConfig({
   server: {
     host: process.env.VITE_DEV_SERVER_HOST,
     allowedHosts: process.env.VITE_ALLOWED_HOST ? [process.env.VITE_ALLOWED_HOST] : [],
+    // 开发环境代理：将 /api-other 请求转发到外部 API 以解决跨域
+    // 配置 VITE_OTHER_API_BASE_URL 后自动启用
+    proxy: process.env.VITE_OTHER_API_BASE_URL
+      ? {
+          '/api-other': {
+            target: process.env.VITE_OTHER_API_BASE_URL,
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/api-other/, ''),
+          },
+        }
+      : undefined,
   },
   staged: {
     '*.{ts,tsx,vue,js}': 'vp check --fix',

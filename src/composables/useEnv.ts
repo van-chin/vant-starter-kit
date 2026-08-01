@@ -26,6 +26,8 @@ export function useEnv(env: ImportMetaEnv) {
     appTitle: env.VITE_APP_TITLE || 'vant-starter-kit',
     /** 是否启用 vConsole 调试面板 */
     enableVConsole: env.VITE_ENABLE_VCONSOLE === 'true',
+    /** 外部 API 基础路径（如 http://www.xxx.com/api；未配置时返回空字符串） */
+    otherApiURL: env.VITE_OTHER_API_BASE_URL || '',
   } as const;
 }
 
