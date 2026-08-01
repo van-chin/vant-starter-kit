@@ -51,6 +51,7 @@
     "@vitejs/plugin-vue-jsx": "catalog:",
     "@vue/test-utils": "^2.4.11",
     "@vue/tsconfig": "catalog:",
+    "bumpp": "catalog:",
     "jiti": "catalog:",
     "jsdom": "catalog:",
     "syncpack": "catalog:",

@@ -17,6 +17,7 @@ catalog:
   vue-router: '^5.2.0'
   alova: '^3.5.2'
   '@alova/adapter-axios': '^2.0.19'
+  bumpp: '^12.1.1'
   tailwindcss: '^4.3.3'
   nitro: '3.0.260610-beta'
   '@tailwindcss/vite': '^4.3.3'
