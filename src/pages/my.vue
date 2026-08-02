@@ -21,6 +21,7 @@
       <van-cell-group inset>
         <van-cell title="版本变化v04" value="ddd" />
         <van-cell title="商品详细示例页面" is-link to="/good" />
+        <van-cell title="登录页 (Figma 还原)" value="/login-oths" is-link to="/login-oths" />
       </van-cell-group>
     </div>
 
