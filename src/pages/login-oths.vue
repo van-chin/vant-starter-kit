@@ -286,7 +286,7 @@ function onForgotPassword() {
   opacity: 0.15;
 }
 
-:global(.dark) .chakra-deco {
+html.dark .chakra-deco {
   opacity: 0.08;
 }
 
@@ -333,7 +333,7 @@ function onForgotPassword() {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-:global(.dark) .login-btn {
+html.dark .login-btn {
   background-image: linear-gradient(70.56deg, #5a7fcf 6.7%, #8b6db8 102.9%);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -352,11 +352,11 @@ function onForgotPassword() {
   background: linear-gradient(270deg, rgba(139, 139, 139, 1) 0%, rgba(248, 249, 250, 0) 80%);
 }
 
-:global(.dark) .or-line-left {
+html.dark .or-line-left {
   background: linear-gradient(90deg, rgba(139, 139, 139, 1) 0%, rgba(30, 30, 32, 0) 80%);
 }
 
-:global(.dark) .or-line-right {
+html.dark .or-line-right {
   background: linear-gradient(270deg, rgba(139, 139, 139, 1) 0%, rgba(30, 30, 32, 0) 80%);
 }
 
@@ -397,11 +397,11 @@ function onForgotPassword() {
 }
 
 /* ─── 深色模式：输入框阴影 ─── */
-:global(.dark) .field-wrapper :deep(.van-cell) {
+html.dark .field-wrapper :deep(.van-cell) {
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-:global(.dark) .login-field :deep(.van-field__control) {
+html.dark .login-field :deep(.van-field__control) {
   color: var(--color-text-primary);
 }
 

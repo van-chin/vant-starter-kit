@@ -321,11 +321,11 @@ function onForgotPassword() {
 }
 
 /* ─── Dark Mode: minimal overrides — most colors handled by global tokens ─── */
-:global(.dark) .field-wrapper :deep(.van-cell) {
+html.dark .field-wrapper :deep(.van-cell) {
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-:global(.dark) .login-field :deep(.van-field__control) {
+html.dark .login-field :deep(.van-field__control) {
   color: var(--color-text-primary);
 }
 
