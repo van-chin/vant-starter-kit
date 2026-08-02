@@ -70,6 +70,38 @@ VueUse `useDark()` 单例驱动，三路并行：
 
 ---
 
+## 🗺️ 示例页面
+
+克隆后打开「我的 → 示例中心」（`/examples`）即可浏览全部 18+ 个示例页面，
+覆盖移动端开发最常见的场景，每个页面都演示了 Starter Kit 的一个能力点：
+
+| 场景                    | 路由                 | 演示要点                                       |
+| ----------------------- | -------------------- | ---------------------------------------------- |
+| 🏠 首页                 | `/`                  | App Shell + 商品网格 + Skeleton + Pinia 加购   |
+| 🗂️ 分类页               | `/categories`        | Sidebar 分类导航 + 商品联动列表                |
+| 🌱 种草社区             | `/seed`              | Feed 卡片流 + 点赞/关注/收藏交互               |
+| 🛒 购物车               | `/cart`              | Cart Store 增删改查 + SwipeCell + SubmitBar    |
+| 👤 我的                 | `/my`                | 深色模式切换 + 多语言切换 + 功能入口           |
+| 📦 商品详情             | `/good`              | 轮播 + 规格选择弹层 + Stepper + ActionBar      |
+| 📰 资讯列表             | `/list`              | PullRefresh + List 无限滚动（分页模拟）        |
+| 📄 文章详情             | `/detail`            | 路由嵌套 + 自定义 Footer + 文章阅读            |
+| 🔐 登录页               | `/login`             | 表单验证 + Auth Store + 路由守卫               |
+| 🎨 登录页（Figma 还原） | `/login-oths`        | Figma 设计稿完整还原 + 多尺寸屏幕适配          |
+| 📊 数据大屏             | `/screen`            | Screen 布局 + 深色全屏仪表盘                   |
+| 🛠️ 管理后台             | `/admin`             | Admin 布局 + 可折叠侧边栏 + 统计卡片           |
+| 🧪 布局测试页           | `/test`              | 自定义 Header/Footer 替换 + 显隐控制           |
+| 🔄 下拉刷新             | `/pull-refresh`      | PullRefresh 基础用法                           |
+| 🧩 Vant 组件示例        | `/components-demo`   | 基础/反馈/表单/展示四大类组件                  |
+| 📝 表单示例             | `/examples/form`     | van-form 校验 + Picker/Uploader/Switch/Stepper |
+| 💬 反馈组件示例         | `/examples/feedback` | Toast/Dialog/Notify/ActionSheet/ShareSheet     |
+| 🏛️ 示例中心             | `/examples`          | 所有示例页面的统一入口                         |
+
+> 💡 **给开发者的建议**：参考 `examples/` 页面的写法开发新页面——每个页面
+> 同时展示了数据流（composable/store）、交互（Vant 组件）和样式（设计令牌）
+> 的最佳实践，可作为业务开发的起点模板。
+
+---
+
 ## 🚀 快速开始
 
 ### 环境要求
@@ -441,4 +473,3 @@ src/
 ## 📄 许可证
 
 [MIT](./LICENSE) © 2026 Van Chin
-

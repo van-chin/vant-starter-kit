@@ -5,7 +5,7 @@
       当前布局为 App Shell flex-col，footer 固定在视口底部，
       无需 fixed，回归正常流让 flex 自动分配空间，清除 padding-bottom hack。
     -->
-    <van-tabbar :model-value="active" :fixed="false" safe-area-inset-bottom @change="onChange">
+    <van-tabbar :model-value="active" :fixed="false" safe-area-inset-bottom>
       <van-tabbar-item
         v-for="item in localizedItems"
         :key="item.name"

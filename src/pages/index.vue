@@ -2,7 +2,15 @@
   <div class="index">
     <!-- Banner -->
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for="n in 4" :key="n">{{ n }}</van-swipe-item>
+      <van-swipe-item
+        v-for="banner in banners"
+        :key="banner.title"
+        class="flex flex-col items-center justify-center"
+      >
+        <span class="text-4xl">{{ banner.emoji }}</span>
+        <span class="mt-2 text-base font-medium text-white">{{ banner.title }}</span>
+        <span class="mt-1 text-xs text-white/80">{{ banner.subtitle }}</span>
+      </van-swipe-item>
     </van-swipe>
 
     <!-- Skeleton 加载演示 -->
@@ -50,6 +58,14 @@ definePage({
 
 const cartStore = useCartStore();
 const { loading, withLoading } = useLoading();
+
+/** 轮播 Banner */
+const banners = [
+  { emoji: '🧘', title: '21 天瑜伽挑战', subtitle: '从今天开始，遇见更好的自己' },
+  { emoji: '🌱', title: '新人 7 天免费课', subtitle: '零基础也能轻松入门' },
+  { emoji: '🏆', title: '累计打卡赢好礼', subtitle: '坚持是最好的天赋' },
+  { emoji: '🎁', title: '会员日 8 折起', subtitle: '装备课程一站购齐' },
+];
 
 /** 演示用商品数据 */
 interface Product {
