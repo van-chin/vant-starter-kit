@@ -9,7 +9,7 @@
     "#build": "./build/index.ts"
   },
   "scripts": {
-    "build": "vue-tsc --noEmit -p tsconfig.app.json && vue-tsc --noEmit -p tsconfig.vitest.json && vue-tsc --noEmit -p tsconfig.node.json && vp build",
+    "build": "vp build && vue-tsc --noEmit -p tsconfig.app.json && vue-tsc --noEmit -p tsconfig.vitest.json && vue-tsc --noEmit -p tsconfig.node.json",
     "dev": "vp dev",
     "prepare": "vp config",
     "preview": "vp preview",

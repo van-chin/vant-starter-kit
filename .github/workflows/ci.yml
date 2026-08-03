@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: vp install --frozen-lockfile
 
-      - name: Format / lint / type check
+      - name: Format / lint（含类型感知 lint）
         run: vp check
 
       - name: Run tests

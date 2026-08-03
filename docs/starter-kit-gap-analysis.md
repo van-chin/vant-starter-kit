@@ -269,7 +269,10 @@ index.html (静态兜底) → @unhead/vue (运行时接管)
 **修复**：
 
 - build 脚本改为
-  `vue-tsc --noEmit -p tsconfig.app.json && vue-tsc --noEmit -p tsconfig.vitest.json && vue-tsc --noEmit -p tsconfig.node.json && vp build`
+  `vp build && vue-tsc --noEmit -p tsconfig.app.json && vue-tsc --noEmit -p tsconfig.vitest.json && vue-tsc --noEmit -p tsconfig.node.json`
+  （**必须先 `vp build` 再类型检查**：unplugin-auto-import / vue-components / vue-router
+  在构建期间才会生成 `types/automatics/*.d.ts`，该目录被 gitignore，全新 CI 检出中不存在；
+  若先跑 vue-tsc 会报大量 `Cannot find name 'ref' / 'useXxx' / 'defineStore'`）
 - 修复了开启检查后暴露的既有问题：
   - `vite.config.ts`：代理规则类型 `Record<string, ProxyOptions>`；`ProxyOptions` 改从 `vite-plus` 导入
   - `navbar.vue`：emit 事件名大小写不一致（`toggle-sidebar` vs `toggleSidebar`）
@@ -321,3 +324,15 @@ vp check        → pass（108 files formatted / 0 error / 0 warning）
 vp test         → 2 files / 11 tests passed
 pnpm build      → vue-tsc 3 项目通过 + vp build 成功（PWA 126 预缓存条目）
 ```
+
+### 7.7 GitHub Actions 构建失败修复（2026-08-03）
+
+**现象**：提交 `13efbb0` 后 CI 的 `pnpm build` 在 `vue-tsc` 阶段报大量
+`TS2304: Cannot find name 'ref' / 'useCartStore' / 'defineStore'`。
+
+**根因**：`types/automatics/`（auto-imports / components / typed-router 的自动生成
+类型声明）在 `.gitignore` 中，全新 CI 检出时不存在；而上一版 build 脚本把
+`vue-tsc` 放在了 `vp build` 之前，此时生成文件尚未产生。
+
+**修复**：调整 build 脚本顺序为先 `vp build`（构建期间生成 dts）再逐个运行
+`vue-tsc` 类型检查，并在干净 worktree 中完整复现 + 验证通过。
