@@ -32,8 +32,8 @@
         <van-cell title="下拉刷新" value="🔄" is-link to="/pull-refresh" />
         <van-cell title="列表" value="示例" is-link to="/list" />
         <van-cell title="Vant 组件示例" value="🧩" is-link to="/components-demo" />
-        <van-cell title="数据大屏" value="📊" is-link to="/screen" />
-        <van-cell title="管理后台" value="🛠️" is-link to="/admin" />
+        <van-cell title="数据大屏vvvv" value="📊" is-link to="/screen" />
+        <van-cell title="管理后台-123" value="🛠️" is-link to="/admin" />
       </van-cell-group>
     </div>
 
