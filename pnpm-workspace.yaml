@@ -4,7 +4,7 @@ allowBuilds:
   sharp: true
   workerd: true
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@0.2.6
+  vite: npm:@voidzero-dev/vite-plus-core@0.2.7
   vite-plus: 0.2.7
   vue: '^3.6.0-rc.2'
   vant: '^4.10.0'

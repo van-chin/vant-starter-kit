@@ -10,7 +10,7 @@ describe('useEnv', () => {
   });
 
   it('reads values from env object', () => {
-    const env = useEnv({ VITE_API_BASE_URL: '/custom-api' } as ImportMetaEnv);
+    const env = useEnv({ VITE_API_BASE_URL: '/custom-api' } as unknown as ImportMetaEnv);
     expect(env.apiURL).toBe('/custom-api');
   });
 

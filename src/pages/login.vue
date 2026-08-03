@@ -207,14 +207,26 @@ const onSubmit = async () => {
   try {
     await authStore.login(form);
     showToast(t('login.success'));
-    const redirect = (route.query.redirect as string) || '/';
-    router.replace(redirect);
+    router.replace(resolveRedirect(route.query.redirect));
   } catch {
     showToast(t('login.fail'));
   } finally {
     loading.value = false;
   }
 };
+
+/**
+ * 解析登录成功后的跳转地址。
+ * 只允许站内相对路径（以 / 开头且不是 // 协议相对地址），
+ * 防止 ?redirect=https://evil.com 之类的开放重定向。
+ */
+function resolveRedirect(redirect: unknown): string {
+  if (typeof redirect !== 'string' || !redirect.startsWith('/') || redirect.startsWith('//')) {
+    return '/';
+  }
+  // 避免重定向回登录页造成死循环
+  return redirect.startsWith('/login') ? '/' : redirect;
+}
 
 /** 第三方登录（占位，需对接实际 OAuth） */
 function onSocialLogin(provider: string) {

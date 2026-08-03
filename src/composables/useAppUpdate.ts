@@ -26,8 +26,26 @@ const POLL_INTERVAL = 1 * 60 * 1000;
 /** 当前缓存的版本号 */
 let currentVersion = '';
 
-/** 是否已初始化 */
-let initialized = false;
+/** 当前挂载中的组件实例数（用于单例轮询的生命周期管理） */
+let activeInstances = 0;
+
+/** 轮询定时器（模块级单例，多个组件实例共享同一计时器） */
+let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+/** 启动轮询（首次挂载时调用） */
+function startPolling(checkUpdate: () => Promise<void>): void {
+  if (pollTimer) return;
+  void checkUpdate();
+  pollTimer = setInterval(() => void checkUpdate(), POLL_INTERVAL);
+}
+
+/** 停止轮询（最后一个实例卸载时调用） */
+function stopPolling(): void {
+  if (pollTimer) {
+    clearInterval(pollTimer);
+    pollTimer = null;
+  }
+}
 
 export function useAppUpdate() {
   /** 是否有新版本可用 */
@@ -60,35 +78,29 @@ export function useAppUpdate() {
     }
   }
 
-  let pollTimer: ReturnType<typeof setInterval> | null = null;
-
   /** 用户切回页面时检查（处理后台标签页唤醒） */
   function onVisibilityChange(): void {
     if (document.visibilityState === 'visible') {
-      checkUpdate();
+      void checkUpdate();
     }
   }
 
   onMounted(() => {
-    if (initialized) return;
-    initialized = true;
-
-    // 首次检查
-    checkUpdate();
-
-    // 定时轮询
-    pollTimer = setInterval(checkUpdate, POLL_INTERVAL);
+    activeInstances++;
+    // 首次挂载时启动单例轮询；组件卸载后重新挂载会自动恢复
+    startPolling(checkUpdate);
 
     // 页面可见性变化时检查
     document.addEventListener('visibilitychange', onVisibilityChange);
   });
 
   onUnmounted(() => {
-    if (pollTimer) {
-      clearInterval(pollTimer);
-      pollTimer = null;
-    }
+    activeInstances = Math.max(0, activeInstances - 1);
     document.removeEventListener('visibilitychange', onVisibilityChange);
+    // 最后一个实例卸载后停止轮询，避免后台持续请求
+    if (activeInstances === 0) {
+      stopPolling();
+    }
   });
 
   /** 用户确认更新：刷新页面 */

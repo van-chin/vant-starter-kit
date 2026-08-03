@@ -27,13 +27,20 @@
 
 import { getExternalAlova } from '@/api/external';
 
-const payApi = getExternalAlova('pay');
+/**
+ * 惰性获取支付 API 实例。
+ * 直接模块级调用 getExternalAlova('pay') 会在环境变量未配置时于 import 阶段抛错，
+ * 改为使用时再获取，未配置时只有真正调用对应方法才报错。
+ */
+function payApi() {
+  return getExternalAlova('pay');
+}
 
 /** 获取订单列表 */
-export const getOrders = () => payApi.Get('/orders');
+export const getOrders = () => payApi().Get('/orders');
 
 /** 获取订单详情 */
-export const getOrder = (id: string) => payApi.Get(`/orders/${id}`);
+export const getOrder = (id: string) => payApi().Get(`/orders/${id}`);
 
 /** 创建订单 */
-export const createOrder = (data: Record<string, unknown>) => payApi.Post('/orders', data);
+export const createOrder = (data: Record<string, unknown>) => payApi().Post('/orders', data);

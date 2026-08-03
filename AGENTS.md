@@ -21,6 +21,27 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 
 # vant-starter-kit — 项目开发指南
 
+## 🚨 提交与推送规范（Commit & Push Policy，最高优先级）
+
+**本项目要求：每次代码/文档改动完成后，必须自动执行 `git commit` 并 `git push` 到远程仓库，禁止询问用户"是否提交"。**
+
+此规则对所有 agent 工具、AI 模型、电脑环境一致生效——只要在本仓库内工作（vibe coding / 换 agent / 换模型 / 换电脑），都必须遵守，无需再次征求用户确认。
+
+### 强制流程
+
+1. **改动完成后先验证**：运行 `vp check` 和 `vp test`（必要时 `vp run build`），确保改动通过后再提交。
+2. **提交所有相关改动**：`git add` 本次任务涉及的全部文件（包括 AGENTS.md、文档、配置、lockfile 等），不要遗漏，也不要夹带与任务无关的改动。
+3. **提交信息遵循 Conventional Commits**：
+   - 格式：`<type>(<scope>): <subject>`，如 `feat(cart): 支持批量删除`
+   - type 常用值：`feat` / `fix` / `refactor` / `perf` / `docs` / `style` / `test` / `build` / `ci` / `chore`
+   - subject 用祈使句、首字母小写、不超过 50 字符、结尾不加句号
+   - 正文（可选）说明"改了什么、为什么"，每行不超过 72 字符，用中文撰写
+4. **推送**：`git push` 到当前分支对应的远程仓库。
+5. **推送冲突时**：先 `git pull --rebase` 拉取远程最新，解决冲突后重新提交并推送。
+6. **用户已有未提交改动**：保留并纳入提交（除非明确属于其他任务，则保留不动并在提交说明中注明）。
+
+> 违反示例：改完代码不提交就结束任务、提交前问"需要提交吗"、push 失败后静默跳过。
+
 ## 技术栈
 
 - **构建工具**: Vite+ (v0.2.7) — 基于 Vite 的统一工具链
@@ -243,16 +264,16 @@ dark:* 类          :theme="vantTheme"
 定义在 `src/styles/index.css` 中，`:root` 浅色 / `.dark` 深色两组值自动切换。
 **新页面优先使用令牌**，避免逐页面手写 `dark:` 覆盖：
 
-| 令牌 | 浅色 | 深色 | 用途 |
-|------|------|------|------|
-| `--color-bg-page` | `#F8F9FA` | `#1c1c1e` | 页面底色 |
-| `--color-bg-surface` | `#fff` | `#2c2c2e` | 卡片/输入框表面 |
-| `--color-bg-elevated` | `#fff` | `#3a3a3c` | 悬浮态表面 |
-| `--color-text-primary` | `#1F1F1F` | `#f5f5f5` | 主文字 |
-| `--color-text-secondary` | `#757575` | `#8e8e93` | 辅助文字 |
-| `--color-text-tertiary` | `#525252` | `#a1a1a6` | 三级文字 |
-| `--color-accent` | `#3883FF` | `#6eb4ff` | 链接/强调色 |
-| `--color-border-subtle` | `rgba(0,0,0,.05)` | `rgba(255,255,255,.08)` | 浅色分割线 |
+| 令牌                     | 浅色              | 深色                    | 用途            |
+| ------------------------ | ----------------- | ----------------------- | --------------- |
+| `--color-bg-page`        | `#F8F9FA`         | `#1c1c1e`               | 页面底色        |
+| `--color-bg-surface`     | `#fff`            | `#2c2c2e`               | 卡片/输入框表面 |
+| `--color-bg-elevated`    | `#fff`            | `#3a3a3c`               | 悬浮态表面      |
+| `--color-text-primary`   | `#1F1F1F`         | `#f5f5f5`               | 主文字          |
+| `--color-text-secondary` | `#757575`         | `#8e8e93`               | 辅助文字        |
+| `--color-text-tertiary`  | `#525252`         | `#a1a1a6`               | 三级文字        |
+| `--color-accent`         | `#3883FF`         | `#6eb4ff`               | 链接/强调色     |
+| `--color-border-subtle`  | `rgba(0,0,0,.05)` | `rgba(255,255,255,.08)` | 浅色分割线      |
 
 > 用法：`<div class="bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)]">`
 > Tailwind v4 任意值语法支持 CSS 变量，自动跟随主题切换。

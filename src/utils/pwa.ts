@@ -15,7 +15,16 @@ type EventCallback = () => void;
 const installableCallbacks: EventCallback[] = [];
 const installedCallbacks: EventCallback[] = [];
 
-let installPromptEvent: BeforeInstallPromptEvent | null = null;
+/**
+ * 浏览器原生的 BeforeInstallPromptEvent 在部分 TS lib 中未声明（解析为 error 类型），
+ * 这里声明一个最小接口，只暴露本模块用到的成员。
+ */
+interface InstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
+let installPromptEvent: InstallPromptEvent | null = null;
 let eventsInitialized = false;
 
 /** 订阅 beforeinstallprompt 事件 */
@@ -55,7 +64,7 @@ export function initPwaEvents(): void {
   window.addEventListener('beforeinstallprompt', (e) => {
     console.log('[PWA] 📢 beforeinstallprompt 触发，站点满足 PWA 安装条件');
     e.preventDefault();
-    installPromptEvent = e as BeforeInstallPromptEvent;
+    installPromptEvent = e as InstallPromptEvent;
     installableCallbacks.forEach((cb) => cb());
   });
 

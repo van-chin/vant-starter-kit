@@ -91,11 +91,11 @@
 
 ## 三、🟢 锦上添花
 
-### 3.1 CI/CD
+### 3.1 ~~CI/CD~~ ✅（2026-08-03 完成）
 
 - 无 `.github/workflows/`，建议添加：
-  - `ci.yml`：`vp install && vp check && vp test`
-  - `deploy.yml`：Cloudflare Pages / Workers 部署
+  - ~~`ci.yml`~~：`vp install --frozen-lockfile && vp check && vp test && vp run build`
+  - ~~`deploy.yml`~~：Cloudflare Workers 部署（push main 自动构建 + wrangler deploy）
 
 ### 3.2 Build 优化
 
@@ -138,20 +138,21 @@ index.html (静态兜底) → @unhead/vue (运行时接管)
 
 ### 3.6 PWA 功能状态
 
-| 功能                                    | 状态 | 说明                                                            |
-| --------------------------------------- | ---- | --------------------------------------------------------------- |
-| ~~Service Worker（Workbox）~~           | ✅   | `registerType: 'autoUpdate'`，预缓存 + API 缓存                 |
-| ~~PWA 图标生成~~                        | ✅   | `@vite-pwa/assets-generator`，全套 icon（含 maskable）          |
-| ~~manifest.webmanifest~~                | ✅   | name / short_name / icons / display / scope                     |
-| ~~manifest `id` 字段~~                  | ✅   | `id: '/'`，Chrome PWA 唯一标识（2026-07-31 新增）               |
-| `screenshots`                           | ⚠️   | manifest 中留有 TODO 占位，需要产品截图（3-5 张）               |
-| `navigationFallback`                    | ⚠️   | Workbox `NavigationRoute` 已配置但 precache 无 `index.html`     |
-| 图片/字体缓存策略                       | ❌   | 仅缓存 API 请求，无图片/字体/外部 CDN 静态资源缓存              |
-| `CacheableResponsePlugin`（状态码过滤） | ❌   | 未配置，0xx/3xx 响应也可能被缓存                                |
-| SW 注册错误监控                         | ✅   | `src/utils/pwa.ts` 提供 Console 日志诊断（2026-07-31 新增）     |
-| ~~`appinstalled` 事件处理~~             | ✅   | 安装完成后弹出 Toast "安装成功！应用已添加到桌面"（2026-07-31） |
-| ~~`beforeinstallprompt` 事件~~          | ✅   | 监听 + `promptInstall()` 手动触发安装（2026-07-31 新增）        |
-| ~~开发环境 HTTPS 反向代理~~             | ✅   | `unplugin-https-reverse-proxy`，但需释放 443 端口（见下方）     |
+| 功能                                        | 状态 | 说明                                                                           |
+| ------------------------------------------- | ---- | ------------------------------------------------------------------------------ |
+| ~~Service Worker（Workbox）~~               | ✅   | `registerType: 'autoUpdate'`，预缓存 + API 缓存                                |
+| ~~PWA 图标生成~~                            | ✅   | `@vite-pwa/assets-generator`，全套 icon（含 maskable）                         |
+| ~~manifest.webmanifest~~                    | ✅   | name / short_name / icons / display / scope                                    |
+| ~~manifest `id` 字段~~                      | ✅   | `id: '/'`，Chrome PWA 唯一标识（2026-07-31 新增）                              |
+| `screenshots`                               | ⚠️   | manifest 中留有 TODO 占位，需要产品截图（3-5 张）                              |
+| ~~`navigationFallback`~~                    | ✅   | `navigateFallback: '/index.html'` + API/version.json 等 denylist（2026-08-03） |
+| ~~图片/字体缓存策略~~                       | ✅   | 图片 CacheFirst（30 天）+ 字体 CacheFirst（1 年）（2026-08-03）                |
+| ~~`CacheableResponsePlugin`（状态码过滤）~~ | ✅   | API/图片/字体缓存均只缓存 `0/200` 状态码（2026-08-03）                         |
+| ~~`cleanupOutdatedCaches`~~                 | ✅   | 自动清理旧版本预缓存，配合 autoUpdate（2026-08-03）                            |
+| SW 注册错误监控                             | ✅   | `src/utils/pwa.ts` 提供 Console 日志诊断（2026-07-31 新增）                    |
+| ~~`appinstalled` 事件处理~~                 | ✅   | 安装完成后弹出 Toast "安装成功！应用已添加到桌面"（2026-07-31）                |
+| ~~`beforeinstallprompt` 事件~~              | ✅   | 监听 + `promptInstall()` 手动触发安装（2026-07-31 新增）                       |
+| ~~开发环境 HTTPS 反向代理~~                 | ✅   | `unplugin-https-reverse-proxy`，但需释放 443 端口（见下方）                    |
 
 ### 3.7 PWA 跨浏览器兼容性
 
@@ -195,10 +196,11 @@ index.html (静态兜底) → @unhead/vue (运行时接管)
 ✅ 第三阶段（已完成）：🟢 部分完善项
 
 ⏳ 待完成（低优先级）：
-  ├── CI/CD（GitHub Actions）
-  ├── Build 优化（code splitting + compression + visualizer）
-  └── PWA SW 策略增强（图片/字体缓存 + CacheableResponsePlugin + navigationFallback + screenshots）
+  ├── Build 优化（code splitting + compression + visualizer —— manualChunks 与 Rolldown 不兼容，需按 Rolldown 方式拆分）
+  └── PWA manifest `screenshots`（需要真实产品截图 3-5 张）
 ```
+
+> 2026-08-03 更新：CI/CD 与 PWA SW 策略增强已完成，见下方「七、工程优化记录」。
 
 ---
 
@@ -253,3 +255,69 @@ index.html (静态兜底) → @unhead/vue (运行时接管)
 
 - `README.md` 新增「🗺️ 示例页面」章节，列出全部示例路由与演示要点
 - `src/plugins/i18n.ts` 支持从持久化存储恢复语言，刷新不丢失
+
+---
+
+## 七、工程优化记录（2026-08-03）
+
+### 7.1 类型检查修复（重要）
+
+**问题**：`package.json` 的 build 脚本是 `tsc && vp build`，但根 `tsconfig.json`
+是 solution 风格（`files: []` + references），裸 `tsc` 实际上**不检查任何文件**，
+项目一直在"无类型检查"状态下构建。
+
+**修复**：
+
+- build 脚本改为
+  `vue-tsc --noEmit -p tsconfig.app.json && vue-tsc --noEmit -p tsconfig.vitest.json && vue-tsc --noEmit -p tsconfig.node.json && vp build`
+- 修复了开启检查后暴露的既有问题：
+  - `vite.config.ts`：代理规则类型 `Record<string, ProxyOptions>`；`ProxyOptions` 改从 `vite-plus` 导入
+  - `navbar.vue`：emit 事件名大小写不一致（`toggle-sidebar` vs `toggleSidebar`）
+  - `useEnv.test.ts`：`as unknown as ImportMetaEnv` 显式双重转换
+  - `tsconfig.vitest.json`：include 补上 `types/**/*`，否则测试项目看不到自动生成的
+    auto-imports / typed-router / 虚拟模块声明
+- 新增 `types/virtual-modules.d.ts`：声明 `virtual:generated-layouts` 虚拟模块
+  （该插件的 `client.d.ts` 通过 `types` 数组加载在 build 模式下不可靠，
+  且模块名含 `virtual:` 会被模块解析当作 URI 跳过）
+- 版本对齐：pnpm catalog 中 `vite` 从 `vite-plus-core@0.2.6` 升到 `0.2.7`，
+  与 `vite-plus@0.2.7` 一致，消除双副本类型不匹配（Excessive stack depth）
+
+### 7.2 Lint 清理
+
+- 移除 `external.ts` 未使用的 `Method` 导入
+- 消除 4 处 `no-floating-promises`（useAppUpdate / useStatusBar / main.ts）
+- 用自定义 `InstallPromptEvent` 接口替换 TS 中为 error 类型的
+  `BeforeInstallPromptEvent`
+- `vp check` 目前 0 error / 0 warning
+
+### 7.3 CI/CD
+
+- 新增 `.github/workflows/ci.yml`：`vp install --frozen-lockfile` → `vp check` →
+  `vp test` → `vp run build`（与 deploy 使用同一构建脚本）
+- 使用 `voidzero-dev/setup-vp@v1` 自动安装 Node.js + pnpm + 依赖缓存
+
+### 7.4 PWA SW 策略增强（`build/plugins/pwa.ts`）
+
+- `cleanupOutdatedCaches: true`：自动清理旧版本预缓存
+- `navigateFallback: '/index.html'`：SPA 路由回退（denylist：API / 外部 API /
+  version.json / _headers）
+- 图片资源 CacheFirst（30 天）+ 字体资源 CacheFirst（1 年）
+- 所有运行时缓存（API / 图片 / 字体）增加 `cacheableResponse` 状态码过滤（0/200）
+- `maximumFileSizeToCacheInBytes: 4MB` 防异常大文件
+
+### 7.5 其他打磨
+
+- `index.html`：`lang="zh-CN"`
+- `index.css`：定义 `--safe-area-inset-top`，让 `AppUpdatePrompt` 的顶部安全区生效
+- `external-methods/pay.ts`：API 实例改为惰性获取，避免环境变量未配置时 import 即抛错
+- `useNetworkStatus`：组件卸载时清理恢复提示的计时器
+- `login.vue`：登录后 redirect 只允许站内相对路径，修复开放重定向隐患
+- `useAppUpdate`：轮询改为单例 + 实例计数，修复"组件卸载后轮询永久停止"的生命周期 bug
+
+### 7.6 验证结果
+
+```text
+vp check        → pass（108 files formatted / 0 error / 0 warning）
+vp test         → 2 files / 11 tests passed
+pnpm build      → vue-tsc 3 项目通过 + vp build 成功（PWA 126 预缓存条目）
+```

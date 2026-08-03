@@ -34,7 +34,7 @@ export function useStatusBar(isDark: Ref<boolean>): void {
     themeColor,
     (color) => {
       // nextTick 确保 Unhead 已更新 DOM 后再直接赋值
-      nextTick(() => {
+      void nextTick(() => {
         const metas = document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
         metas.forEach((meta) => {
           meta.content = color;

@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # setup-vp：安装 Vite+、匹配 .node-version 的 Node.js 并自动缓存依赖
+      - uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version: '24'
+          cache: true
+
+      - name: Install dependencies
+        run: vp install --frozen-lockfile
+
+      - name: Format / lint / type check
+        run: vp check
+
+      - name: Run tests
+        run: vp test
+
+      # 与 deploy.yml 保持一致：执行 package.json 的 build 脚本
+      # （vue-tsc 完整类型检查 + vp build 生产构建）
+      - name: Production build
+        run: vp run build

@@ -24,6 +24,22 @@ export function createPwaPlugin(): PluginOption {
       // 预缓存构建产物（JS/CSS/HTML/图片/字体）
       globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
 
+      // 清理旧版本的预缓存（配合 registerType: 'autoUpdate' 避免缓存膨胀）
+      cleanupOutdatedCaches: true,
+
+      // 单页应用导航回退：任意未匹配路由回退到 index.html（App Shell）
+      // 排除 API / 外部 API 代理 / 版本检测等不应回退的路径
+      navigateFallback: '/index.html',
+      navigateFallbackDenylist: [
+        /^\/api\//i,
+        /^\/api-external-/i,
+        /^\/version\.json/i,
+        /^\/_headers/i,
+      ],
+
+      // 单文件上限 4MB，避免异常大文件撑爆预缓存
+      maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+
       // 运行时缓存策略
       runtimeCaching: [
         {
@@ -37,6 +53,34 @@ export function createPwaPlugin(): PluginOption {
               maxEntries: 100,
               maxAgeSeconds: 60 * 60 * 24, // 1 天
             },
+            // 只缓存正常响应（0 = opaque 响应，200 = 成功），避免缓存错误页
+            cacheableResponse: { statuses: [0, 200] },
+          },
+        },
+        {
+          // 图片资源：缓存优先（静态图片不可变，命中缓存零请求）
+          urlPattern: /\.(?:png|jpe?g|svg|gif|webp|ico|avif)$/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'static-image-cache',
+            expiration: {
+              maxEntries: 60,
+              maxAgeSeconds: 30 * 24 * 60 * 60, // 30 天
+            },
+            cacheableResponse: { statuses: [0, 200] },
+          },
+        },
+        {
+          // 字体资源：缓存优先（字体文件带版本号/指纹，基本不可变）
+          urlPattern: /\.(?:woff2?|eot|ttf|otf)$/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'font-cache',
+            expiration: {
+              maxEntries: 20,
+              maxAgeSeconds: 365 * 24 * 60 * 60, // 1 年
+            },
+            cacheableResponse: { statuses: [0, 200] },
           },
         },
       ],

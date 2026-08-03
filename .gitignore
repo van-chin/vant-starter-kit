@@ -41,3 +41,6 @@ public/version.json
 
 # Wrangler 本地运行产物（deploy 配置 / 本地运行状态等）
 .wrangler/
+
+# ZCode 工具会话产物（自动生成的开发计划，不纳入版本管理）
+.zcode/

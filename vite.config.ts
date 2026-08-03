@@ -1,4 +1,5 @@
 import { fileURLToPath, URL } from 'node:url';
+import type { ProxyOptions } from 'vite-plus';
 import { defineConfig, lazyPlugins } from 'vite-plus';
 
 /**
@@ -9,7 +10,7 @@ import { defineConfig, lazyPlugins } from 'vite-plus';
  *   /api-external-<name> → <URL>（开发环境自动处理跨域）
  */
 function buildExternalProxyRules() {
-  const rules: Record<string, unknown> = {};
+  const rules: Record<string, ProxyOptions> = {};
   for (const key of Object.keys(process.env)) {
     const match = key.match(/^VITE_EXTERNAL_API_(.+)$/);
     if (match?.[1] && process.env[key]) {
@@ -65,6 +66,9 @@ export default defineConfig({
   lint: {
     jsPlugins: [{ name: 'vite-plus', specifier: 'vite-plus/oxlint-plugin' }],
     rules: { 'vite-plus/prefer-vite-plus-imports': 'error' },
+    // 说明：tsgolint 的 typeCheck 目前无法解析 `*.vue` 环境声明（会误报
+    // "Cannot find module './App.vue'"），因此这里保持 typeCheck: false；
+    // 真正的完整类型检查由构建脚本中的 `vue-tsc --noEmit -p ...` 完成。
     options: { typeAware: true, typeCheck: false },
   },
   plugins: lazyPlugins(async () => {

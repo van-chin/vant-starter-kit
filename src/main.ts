@@ -64,7 +64,7 @@ const initApplication = async () => {
   app.mount('#app');
 
   // 异步初始化 vConsole 调试面板（不阻塞首屏）
-  import('@/plugins/vconsole').then((m) => m.initVConsole());
+  void import('@/plugins/vconsole').then((m) => m.initVConsole());
 };
 
 await initApplication();

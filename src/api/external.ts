@@ -1,4 +1,4 @@
-import { createAlova, type Method } from 'alova';
+import { createAlova } from 'alova';
 import VueHook from 'alova/vue';
 import { axiosRequestAdapter } from '@alova/adapter-axios';
 

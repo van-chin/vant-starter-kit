@@ -28,6 +28,8 @@
   --color-accent: #3883ff;
   /* 浅色分隔线 / 边框 */
   --color-border-subtle: rgba(0, 0, 0, 0.05);
+  /* iOS 安全区（顶部），供 AppUpdatePrompt 等 fixed 顶部元素使用 */
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
 }
 
 .dark {
