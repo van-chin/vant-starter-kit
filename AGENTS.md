@@ -164,7 +164,7 @@ vp install     # 安装依赖
 vpr dev        # 启动开发服务器（执行 package.json dev 脚本）
 vpr build      # 生产构建（执行 package.json build 脚本）
 vpr preview    # 预览生产构建（执行 package.json preview 脚本）
-vp check       # 格式化 + 代码检查 + 类型检查
+vp check       # 格式化 + 代码检查（完整类型检查由 vpr build 的 vue-tsc 承担）
 vp test        # 运行测试
 vpr <script>   # 运行 package.json 中的脚本（v0.2.9+，等价于 vp run <script>）
 vp env doctor  # 诊断环境问题
