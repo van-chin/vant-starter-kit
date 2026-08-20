@@ -2,6 +2,9 @@ import { createApp } from 'vue';
 
 import '@/styles/index.css';
 
+// 自托管中文字体（Noto Sans SC Variable，unicode-range 按需加载，全端视觉一致）
+import '@fontsource-variable/noto-sans-sc';
+
 // 全局 Day.js 配置（必须在其他模块之前执行）
 import '@/plugins/dayjs';
 

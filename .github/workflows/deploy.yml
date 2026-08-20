@@ -15,20 +15,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+      # setup-vp：安装 Vite+、匹配 .node-version 的 Node.js 并自动缓存依赖
+      # （与 ci.yml 保持一致，统一使用 Vite+ 工具链）
+      - uses: voidzero-dev/setup-vp@v1
         with:
-          version: 11.22.0 # 与 devEngines 一致
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version # 24.19.0
-          cache: pnpm
+          node-version: '24'
+          cache: true
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: vp install --frozen-lockfile
 
       - name: Build
-        run: pnpm build
+        run: vp run build
         env:
           VITE_ENV_NAME: production
           # vConsole 移动端调试面板：prod 默认启用（也可通过 ?vconsole 按需开启）

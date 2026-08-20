@@ -166,11 +166,11 @@ vpr build      # 生产构建（执行 package.json build 脚本）
 vpr preview    # 预览生产构建（执行 package.json preview 脚本）
 vp check       # 格式化 + 代码检查 + 类型检查
 vp test        # 运行测试
-vpr <script>   # 运行 package.json 中的脚本（v0.2.7+，等价于 vp run <script>）
+vpr <script>   # 运行 package.json 中的脚本（v0.2.9+，等价于 vp run <script>）
 vp env doctor  # 诊断环境问题
 ```
 
-> **v0.2.7 起**：`vpr` 是 `vp run` 的快捷方式，专门执行 `package.json` 中定义的脚本。
+> **v0.2.9 起**：`vpr` 是 `vp run` 的快捷方式，专门执行 `package.json` 中定义的脚本。
 > 例如 `vpr dev` 会运行 `package.json` 的 `"dev"` 脚本，而 `vp dev` 始终运行 Vite+ 内置的 dev 命令。
 > 当两者同名时，`vp` 会提示改用 `vpr`。
 

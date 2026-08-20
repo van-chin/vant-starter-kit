@@ -278,7 +278,7 @@ function onForgotPassword() {
 /* ─── Input Fields ─── */
 .login-field :deep(.van-field__control) {
   font-size: 12px;
-  font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .login-field :deep(.van-field__control::placeholder) {

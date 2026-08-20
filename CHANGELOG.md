@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## v0.0.2 (2026-08-20)
+
+### 依赖升级
+
+- **Vite+ 0.2.7 → 0.2.9** — 新增 `vp toolchain` / `vp hooks` 命令；vite-plus-core 0.2.9（vite 8.2.1 + rolldown 1.2.3）
+- **Vue 3.6.0-rc.4** / Vant 4.10.0 / pinia 4.0.3 等依赖同步升级至最新
+- **pnpm 11.18 → 11.22**，**Node 24.18 → 24.19**
+- 修复 rolldown native binding 加载失败（vite 别名对齐 vite-plus-core@0.2.9）
+
+### 工程优化
+
+- **字体自托管** — 移除 Google Fonts（Poppins），改用自托管 Noto Sans SC Variable（思源黑体，OFL 开源协议），unicode-range 按需加载，全端视觉一致，不依赖外网 CDN
+- **CI 统一** — deploy.yml 迁移至 setup-vp，与 ci.yml 工具链一致；wrangler / pnpm 版本与本地 catalog 对齐
+- **发布脚本** — 新增 `vpr release`（bumpp 一键版本递增 + commit + tag + push）
+- `@vue/test-utils` 纳入 pnpm catalog，syncpack 门禁通过
+
 ## v0.0.1 (2026-08-01)
 
 ### 核心架构

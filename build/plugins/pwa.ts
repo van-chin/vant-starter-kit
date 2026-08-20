@@ -21,8 +21,12 @@ export function createPwaPlugin(): PluginOption {
     registerType: 'autoUpdate',
 
     workbox: {
-      // 预缓存构建产物（JS/CSS/HTML/图片/字体）
-      globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+      // 预缓存构建产物（JS/CSS/HTML/图片）。
+      // 注意：woff2 字体文件不进入预缓存 —— Noto Sans SC Variable 有 101 个
+      // unicode-range 分片（约 4.5MB），全部预缓存会拖慢 SW 安装。
+      // 由下方 font-cache 运行时规则 CacheFirst 按需缓存（首次访问只下载
+      // 当前页面用到的分片，命中后永久缓存，视觉一致性不受影响）。
+      globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
 
       // 清理旧版本的预缓存（配合 registerType: 'autoUpdate' 避免缓存膨胀）
       cleanupOutdatedCaches: true,

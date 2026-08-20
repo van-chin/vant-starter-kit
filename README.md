@@ -145,6 +145,17 @@ vpr build      # 类型检查 + 构建
 vpr preview    # 本地预览生产版本
 ```
 
+### 发布新版本
+
+```bash
+vpr release             # 交互式选择版本类型（patch / minor / major）
+```
+
+基于 [bumpp](https://github.com/unjs/bumpp) 一键发布：版本号递增（package.json）→
+自动 git commit（`chore: release vX.Y.Z`）→ 打 tag（`vX.Y.Z`）→ push 到远程。
+
+发布前请先更新 `CHANGELOG.md` 并确保 `vp check` / `vp test` 通过。
+
 ---
 
 ## 🎨 定制你的应用
