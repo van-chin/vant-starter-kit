@@ -17,11 +17,11 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 11.18.0 # 与 devEngines 一致
+          version: 11.22.0 # 与 devEngines 一致
 
       - uses: actions/setup-node@v4
         with:
-          node-version-file: .node-version # 24.18.0
+          node-version-file: .node-version # 24.19.0
           cache: pnpm
 
       - name: Install dependencies
@@ -45,4 +45,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} # wrangler.json 无此字段，必须显式传
           command: deploy
-          wranglerVersion: '4.116.0' # 与本地 catalog 版本一致，避免行为漂移
+          wranglerVersion: '4.124.0' # 与本地 catalog 版本一致，避免行为漂移

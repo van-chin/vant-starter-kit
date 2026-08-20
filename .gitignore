@@ -44,3 +44,6 @@ public/version.json
 
 # ZCode 工具会话产物（自动生成的开发计划，不纳入版本管理）
 .zcode/
+
+# Vite+ 任务临时目录
+.vite-temp/

@@ -51,7 +51,7 @@ release. Add a tool name to select part of the graph. For example, run
 
 ## 技术栈
 
-- **构建工具**: Vite+ (v0.2.7) — 基于 Vite 的统一工具链
+- **构建工具**: Vite+ (v0.2.9) — 基于 Vite 的统一工具链
 - **框架**: **Vue 3.6** (Composition API, `<script setup>`)
 - **UI 库**: Vant 4 (移动端组件库，自动导入)
 - **工具库**: VueUse (useDark, useToggle 等)
@@ -293,7 +293,7 @@ Vue 3.6 引入了 Vapor Mode，移除 Virtual DOM 运行时，性能对标 Solid
 
 ### 当前阶段策略
 
-项目已安装 `vue@3.6.0-rc.2`，Vapor 运行时已内置。**目前保持 VDOM 标准模式开发**：
+项目已安装 `vue@3.6.0-rc.4`，Vapor 运行时已内置。**目前保持 VDOM 标准模式开发**：
 
 1. **Vue 3.6 仍为 RC 阶段** — 正式版发布前可能有行为调整
 2. **UI 组件库尚未就绪** — Vant 4 等尚未正式支持 Vapor Mode

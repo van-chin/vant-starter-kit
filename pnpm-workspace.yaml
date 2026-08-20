@@ -28,6 +28,7 @@ catalog:
   unplugin-https-reverse-proxy: '^4.0.2'
   unplugin-auto-import: '^21.1.0'
   jsdom: '^29.1.1'
+  '@vue/test-utils': '^2.4.11'
   '@vue/tsconfig': '^0.9.1'
   '@vitejs/plugin-vue': '^6.0.8'
   '@vitejs/plugin-vue-jsx': '^5.1.6'

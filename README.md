@@ -106,8 +106,8 @@ VueUse `useDark()` 单例驱动，三路并行：
 
 ### 环境要求
 
-- **Node.js** >= 24（推荐 24.18.0）
-- **pnpm** >= 11.18.0（`corepack enable` 自动安装）
+- **Node.js** >= 24（推荐 24.19.0）
+- **pnpm** >= 11.22.0（`corepack enable` 自动安装）
 
 ### 克隆 & 启动
 
@@ -439,7 +439,7 @@ src/
 | -------- | ------------------------------------------ |
 | 框架     | Vue 3 (Composition API + `<script setup>`) |
 | UI 库    | Vant 4（移动端）                           |
-| 构建     | Vite+ v0.2.7                               |
+| 构建     | Vite+ v0.2.9                               |
 | CSS      | Tailwind CSS v4                            |
 | 状态管理 | Pinia + persist 插件                       |
 | 路由     | Vue Router（文件系统路由 + 布局系统）      |

@@ -83,5 +83,4 @@ export default defineConfig({
       '#types': fileURLToPath(new URL('./types', import.meta.url)),
     },
   },
-  define: {},
 });
