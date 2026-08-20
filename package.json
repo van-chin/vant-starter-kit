@@ -1,6 +1,6 @@
 {
   "name": "vant-starter-kit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "基于 Vue 3 + Vant 4 + Vite+ 的移动端 H5 / PWA 极速启动模板 — App Shell 布局、深色模式、PWA 完整集成、多后端 API 支持、Cloudflare Workers 一键部署",
   "license": "MIT",
