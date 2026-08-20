@@ -39,7 +39,7 @@
     "vue-router": "catalog:"
   },
   "devDependencies": {
-    "@intlify/unplugin-vue-i18n": "^11.2.4",
+    "@intlify/unplugin-vue-i18n": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@tsconfig/node24": "catalog:",
     "@types/jsdom": "catalog:",
@@ -64,8 +64,8 @@
     "vite-plugin-vue-devtools": "catalog:",
     "vite-plugin-vue-layouts-next": "catalog:",
     "vite-plus": "catalog:",
-    "vitest": "^4.1.10",
-    "vue-i18n": "^11.4.8",
+    "vitest": "catalog:",
+    "vue-i18n": "catalog:",
     "vue-tsc": "catalog:",
     "workbox-build": "catalog:",
     "workbox-window": "catalog:",
@@ -74,7 +74,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "11.18.0",
+      "version": "11.22.0",
       "onFail": "download"
     }
   }
