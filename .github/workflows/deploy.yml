@@ -34,6 +34,16 @@ jobs:
           # 其他构建期变量可按需追加，例如：
           # VITE_TCC_APP_ID: ${{ secrets.VITE_TCC_APP_ID }}
 
+      # setup-vp / vp 不把裸 pnpm 放到 runner PATH（build 用 vp 内置 pnpm），
+      # 而 wrangler-action 需要一个裸 package manager：npm 会因 package.json 的
+      # devEngines.packageManager=pnpm 触发 EBADDEVENGINES 失败。用 corepack（node 自带）
+      # 激活 pnpm，使 wrangler-action 按 pnpm-lock.yaml 推断出的 pnpm 可用。
+      - name: Enable pnpm via corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.22.0 --activate
+          pnpm --version
+
       - name: Deploy to Cloudflare Workers
         # 必须从仓库根目录部署：Nitro 构建时生成 .wrangler/deploy/config.json
         # 指向 .output/server/wrangler.json，wrangler 在根目录自动发现并解析
